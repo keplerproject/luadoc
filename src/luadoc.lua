@@ -122,26 +122,15 @@ function main ()
 	
 	local taglet = require(options.taglet)
 	local doclet = require(options.doclet)
-	
-	-- Process files.
-	for i = 1, table.getn(files) do
-		local f = files[i]
-		local h = string.gsub (f, "lua$", "html")
-		h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
-		if options.verbose then
-			print ("processing "..f.." (=> "..h..")")
-		end
-		local doc = luadoc.analyze.analyze (f, taglet, FILTERS)
-		
-		local t2s = require "luadoc.tab2str"
-		print(t2s.t2s(doc, "  ", ""))
-		luadoc.compose.compose (doc, doclet, h)
-	end
-	
-	-- Generate index file.
-	if (table.getn(files) > 0) and (not options.noindexpage) then
-		luadoc.compose.index (options.output_dir)
-	end
+
+	-- analyze input
+	local doc = luadoc.analyze.analyze(files, taglet, options, FILTERS)
+
+	local t2s = require "luadoc.tab2str"
+	print(t2s.t2s(doc, "  ", ""))
+
+	-- generate output
+	luadoc.compose.compose(doc, doclet, options)
 end
 
 main()

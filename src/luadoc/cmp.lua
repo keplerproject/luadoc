@@ -291,3 +291,29 @@ html = {
 }
 
 return html
+
+--[[
+<A NAME="asin(double)"><!-- --></A><H3>
+asin</H3>
+<PRE>
+public static double <B>asin</B>(double&nbsp;a)</PRE>
+<DL>
+
+<DD>Returns the arc sine of an angle, in the range of -<i>pi</i>/2 through
+ <i>pi</i>/2. Special cases: 
+ <ul><li>If the argument is NaN or its absolute value is greater 
+ than 1, then the result is NaN.
+ <li>If the argument is zero, then the result is a zero with the
+ same sign as the argument.</ul>
+ <p>
+ A result must be within 1 ulp of the correctly rounded result.  Results
+ must be semi-monotonic.
+<P>
+<DD><DL>
+<DT><B>Parameters:</B><DD><CODE>a</CODE> - the value whose arc sine is to be returned.
+
+<DT><B>Returns:</B><DD>the arc sine of the argument.</DL>
+</DD>
+</DL>
+<HR>
+]]

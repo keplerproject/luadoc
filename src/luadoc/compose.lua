@@ -111,7 +111,7 @@ end
 -- @param cmp Table with output formatting rules.
 -- @param out_file String with the name of the output file.
 
-function compose (in_tab, doclet, out_file)
+function file (in_tab, doclet, out_file)
    CMP.out_format = doclet
    CMP.out_table = {}
    CMP.resolve_anchoring (in_tab, CMP.out_format)
@@ -131,4 +131,31 @@ function index (dir)
    io.output (dir.."index.html")
    CMP.write_doc (CMP.files, CMP.out_format.file_index)
    io.close ()
+end
+
+-------------------------------------------------------------------------------
+-- Compose a doc table, using the specified doclet and options
+-- @param doc Table with documentation structure
+-- @param doclet Class to generate documentation output
+-- @param options Table with command line options
+function compose (doc, doclet, options)
+	-- Process files
+	for i = 1, table.getn(doc.files) do
+		local file_doc = doc.files[i]
+		
+		-- assembly the filename
+		local h = string.gsub (file_doc.in_file, "lua$", "html")
+		h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
+		if options.verbose then
+			print ("generating "..h)
+		end
+		
+		-- generate the html output for the file
+		luadoc.compose.file (file_doc, doclet, h)
+	end
+
+	-- Generate index file
+	if (table.getn(doc.files) > 0) and (not options.noindexpage) then
+		index (options.output_dir)
+	end
 end

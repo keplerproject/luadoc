@@ -256,18 +256,45 @@ end
 -- @param FILTERS Table with filters to be applied
 -- @return Table with the structured document.
 
-function analyze (in_file, sub, FILTERS)
-   -- load substitutions file.
+function file (in_file, sub, FILTERS)
    -- load source string.
    local file = io.open (in_file, "r")
    assert(file, string.format("could not open file `%s' for reading", in_file))
    local source = file:read ("*a")
    file:close ()
+   
    -- initialize global variables.
-   doc_table = { in_file = in_file, n = 0 }
-   global_table = { comm_filters = copy_table (FILTERS), n = 0 }
+   local doc_table = { in_file = in_file }
+   global_table = { comm_filters = copy_table (FILTERS) }
+
    -- process source string.
    source = apply (source, sub, doc_table)
-   -- generate output of the structured document as a table.
+
    return doc_table
+end
+
+-------------------------------------------------------------------------------
+-- Process a list of files according to a set of substitutions and
+-- generate a table with the documentation.
+-- @param files Table with filenames to process.
+-- @param taglet Table with substitution rules.
+-- @param options Table with command line options.
+-- @param FILTERS Table with filters to be applied.
+-- @return Table with the structure documents.
+function analyze (files, taglet, options, FILTERS)
+	-- Create an empty document
+	local doc = {}
+	doc.files = {}
+
+	-- Process files.
+	for i = 1, table.getn(files) do
+		local f = files[i]
+		if options.verbose then
+			print ("processing "..f)
+		end
+		local file_doc = luadoc.analyze.file (f, taglet, FILTERS)
+		table.insert(doc.files, file_doc)
+	end
+	
+	return doc
 end
