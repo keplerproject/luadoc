@@ -1,33 +1,33 @@
 <html>
 <head>
 <title>LuaDoc</title>
-    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css">
+    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css" />
 </head>
 
 <body>
 
 <center>
-<table border=0 cellspacing=2 cellpadding=2>
-<tr><td align=center><a href="http://www.lua.org">
-<img border=0 alt="The Lua language" src="lua.png"></a>
-<tr><td align=center><big><b>LuaDoc</b></big>
-<tr><td align=center valign=top>Documentation Generator Tool for the Lua language
+<table border="0" cellspacing="2" cellpadding="2">
+<tr><td align="center"><a href="http://www.lua.org">
+<img border="0" alt="The Lua language" src="lua.png" /></a></td></tr>
+<tr><td align="center"><big><b>LuaDoc</b></big></td></tr>
+<tr><td align="center" valign="top">Documentation Generator Tool for the Lua language</td></tr>
 </table>
 </center>
 <p>
 
 <center>
-<a href=#whatis>what is?</a> &middot;
-<a href=#download>download</a> &middot;
-<a href=#howto>how to</a> &middot;
-<a href=#subsections>subsections</a> &middot;
-<a href=#options>options</a> &middot;
-<a href=#news>news</a>
+<a href="#whatis">what is?</a> &middot;
+<a href="#download">download</a> &middot;
+<a href="#howto">how to</a> &middot;
+<a href="#subsections">subsections</a> &middot;
+<a href="#options">options</a> &middot;
+<a href="#news">news</a>
 </center>
 <p>
-
+<hr></hr>
 <a name="whatis"></a>
-<h3>What is LuaDoc?</h3>
+<h2>What is LuaDoc?</h2>
 
 <p>
 LuaDoc is a documentation generator tool for
@@ -38,21 +38,20 @@ set of Lua source files and produces a set of HTML pages describing the
 commented declarations and functions.
 </p>
 <p>
-This new version (2.0) is entirely written in Lua.
-It requires Lua 4.0.
+This new version (3.0.0) is entirely written in Lua.
+It requires Lua 5.0 and <a href="http://www.keplerproject.org/compat">Compat-5.1</a>.
 </p>
 
 <a name="download"></a>
-<h3>Download and Installation</h3>
+<h2>Download and Installation</h2>
 <p>
-LuaDoc can be freely downloaded by clicking
-<a href="/~tomas/luadoc/luadoc.tar.gz">here</a> (which gives you a
-<tt>.tar.gz</tt> file).
+LuaDoc can be downloaded in source code from the <a href=
+"http://luaforge.net/frs/?group_id=18">Lua
+Forge</a> page.
 </p>
 <p>
-To install LuaDoc, edit luadoc.lua to point to  your  Lua  installation
-and set LUADOC_HOME variable to point to a directory where LuaDoc files
-will reside.  Then, you may copy all files there.
+To install LuaDoc, copy the "luadoc" folder to your Lua installation folder
+and just <code>require "luadoc"</code>.
 </p>
 <p>
 On Unix boxes, the file luadoc.lua could be used as a script; it's  the
@@ -68,7 +67,7 @@ options.
 </p>
 
 <a name="howto"></a>
-<h3>How to comment</h3>
+<h2>How to comment</h2>
 <p>
 LuaDoc looks for the sequence of three minus signs (---).
 These sequence of characters indicate the beginning of a documented comment.
@@ -100,10 +99,11 @@ The first line (until the first period) will be the resume.
 The last two, which begins with <tt>-- @param</tt>, will compound the
 parameters section.
 The other lines will complete the description of the function.
-The corresponding documentation should be something like:<br>
+The corresponding documentation should be something like:
 </p>
+<pre class="example">
 <table>
-  <tr><td bgcolor="#FFFFFF">
+  <tr><td>
     <li><a name="def_escapes"><tt><b>def_escapes</b> (find, subs)</tt></a>
     <dl>
     <dd>
@@ -117,6 +117,7 @@ The corresponding documentation should be something like:<br>
     </dl></dd>
     </dl>
 </table>
+</pre>
 <p>
 A good example is the LuaDoc system itself.
 You can build the documentation by executing the following line from the
@@ -131,7 +132,7 @@ You can browse them <a href="html/index.html">here</a>.
 </p>
 
 <a name="subsections"></a>
-<h3>Subsections</h3>
+<h2>Subsections</h2>
 <p>
 LuaDoc can generate some subsections at each function or assignment
 documentation.
@@ -147,10 +148,9 @@ followed by the name of the subsection:
 </ul>
 
 <a name="options"></a>
-<h3>Command line options</h3>
+<h2>Command line options</h2>
 <p>
-Version 2.0 has a different set of command line options.
-Here they are:
+The luadoc command line script has some options:
 </p>
 <ul>
   <li> <tt>-d path</tt>: defines the output directory path
@@ -164,27 +164,30 @@ Here they are:
 </ul>
 
 <a name="news"></a>
-<h3>News</h3>
+<h2>News</h2>
+
 <ul>
-  <li>Version 2.0 released [14 aug 2002]
-  <li>Version 1.1 released [31 mar 1999] with "DOS/Windows"-safe sources
+	<li>[xx/xx/2005] Version 3.0.0 released</li>
+	<li>[08/14/2002] Version 2.0 released</li>
+	<li>[03/31/1999] Version 1.1 released with "DOS/Windows"-safe sources
 	(no problems with "<tt>\r\n</tt>" line-breaks) and new <tt>usage</tt>
-	subsection
-  <li>Version 1.0 released [15 mar 1999]
+	subsection</li>
+	<li>[03/15/1999] Version 1.0 released</li>
 </ul>
+
+<a name="contact"></a>
+<h2>Contact us</h2>
+
 <p>
-If you have tried LuaDoc, please mail us your suggestions:<br>
-<img src="email.png">
+For more information please
+<a href="mailto:info-NO-SPAM-THANKS@keplerproject.org">contact us</a>.
+Comments are welcome!
 </p>
 
-<h6>
-<p>
-<i>Last modification:
-<!-- no vi: :r!date -->
-Wed Aug 14 11:25:13 BRT 2002
-by <a href="http://www.tecgraf.puc-rio.br/~tomas">Tom&aacute;s</a></i>
-</p>
-
-</h6>
+<hr>
+<small>
+$Id: index.html,v 1.3 2005/03/08 20:52:39 tuler Exp $
+</small>
+	
 </body>
 </html>
