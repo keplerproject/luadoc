@@ -212,7 +212,7 @@ function Ctags (...)
       e = e.."</"..tag..">"
    end
    return function (field_value)
-	return b..field_value..e.."\n"
+	return b..field_value..e..""
    end
 end
 
@@ -269,7 +269,7 @@ html = {
 		{ "value", Citemize_first ("=", "") },
 		"<dd>\n",
 		{ "resume", Write },
-		"</dd>\n",
+		"</dd><br/>\n",
 		;
 		order_field = { "section", "name" },
 		link_field = { "name" },
