@@ -20,8 +20,6 @@ _VERSION = "3.0.0"
 _COPYRIGHT = "Copyright (c) 2003-2005 The Kepler Project"
 
 -- Load sub-modules
-local sub = require "luadoc.sub"
-local cmp = require "luadoc.cmp"
 require "luadoc.analyze"
 require "luadoc.compose"
 
@@ -39,6 +37,8 @@ Extract documentation from files.  Available options are:
   -g "<find>=<repl>"    define a substitution filter (string.gsub patterns)
   -h, --help            print this help and exit
       --noindexpage     do not generate global index page
+      --doclet doclet   doclet module to generate output
+      --taglet taglet   taglet module to parse input code
   -q, --quiet           suppress all normal output
   -v, --version         print version information]])
 end
@@ -84,6 +84,8 @@ OPTIONS = {
 }
 DEFAULT_OPTIONS = {
 	output_dir = "",
+	taglet = "luadoc.sub",
+	doclet = "luadoc.cmp",
 	verbose = 1,
 }
 function process_options (arg)
@@ -110,25 +112,36 @@ function process_options (arg)
 	return files, options
 end 
 
--- Process options.
-local argc = table.getn(arg)
-if argc < 1 then
-	print_help ()
-end
-local files, options = process_options (arg)
-
--- Process files.
-for i = 1, table.getn(files) do
-	local f = files[i]
-	local h = string.gsub (f, "lua$", "html")
-	h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
-	if options.verbose then
-		print ("processing "..f.." (=> "..h..")")
+function main ()
+	-- Process options.
+	local argc = table.getn(arg)
+	if argc < 1 then
+		print_help ()
 	end
-	luadoc.compose.compose (luadoc.analyze.analyze (f, sub, FILTERS), cmp, h)
+	local files, options = process_options (arg)
+	
+	local taglet = require(options.taglet)
+	local doclet = require(options.doclet)
+	
+	-- Process files.
+	for i = 1, table.getn(files) do
+		local f = files[i]
+		local h = string.gsub (f, "lua$", "html")
+		h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
+		if options.verbose then
+			print ("processing "..f.." (=> "..h..")")
+		end
+		local doc = luadoc.analyze.analyze (f, taglet, FILTERS)
+		
+		local t2s = require "luadoc.tab2str"
+		print(t2s.t2s(doc, "  ", ""))
+		luadoc.compose.compose (doc, doclet, h)
+	end
+	
+	-- Generate index file.
+	if (table.getn(files) > 0) and (not options.noindexpage) then
+		luadoc.compose.index (options.output_dir)
+	end
 end
 
--- Generate index file.
-if (table.getn(files) > 0) and (not options.noindexpage) then
-	luadoc.compose.index (options.output_dir)
-end
+main()
