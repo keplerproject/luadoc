@@ -111,8 +111,8 @@ end
 -- @param cmp Table with output formatting rules.
 -- @param out_file String with the name of the output file.
 
-function compose (in_tab, cmp, out_file)
-   CMP.out_format = cmp		-- !!!!!
+function compose (in_tab, doclet, out_file)
+   CMP.out_format = doclet
    CMP.out_table = {}
    CMP.resolve_anchoring (in_tab, CMP.out_format)
    -- Write output file.
