@@ -79,7 +79,7 @@ function start (doc)
 		local f = io.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
-		lp.include("luadoc/doclet/html/file.lp", { table=table, io=io, tonumber=tonumber, tostring=tostring, type=type, luadoc=luadoc, doc=file_doc })
+		lp.include("luadoc/doclet/html/file.lp", { table=table, io=io, lp=lp, tonumber=tonumber, tostring=tostring, type=type, luadoc=luadoc, doc=file_doc })
 		f:close()	
 	end
 end

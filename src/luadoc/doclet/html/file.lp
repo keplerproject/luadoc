@@ -50,28 +50,7 @@ end
 for i, func in doc do
     if (type(func) == "table") and (func.class == "function") then
 %>
-<div class="function">
-<dt><a name="<%=func.name%>"><b><%=func.name%></b></a><%=func.param_list%></dt>
-<dd><b><%=func.resume or "(nil)"%></b><%=func.description or "(nil)"%></dd>
-
-<i>Parameters</i>
-<ul>
-<%
-if type(func.param) == "table" then
-   for p = 1, table.getn(func.param) do%>
-<li>
-  <%=func.param[p]%>:
-  <%=func.param[func.param[p]] or ""%></li>
-</li>
-<%
-   end
-end
-%>
-</ul>
-
-<i>Return Value:</i>
-<%=func.ret or ""%>
-</div>
+<%=lp.include("luadoc/doclet/html/function.lp", { io=io, table=table, type=type, func=func })%>
 <hr/>
 <%
     end
@@ -85,7 +64,7 @@ end
 
 <div id="about">
 	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
-	<p><small>$Id: file.lp,v 1.1 2005/03/15 20:54:25 tuler Exp $</small></p>
+	<p><small>$Id: file.lp,v 1.2 2005/03/15 21:04:44 tuler Exp $</small></p>
 </div> <!-- id="about" -->
 
 </div> <!-- id="container" -->	
