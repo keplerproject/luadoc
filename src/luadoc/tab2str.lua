@@ -26,7 +26,7 @@ module "luadoc.tab2str"
 function tab2str (t, spacing, indent)
    local tipo = type (t)
    if tipo == "string" then
-      return format ("%q",t)
+      return string.format ("%q",t)
    elseif tipo == "number" then
       return t
    elseif tipo == "table" then
