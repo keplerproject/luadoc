@@ -1,3 +1,9 @@
+
+module "luadoc.cmp"
+
+require "luadoc.compose"
+local CMP = luadoc.compose.CMP
+
 -----------------------------------------------------------------
 -- Composition rules for generating the output files.
 
@@ -289,3 +295,5 @@ html = {
 	},
 	footer = file_footer,
 }
+
+return html

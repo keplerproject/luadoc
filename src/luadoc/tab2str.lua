@@ -1,3 +1,6 @@
+
+module "luadoc.tab2str"
+
 -----------------------------------------------------------------------------
 -- Tab2str: Table to String.
 -- Produce a string with Lua code that can rebuild the given table.

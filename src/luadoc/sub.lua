@@ -1,3 +1,13 @@
+
+module "luadoc.sub"
+
+require "luadoc.analyze"
+local Gappend_pair = luadoc.analyze.Gappend_pair
+local Tcreate = luadoc.analyze.Tcreate
+local Uappend = luadoc.analyze.Uappend
+local Tinsert = luadoc.analyze.Tinsert
+local Ucreate = luadoc.analyze.Ucreate
+
 ---------------------------------------------------------------------------
 -- "Parser" rules for interpreting the input files.
 
@@ -132,3 +142,5 @@ lua = {
 		{ "^(.*)$",			Tcreate ("description") },
 	} },
 }
+
+return lua

@@ -1,3 +1,6 @@
+
+module "luadoc.compose"
+
 ---------------------------------------------------------------------------
 -- Compose documentation.
 -- This file defines the functions responsible for the generation of the
@@ -105,12 +108,11 @@ end
 ---------------------------------------------------------------------------
 -- Compose the output.
 -- @param in_tab Table with the descriptions.
--- @param desc_file String with the name of the output formatting file.
+-- @param cmp Table with output formatting rules.
 -- @param out_file String with the name of the output file.
 
-function compose (in_tab, desc_file, out_file)
-   dofile (desc_file)
-   CMP.out_format = html		-- !!!!!
+function compose (in_tab, cmp, out_file)
+   CMP.out_format = cmp		-- !!!!!
    CMP.out_table = {}
    CMP.resolve_anchoring (in_tab, CMP.out_format)
    -- Write output file.

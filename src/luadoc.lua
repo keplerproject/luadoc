@@ -1,12 +1,19 @@
 #!/usr/local/bin/lua
 
--- Load modules.
---LUADOC_HOME = "/usr/local/luadoc"
-LUADOC_HOME = "c:/users/tuler/prj/kepler/luadoc/src"
-LUADOC_SUB = LUADOC_HOME.."/sub.lua"
-LUADOC_CMP = LUADOC_HOME.."/cmp.lua"
-dofile (LUADOC_HOME.."/analyze.lua")
-dofile (LUADOC_HOME.."/compose.lua")
+-- compatibility code for Lua version 5.0 providing 5.1 behavior
+if string.find (_VERSION, "Lua 5.0") and not package then
+	if not LUA_PATH then
+		LUA_PATH = [[./?.lua;./?/?.lua]]
+	end
+	require"compat-5.1"
+	package.cpath = [[./?.dll]]
+end
+
+-- Load modules
+local sub = require "luadoc.sub"
+local cmp = require "luadoc.cmp"
+require "luadoc.analyze"
+require "luadoc.compose"
 
 -- Print version number.
 function print_version ()
@@ -108,10 +115,10 @@ for i = 1, table.getn(files) do
 	if options.verbose then
 		print ("Processando "..f.." (=> "..h..")")
 	end
-	compose (analyze (f, LUADOC_SUB), LUADOC_CMP, h)
+	luadoc.compose.compose (luadoc.analyze.analyze (f, sub), cmp, h)
 end
 
 -- Generate index file.
 if (table.getn(files) > 0) and (not options.noindexpage) then
-	index (options.output_dir)
+	luadoc.compose.index (options.output_dir)
 end
