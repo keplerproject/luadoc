@@ -9,7 +9,17 @@ if string.find (_VERSION, "Lua 5.0") and not package then
 	package.cpath = [[./?.dll]]
 end
 
--- Load modules
+module "luadoc"
+
+-----------------------------------------------------------------
+-- LuaDoc version number.
+
+_NAME = "LuaDoc"
+_DESCRIPTION = "Documentation Generator Tool for the Lua language"
+_VERSION = "3.0.0"
+_COPYRIGHT = "Copyright (c) 2003-2005 The Kepler Project"
+
+-- Load sub-modules
 local sub = require "luadoc.sub"
 local cmp = require "luadoc.cmp"
 require "luadoc.analyze"
@@ -17,7 +27,7 @@ require "luadoc.compose"
 
 -- Print version number.
 function print_version ()
-	print ("LuaDoc "..LUADOC_VERSION)
+	print (string.format("%s %s\n%s\n%s", _NAME, _VERSION, _DESCRIPTION, _COPYRIGHT))
 end
 
 -- Print usage message.
@@ -113,9 +123,9 @@ for i = 1, table.getn(files) do
 	local h = string.gsub (f, "lua$", "html")
 	h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
 	if options.verbose then
-		print ("Processando "..f.." (=> "..h..")")
+		print ("processing "..f.." (=> "..h..")")
 	end
-	luadoc.compose.compose (luadoc.analyze.analyze (f, sub), cmp, h)
+	luadoc.compose.compose (luadoc.analyze.analyze (f, sub, FILTERS), cmp, h)
 end
 
 -- Generate index file.

@@ -1,17 +1,10 @@
 
 module "luadoc.analyze"
 
-require "luadoc.tab2str"
-
 -----------------------------------------------------------------
 -- General file comment.
 -- Implement the substitution methods of source files.
 -- $Id $
-
------------------------------------------------------------------
--- LuaDoc version number.
-
-LUADOC_VERSION = "2.0"
 
 -----------------------------------------------------------------
 -- Build an append function for the global table.
@@ -247,7 +240,7 @@ function apply (source, desc, result_table)
    return source
 end
 
-function copy_table (tab)
+local function copy_table (tab)
 	local t = {}
 	for i, v in tab do
 		t[i] = v
@@ -256,24 +249,14 @@ function copy_table (tab)
 end
 
 -----------------------------------------------------------------
--- Generate the output.
--- @param doc_table Table with the documentation.
--- @param filter_table Table with the output filters.
--- @see tab2str#t2s.
-
-function write_doc (doc_table, filter_table)
-   io.write (luadoc.t2s (doc_table, "   "))
-end
-
------------------------------------------------------------------
 -- Process an input file according to a set of substitutions and
 -- generate an output file.
 -- @param in_file String with the name of the input file.
 -- @param sub Table with substitution rules.
--- @param out_file String with the name of the output file (optional).
+-- @param FILTERS Table with filters to be applied
 -- @return Table with the structured document.
 
-function analyze (in_file, sub, out_file)
+function analyze (in_file, sub, FILTERS)
    -- load substitutions file.
    -- load source string.
    local file = io.open (in_file, "r")
@@ -286,10 +269,5 @@ function analyze (in_file, sub, out_file)
    -- process source string.
    source = apply (source, sub, doc_table)
    -- generate output of the structured document as a table.
-   if out_file then
-      io.output (out_file)
-      write_doc (doc_table, filter_table)
-      io.close ()
-   end
    return doc_table
 end
