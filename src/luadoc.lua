@@ -3,7 +3,7 @@
 -- compatibility code for Lua version 5.0 providing 5.1 behavior
 if string.find (_VERSION, "Lua 5.0") and not package then
 	if not LUA_PATH then
-		LUA_PATH = [[./?.lua;./?/?.lua]]
+		LUA_PATH = [[./?.lua;./?/?.lua;c:/users/tuler/prj/kepler/cgilua_head/src/?.lua;c:/users/tuler/prj/kepler/cgilua_head/src/?/?.lua]]
 	end
 	require"compat-5.1"
 	package.cpath = [[./?.dll]]
@@ -126,11 +126,15 @@ function main ()
 	-- analyze input
 	local doc = luadoc.analyze.analyze(files, taglet, options, FILTERS)
 
-	local t2s = require "luadoc.tab2str"
-	print(t2s.t2s(doc, "  ", ""))
-
 	-- generate output
-	luadoc.compose.compose(doc, doclet, options)
+--	luadoc.compose.compose(doc, doclet, options)
+--	local doclet = require(options.doclet)
+	local doclet = require("luadoc.doclet.html")
+	doclet.options = options
+	doclet.start(doc)
+	
+--	local raw = require("luadoc.doclet.raw")
+--	raw.start(doc)
 end
 
 main()
