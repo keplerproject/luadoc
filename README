@@ -1,0 +1,53 @@
+LuaDoc, version 2.0
+Tomas Guisasola (tomas@tecgraf.puc-rio.br)
+http://www.tecgraf.puc-rio.br/~tomas/luadoc
+14/aug/2002
+
+What is it?
+
+LuaDoc is a Documentation Generator for Lua source code.  Like  JavaDoc
+it parses the declarations and  documentation  comments  in  a  set  of
+source files and produces a set of HTML pages describing the  commented
+declarations and functions.
+
+Distribution:
+
+This distribution includes a set of  Lua  files  and  this  readme.  It
+requires Lua 4.0.
+
+analyze.lua		-- source code analyzer engine
+sub.lua			-- rules for identifying source code parts
+compose.lua		-- output composer engine
+cmp.lua			-- rules for generating output files
+luadoc.lua		-- main program
+
+Installation:
+
+To install LuaDoc, edit luadoc.lua to point to  your  Lua  installation
+and set LUADOC_HOME variable to point to a directory where LuaDoc files
+will reside.  Then, you may copy all files there.
+
+On Unix boxes, the file luadoc.lua could be used as a script; it's  the
+same as:
+
+lua -f luadoc.lua [options|files]
+
+This is the main script: it will load the other files and  process  the
+options.  Try "luadoc.lua --help": this will  show  you  all  available
+options.
+
+How does it work?
+
+LuaDoc works in two phases: analysis and synthesis.  On the first  one,
+all input files are analyzed and an intermediate structure is made with
+this information.  The second phase is responsible for  cross-reference
+and the composition of the output.  Each phase has an engine  file  and
+one or more description files, that describe the source format and  the
+output format.  This distribution only have a description of Lua source
+files and another for HTML output files.
+
+Some technical documentation can  be  built  running  LuaDoc  over  its
+files.
+
+Please send any comments and bug reports to tomas@tecgraf.puc-rio.br
+

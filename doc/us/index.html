@@ -1,0 +1,174 @@
+<html>
+<head>
+<title>LuaDoc</title>
+<style type="text/css">
+ul { list-style-type: disc };
+</style>
+</head>
+
+<body bgcolor="#ffffff">
+
+<hr>
+<center>
+<table border=0 cellspacing=2 cellpadding=2>
+<tr><td align=center><a href="http://www.lua.org">
+<img border=0 alt="The Lua language" src="lua.png"></a>
+<tr><td align=center><big><b>LuaDoc</b></big>
+<tr><td align=center valign=top>Documentation Generator Tool for the Lua language
+</table>
+</center>
+<p>
+
+<center>
+<a href=#whatis>what is?</a> &middot;
+<a href=#download>download</a> &middot;
+<a href=#howto>how to</a> &middot;
+<a href=#subsections>subsections</a> &middot;
+<a href=#options>options</a> &middot;
+<a href=#news>news</a>
+</center>
+<p>
+
+<a name="whatis"></a>
+<h3>What is LuaDoc?</h3>
+
+LuaDoc is a documentation generator tool for
+<a href="http://www.lua.org">Lua</a>
+source code.
+Like JavaDoc, it parses the declarations and documentation comments in a
+set of Lua source files and produces a set of HTML pages describing the
+commented declarations and functions.
+<p>
+This new version (2.0) is entirely written in Lua.
+It requires Lua 4.0.
+<p>
+
+<a name="download"></a>
+<h3>Download and Installation</h3>
+LuaDoc can be freely downloaded by clicking
+<a href="/~tomas/luadoc/luadoc.tar.gz">here</a> (which gives you a
+<tt>.tar.gz</tt> file).
+<p>
+To install LuaDoc, edit luadoc.lua to point to  your  Lua  installation
+and set LUADOC_HOME variable to point to a directory where LuaDoc files
+will reside.  Then, you may copy all files there.
+<p>
+On Unix boxes, the file luadoc.lua could be used as a script; it's  the
+same as:
+<pre>
+lua -f luadoc.lua [options|files]
+</pre>
+This is the main script: it will load the other files and  process  the
+options.  Try <tt>luadoc.lua --help</tt>: this will  show  you  all  available
+options.
+
+<a name="howto"></a>
+<h3>How to comment</h3>
+LuaDoc looks for the sequence of three minus signs (---).
+These sequence of characters indicate the beginning of a documented comment.
+The last period (.) before a <i>function definition</i> or
+an <i>assignment</i> will be considered the end of the documentation for the
+corresponding function or assignment.
+Inside this documentation, every part has to be ended with a period too.
+<p>
+The following code defines a function and its documentation.
+<table><tr><td bgcolor="#D0D0D0">
+<pre>
+--- Define special sequences of characters.
+-- For each pair (find, subs), the function will create a field named with
+-- find which has the value of subs.
+-- It also creates an index for the table, according to the order of insertion.
+-- @param subs The replacement pattern.
+-- @param find The pattern to find.
+function def_escapes (find, subs)
+   local special = { t = "\t", n = "\n", ['"'] = '"', ['\\'] = '\\', }
+   find = gsub (find, "\\(.)", function (x) return %special[x] or x end)
+   subs = gsub (subs, "\\(.)", function (x) return %special[x] or x end)
+   escape_sequences.n = escape_sequences.n+1
+   escape_sequences[escape_sequences.n] = find
+   escape_sequences[find] = subs
+end
+</pre>
+</table>
+The first line (until the first period) will be the resume.
+The last two, which begins with <tt>-- @param</tt>, will compound the
+parameters section.
+The other lines will complete the description of the function.
+The corresponding documentation should be something like:<br>
+<table>
+  <tr><td bgcolor="#FFFFFF">
+    <li><a name="def_escapes"><tt><b>def_escapes</b> (find, subs)</tt></a>
+    <dl>
+    <dd>
+    Define special sequences of characters.
+    For each pair (find, subs), the function will create a field named with find which has the value of subs.  It also creates an index for the table, according to the order of insertion.
+    <dd><dl>
+    <dt><i>Parameters:</i>
+    <dd>
+    <dd><tt>find</tt>: The pattern to find.
+    <dd><tt>subs</tt>: The replacement pattern.
+    </dl></dd>
+    </dl>
+</table>
+<p>
+A good example is the LuaDoc system itself.
+You can build the documentation by executing the following line from the
+LuaDoc directory:
+<pre>
+luadoc.lua *.lua
+</pre>
+It will produce one HTML file for each Lua file and the an index file.
+You can browse them <a href="html/index.html">here</a>.
+<p>
+
+<a name="subsections"></a>
+<h3>Subsections</h3>
+LuaDoc can generate some subsections at each function or assignment
+documentation.
+Subsections are indicated at the source code with a `<tt>@</tt>' character
+followed by the name of the subsection:
+<ul>
+  <li> <tt>param</tt>: Describe functions' parameters.  It also
+	requires the name of the parameter.
+  <li> <tt>see</tt>: Make reference to other functions or variables.
+  <li> <tt>return</tt>: Describe the returning value or values of the function.
+  <li> <tt>usage</tt>: Describe the usage of the function or variable.
+</ul>
+
+<a name="options"></a>
+<h3>Command line options</h3>
+Version 2.0 has a different set of command line options.
+Here they are:
+<ul>
+  <li> <tt>-d path</tt>: defines the output directory path
+  <li> <tt>-f "&lt;find&gt;=&lt;replace&gt;"</tt>: defines a substitution
+    filter to be applied on all files.  In this option there is no magic
+    characters.
+  <li> <tt>-g "&lt;find&gt;=&lt;replace&gt;"</tt>: defines a substitution
+    filter to be applied on all files.  In this option the strings follow
+    Lua gsub's rules so you can have character classes and define captures.
+  <li> <tt>--noindexpage</tt>: do not generate the index page.
+</ul>
+<p>
+
+<a name="news"></a>
+<h3>News</h3>
+<ul>
+  <li>Version 2.0 released [14 aug 2002]
+  <li>Version 1.1 released [31 mar 1999] with "DOS/Windows"-safe sources
+	(no problems with "<tt>\r\n</tt>" line-breaks) and new <tt>usage</tt>
+	subsection
+  <li>Version 1.0 released [15 mar 1999]
+</ul>
+If you have tried LuaDoc, please mail us your suggestions:<br>
+<img src="email.png">
+
+<p>
+<h6>
+<i>Last modification:
+<!-- no vi: :r!date -->
+Wed Aug 14 11:25:13 BRT 2002
+by <a href="http://www.tecgraf.puc-rio.br/~tomas">Tom&aacute;s</a></i>
+</h6>
+</body>
+</html>
