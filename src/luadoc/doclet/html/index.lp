@@ -12,7 +12,6 @@
 
 <div id="product">
 	<div id="product_logo"><a href="http://www.keplerproject.org/luadoc">
-<!--		<img alt="LuaDoc logo" src="lua.png"/>-->
 	</a></div>
 	<div id="product_name"><big><b>LuaDoc</b></big></div>
 	<div id="product_description">Documentation Generator Tool for the Lua language</div>
@@ -42,7 +41,6 @@
 
 <div id="about">
 	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
-	<p><small>$Id: index.lp,v 1.1 2005/03/15 20:54:25 tuler Exp $</small></p>
 </div> <!-- id="about" -->
 
 </div> <!-- id="container" -->	
