@@ -253,7 +253,7 @@ end
 -- generate an output file.
 -- @param in_file String with the name of the input file.
 -- @param sub Table with substitution rules.
--- @param FILTERS Table with filters to be applied
+-- @param FILTERS Table with filters to be applied.
 -- @return Table with the structured document.
 
 function file (in_file, sub, FILTERS)

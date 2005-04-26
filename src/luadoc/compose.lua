@@ -134,10 +134,10 @@ function index (dir)
 end
 
 -------------------------------------------------------------------------------
--- Compose a doc table, using the specified doclet and options
--- @param doc Table with documentation structure
--- @param doclet Class to generate documentation output
--- @param options Table with command line options
+-- Compose a doc table, using the specified doclet and options.
+-- @param doc Table with documentation structure.
+-- @param doclet Class to generate documentation output.
+-- @param options Table with command line options.
 function compose (doc, doclet, options)
 	-- Process files
 	for i = 1, table.getn(doc.files) do
