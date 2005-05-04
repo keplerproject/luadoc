@@ -174,8 +174,8 @@ function main ()
 	doclet.start(doc)
 end
 
---main()
+main()
 
-for i, v in filelist{"."} do
-	print(i, v)
-end
+--for i, v in filelist{"."} do
+--	print(i, v)
+--end

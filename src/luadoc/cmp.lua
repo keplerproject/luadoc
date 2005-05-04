@@ -226,7 +226,7 @@ function Citemize_first (label, linebreak)
    return function (field_value)
 	local first, rest = first_rest (field_value)
 	if first then
-	   return "<i>"..label.."</i> <b>"..first.."</b>"..rest..
+	   return "<i>"..label.."</i><b>"..first.."</b>"..rest..
 		linebreak.."\n"
 	else
 	   return "<i>"..label.."</i> "..field_value..linebreak.."\n"

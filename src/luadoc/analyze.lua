@@ -292,7 +292,7 @@ function analyze (files, taglet, options, FILTERS)
 		if options.verbose then
 			print ("processing "..f)
 		end
-		local file_doc = luadoc.analyze.file (f, taglet, FILTERS)
+		local file_doc = file (f, taglet, FILTERS)
 		table.insert(doc.files, file_doc)
 	end
 	
