@@ -2,6 +2,21 @@
 module "luadoc.doclet.html"
 
 local lp = require "cgilua.lp"
+require "lfs"
+
+function lfs.open(filename, mode)
+	local f = io.open(filename, mode)
+	if f == nil then
+		filename = string.gsub(filename, "\\", "/")
+		local dir = ""
+		for d in string.gfind(filename, ".-/") do
+			dir = dir .. d
+			lfs.mkdir(dir)
+		end
+		f = io.open(filename, mode)
+	end
+	return f
+end
 
 ----------------------------------------------------------------------------
 -- Preprocess and include the content of a mixed HTML file into the 
@@ -44,10 +59,24 @@ options = {
 }
 
 -------------------------------------------------------------------------------
--- Assembly the output filename for an input file
+-- Returns the name of the html file to be generated from a lua(doc) file.
+-- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
+-- @param filename Name of the file to be processed, may be a .lua file or
+-- a .luadoc file.
+
+function html_file (filename)
+	local h = filename
+	h = string.gsub(h, "lua$", "html")
+	h = string.gsub(h, "luadoc$", "html")
+	return h
+end
+
+-------------------------------------------------------------------------------
+-- Assembly the output filename for an input file.
 function out_file (in_file)
-	local h = string.gsub (in_file, "lua$", "html")
-	h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
+	local h = html_file(in_file)
+--	h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
+	h = options.output_dir..h
 	return h
 end
 
@@ -60,7 +89,7 @@ function start (doc)
 	if (table.getn(doc.files) > 0) and (not options.noindexpage) then
 	
 		local filename = options.output_dir.."index.html"
-		local f = io.open(filename, "w")
+		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
 		lp.include("luadoc/doclet/html/index.lp", { table=table, io=io, tonumber=tonumber, tostring=tostring, type=type, luadoc=luadoc, doc=doc })
@@ -69,17 +98,16 @@ function start (doc)
 	
 	-- Process files
 	for i, file_doc in doc.files do
-	
 		-- assembly the filename
 		local filename = out_file(file_doc.in_file)
 		if options.verbose then
 			print ("generating "..filename)
 		end
 		
-		local f = io.open(filename, "w")
+		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
 		lp.include("luadoc/doclet/html/file.lp", { table=table, io=io, lp=lp, tonumber=tonumber, tostring=tostring, type=type, luadoc=luadoc, doc=file_doc })
-		f:close()	
+		f:close()
 	end
 end

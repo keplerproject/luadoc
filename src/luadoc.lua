@@ -122,14 +122,25 @@ function process_options (arg)
 	return files, options
 end 
 
+-------------------------------------------------------------------------------
+-- Creates a list of files, based on the given list of files/directories, 
+-- recursing into directories. Only files with some defined extensions are
+-- included in the list.
+
 function filelist (files, t)
+	local patterns = { ".*%.lua$", ".*%.luadoc$" }
 	t = t or {}
 	for i = 1, table.getn(files) do
 		local f = files[i]
 		local attr = lfs.attributes(f)
 		assert(attr, string.format("error stating file `%s'", f))
 		if attr.mode == "file" then
-			table.insert(t, f)
+			for j = 1, table.getn(patterns) do
+				if string.find(f, patterns[j]) ~= nil then
+					table.insert(t, f)
+					break
+				end
+			end
 		elseif attr.mode == "directory" then
 			for file in lfs.dir(f) do
 				if file ~= "." and file ~= ".." then
@@ -150,6 +161,7 @@ function main ()
 		print_help ()
 	end
 	local files, options = process_options (arg)
+	files = filelist(files)
 	
 	-- load config file
 	if options.config ~= nil then
@@ -175,7 +187,3 @@ function main ()
 end
 
 main()
-
---for i, v in filelist{"."} do
---	print(i, v)
---end

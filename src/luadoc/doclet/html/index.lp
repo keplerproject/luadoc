@@ -31,7 +31,7 @@
 
 <ul>
 <%for i, file_doc in doc.files do%>
-	<li><a href="<%=luadoc.doclet.html.out_file(file_doc.in_file)%>"><%=file_doc.in_file%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.in_file)%>"><%=file_doc.in_file%></a></li>
 <%end%>
 </ul>
 
