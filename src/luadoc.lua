@@ -3,13 +3,15 @@
 -- compatibility code for Lua version 5.0 providing 5.1 behavior
 if string.find (_VERSION, "Lua 5.0") and not package then
 	if not LUA_PATH then
-		LUA_PATH = [[./?.lua;./?/?.lua;c:/users/tuler/prj/kepler_dev/cgilua/src/?.lua;c:/users/tuler/prj/kepler_dev/cgilua/src/?/?.lua]]
+		LUA_PATH = [[./?.lua;./?/?.lua;c:/users/tuler/prj/kepler/cgilua/src/?.lua;c:/users/tuler/prj/kepler/cgilua/src/?/?.lua]]
 	end
 	require"compat-5.1"
-	package.cpath = [[./?.dll]]
+	package.cpath = [[./?.dll;../../luafilesystem/bin/vc6/?.dll]]
 end
 
 module "luadoc"
+
+require "lfs"
 
 -----------------------------------------------------------------
 -- LuaDoc version number.
@@ -120,6 +122,27 @@ function process_options (arg)
 	return files, options
 end 
 
+function filelist (files, t)
+	t = t or {}
+	for i = 1, table.getn(files) do
+		local f = files[i]
+		local attr = lfs.attributes(f)
+		assert(attr, string.format("error stating file `%s'", f))
+		if attr.mode == "file" then
+			table.insert(t, f)
+		elseif attr.mode == "directory" then
+			for file in lfs.dir(f) do
+				if file ~= "." and file ~= ".." then
+					filelist({ f .. "/" .. file }, t)
+				end
+			end
+		else
+			error(string.format("invalid file `%s': %s", f, attr.mode))
+		end
+	end
+	return t
+end
+
 function main ()
 	-- Process options.
 	local argc = table.getn(arg)
@@ -127,6 +150,17 @@ function main ()
 		print_help ()
 	end
 	local files, options = process_options (arg)
+	
+	-- load config file
+	if options.config ~= nil then
+		-- load specified config file
+		dofile(options.config)
+	else
+		-- load default config file
+		require("luadoc.config")
+	end
+	
+	-- stat files and recurse subdirectories
 	
 	local taglet = require(options.taglet)
 	local doclet = require(options.doclet)
@@ -140,4 +174,8 @@ function main ()
 	doclet.start(doc)
 end
 
-main()
+--main()
+
+for i, v in filelist{"."} do
+	print(i, v)
+end
