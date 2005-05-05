@@ -3,7 +3,7 @@
 -- compatibility code for Lua version 5.0 providing 5.1 behavior
 if string.find (_VERSION, "Lua 5.0") and not package then
 	if not LUA_PATH then
-		LUA_PATH = [[./?.lua;./?/?.lua;c:/users/tuler/prj/kepler/cgilua/src/?.lua;c:/users/tuler/prj/kepler/cgilua/src/?/?.lua]]
+		LUA_PATH = [[./?.lua;./?/?.lua;../../cgilua/src/?.lua;../../cgilua/src/?/?.lua]]
 	end
 	require"compat-5.1"
 	package.cpath = [[./?.dll;../../luafilesystem/bin/vc6/?.dll]]
@@ -94,7 +94,7 @@ OPTIONS = {
 }
 DEFAULT_OPTIONS = {
 	output_dir = "",
-	taglet = "luadoc.sub",
+	taglet = "luadoc.taglet.standard",
 	doclet = "luadoc.doclet.html",
 	verbose = 1,
 }
@@ -161,7 +161,9 @@ function main ()
 		print_help ()
 	end
 	local files, options = process_options (arg)
-	files = filelist(files)
+
+	-- recurse subdirectories
+--	files = filelist(files)
 	
 	-- load config file
 	if options.config ~= nil then
@@ -172,13 +174,13 @@ function main ()
 		require("luadoc.config")
 	end
 	
-	-- stat files and recurse subdirectories
-	
 	local taglet = require(options.taglet)
 	local doclet = require(options.doclet)
 
 	-- analyze input
 	local doc = luadoc.analyze.analyze(files, taglet, options, FILTERS)
+--	taglet.options = options
+--	local doc = taglet.start(files)
 
 	-- generate output
 --	luadoc.compose.compose(doc, doclet, options)
