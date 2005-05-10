@@ -1,7 +1,17 @@
 
 module "luadoc.taglet.standard"
 
+require "luadoc"
 require "lfs"
+
+function parse_file (filepath, doc)
+	-- read the whole file
+	local f = io.open(filepath, "r")
+	local content = f:read("*a")
+	f:close()	
+	
+	return doc
+end
 
 function file (filepath, doc)
 	local patterns = { ".*%.lua$", ".*%.luadoc$" }
@@ -12,7 +22,8 @@ function file (filepath, doc)
 	end)
 	
 	if valid then
-		print(filepath)
+		luadoc.logger:info(string.format("processing file `%s'", filepath))
+		doc = parse_file(filepath, doc)
 	end
 	
 	return doc
@@ -35,7 +46,7 @@ end
 function start (files, doc)
 	assert(files, "file list not specified")
 	
-	-- Create an empty document, or the given one
+	-- Create an empty document, or use the given one
 	doc = doc or {
 		files = {},
 		modules = {},

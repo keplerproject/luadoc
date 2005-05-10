@@ -3,7 +3,7 @@
 -- compatibility code for Lua version 5.0 providing 5.1 behavior
 if string.find (_VERSION, "Lua 5.0") and not package then
 	if not LUA_PATH then
-		LUA_PATH = [[./?.lua;./?/?.lua;../../cgilua/src/?.lua;../../cgilua/src/?/?.lua]]
+		LUA_PATH = [[./?.lua;./?/?.lua;../../cgilua/src/?.lua;../../cgilua/src/?/?.lua;../../lualogging/src/?.lua]]
 	end
 	require"compat-5.1"
 	package.cpath = [[./?.dll;../../luafilesystem/bin/vc6/?.dll]]
@@ -12,8 +12,12 @@ end
 module "luadoc"
 
 require "lfs"
+require "logging"
+require "logging.console"
+logger = logging.console()
+--logger = logging.file("luadoc.log")
 
------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- LuaDoc version number.
 
 _NAME = "LuaDoc"
@@ -178,9 +182,9 @@ function main ()
 	local doclet = require(options.doclet)
 
 	-- analyze input
-	local doc = luadoc.analyze.analyze(files, taglet, options, FILTERS)
---	taglet.options = options
---	local doc = taglet.start(files)
+--	local doc = luadoc.analyze.analyze(files, taglet, options, FILTERS)
+	taglet.options = options
+	local doc = taglet.start(files)
 
 	-- generate output
 --	luadoc.compose.compose(doc, doclet, options)
