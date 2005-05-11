@@ -8,7 +8,7 @@ function parse_file (filepath, doc)
 	-- read the whole file
 	local f = io.open(filepath, "r")
 	local content = f:read("*a")
-	f:close()	
+	f:close()
 	
 	return doc
 end
@@ -31,13 +31,14 @@ end
 
 function directory (path, doc)
 	for f in lfs.dir(path) do
-		local attr = lfs.attributes(f)
-		assert(attr, string.format("error stating path `%s'", path))
+		local fullpath = path .. "/" .. f
+		local attr = lfs.attributes(fullpath)
+		assert(attr, string.format("error stating file `%s'", fullpath))
 		
 		if attr.mode == "file" then
-			doc = file(f, doc)
+			doc = file(fullpath, doc)
 		elseif attr.mode == "directory" and f ~= "." and f ~= ".." then
-			doc = directory(f, doc)
+			doc = directory(fullpath, doc)
 		end
 	end
 	return doc
