@@ -4,10 +4,59 @@ module "luadoc.taglet.standard"
 require "luadoc"
 require "lfs"
 
+local function parse_code (f, line)
+	local code = {}
+	while line ~= nil do
+		if string.find(line, "^%-%-%-") then
+			-- reached another luadoc block
+			return line, code
+		else
+			table.insert(code, line)
+			line = f:read()
+		end
+	end
+	-- reached end of file
+	return line, code
+end
+
+local function parse_block (f, line)
+	local block = {
+		comment = {},
+		code = {},
+	}
+	
+	while line ~= nil do
+		if string.find(line, "^%-%-") == nil then
+			-- reached end of comment, read the code below it
+			-- TODO: allow empty lines
+			line, block.code = parse_code(f, line)
+			return line, block
+		else
+			table.insert(block.comment, line)
+			line = f:read()
+		end
+	end
+	-- reached end of file
+	return line, block
+end
+
 function parse_file (filepath, doc)
-	-- read the whole file
+	local blocks = {}
+	local d = nil
+	
+	-- read each line
 	local f = io.open(filepath, "r")
-	local content = f:read("*a")
+	local line = f:read()
+	while line ~= nil do
+		if string.find(line, "^%-%-%-") then
+			-- reached a luadoc block
+			local block
+			line, block = parse_block(f, line)
+			table.insert(blocks, block)
+		else
+			line = f:read()
+		end
+	end
 	f:close()
 	
 	return doc

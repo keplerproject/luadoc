@@ -4,6 +4,8 @@ module "luadoc.doclet.html"
 local lp = require "cgilua.lp"
 require "lfs"
 
+-------------------------------------------------------------------------------
+-- Opens a file, creating the directories if necessary
 function lfs.open(filename, mode)
 	local f = io.open(filename, mode)
 	if f == nil then
@@ -21,7 +23,7 @@ end
 ----------------------------------------------------------------------------
 -- Preprocess and include the content of a mixed HTML file into the 
 --  currently 'open' HTML document. 
-----------------------------------------------------------------------------
+
 function lp2func (filename, doc)
 	local fh = assert (io.open (filename))
 	local prog = fh:read("*a")

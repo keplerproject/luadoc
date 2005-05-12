@@ -154,7 +154,7 @@ function Treturn (field)
 end
 
 -----------------------------------------------------------------
--- Build an attribution funciton to the upper level table.
+-- Build an attribution function to the upper level table.
 -- The created function will be responsible for attributions to
 -- the [[field]] of the upper level current table.
 -- @param field String with the name of the field of the upper
