@@ -42,10 +42,11 @@ end
 
 function parse_file (filepath, doc)
 	local blocks = {}
-	local d = nil
+	local module = nil
 	
 	-- read each line
 	local f = io.open(filepath, "r")
+	local i = 1
 	local line = f:read()
 	while line ~= nil do
 		if string.find(line, "^%-%-%-") then
@@ -58,6 +59,16 @@ function parse_file (filepath, doc)
 		end
 	end
 	f:close()
+	
+	-- store blocks in file hierarchy
+	-- TODO make hierarchy
+	doc.files[filepath] = blocks
+	
+	-- if module definition is found, store in module hierarchy
+	-- TODO find module definition
+	if module ~= nil then
+		doc.modules[module] = blocks
+	end
 	
 	return doc
 end
