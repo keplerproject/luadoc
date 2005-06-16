@@ -2,23 +2,7 @@
 module "luadoc.doclet.html"
 
 local lp = require "cgilua.lp"
-require "lfs"
-
--------------------------------------------------------------------------------
--- Opens a file, creating the directories if necessary
-function lfs.open(filename, mode)
-	local f = io.open(filename, mode)
-	if f == nil then
-		filename = string.gsub(filename, "\\", "/")
-		local dir = ""
-		for d in string.gfind(filename, ".-/") do
-			dir = dir .. d
-			lfs.mkdir(dir)
-		end
-		f = io.open(filename, mode)
-	end
-	return f
-end
+require "luadoc.util"
 
 ----------------------------------------------------------------------------
 -- Preprocess and include the content of a mixed HTML file into the 
