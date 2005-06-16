@@ -75,8 +75,8 @@ end
 
 -------------------------------------------------------------------------------
 -- Assembly the output filename for an input file.
-function out_file (in_file)
-	local h = html_file(in_file)
+function out_file (filename)
+	local h = html_file(filename)
 --	h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
 	h = options.output_dir..h
 	return h
@@ -89,8 +89,8 @@ end
 function start (doc)
 	-- Generate index file
 	if (table.getn(doc.files) > 0) and (not options.noindexpage) then
-	
 		local filename = options.output_dir.."index.html"
+		luadoc.logger:info(string.format("generating file `%s'", filename))
 		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
@@ -101,9 +101,9 @@ function start (doc)
 	-- Process files
 	for i, file_doc in doc.files do
 		-- assembly the filename
-		local filename = out_file(file_doc.in_file)
+		local filename = out_file(file_doc.name)
 		if options.verbose then
-			print ("generating "..filename)
+			luadoc.logger:info(string.format("generating file `%s'", filename))
 		end
 		
 		local f = lfs.open(filename, "w")

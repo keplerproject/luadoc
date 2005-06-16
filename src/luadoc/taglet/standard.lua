@@ -62,7 +62,11 @@ function parse_file (filepath, doc)
 	
 	-- store blocks in file hierarchy
 	-- TODO make hierarchy
-	doc.files[filepath] = blocks
+	table.insert(doc.files, {
+		type = "file",
+		name = filepath,
+		doc = blocks,
+	})
 	
 	-- if module definition is found, store in module hierarchy
 	-- TODO find module definition

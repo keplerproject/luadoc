@@ -31,9 +31,18 @@
 
 <ul>
 <%for i, file_doc in doc.files do%>
-	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.in_file)%>"><%=file_doc.in_file%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
 <%end%>
 </ul>
+
+<h2><a name="modules"></a>Modules</h2>
+
+<ul>
+<%for i, module_doc in doc.modules do%>
+	<li><a href="<%=luadoc.doclet.html.html_module(module_doc.name)%>"><%=module_doc.name%></a></li>
+<%end%>
+</ul>
+
 
 </div> <!-- id="content" -->
 
