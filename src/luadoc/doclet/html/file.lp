@@ -31,7 +31,7 @@
 
 <dl>
 <%
-for i, func in doc do
+for i, func in ipairs(doc) do
     if (type(func) == "table") and (func.class == "function") then
 %>
 	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;<%=func.param_list%></dt>
@@ -47,7 +47,7 @@ end
 
 <dl>
 <%
-for i, func in doc do
+for i, func in ipairs(doc) do
     if (type(func) == "table") and (func.class == "function") then
 %>
 <%=lp.include("luadoc/doclet/html/function.lp", { io=io, table=table, type=type, func=func })%>

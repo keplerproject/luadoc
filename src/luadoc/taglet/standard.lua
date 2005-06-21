@@ -60,6 +60,76 @@ local function parse_code (f, line, modulename)
 end
 
 -------------------------------------------------------------------------------
+
+local function parse_tag (block)
+	-- @author <text>
+	-- @param <name> <text>
+	-- @see <identifier>
+	-- @see <identifier> <text>
+	-- @see <identifier>, <identifier> REALLY SUPPORT THIS?
+	-- @return <name> <text>
+	-- @return <name> <text>
+	-- @return <name>, <name>, <name> REALLY SUPPORT THIS?
+	-- @usage
+	-- @deprecated
+	-- @field HOW DOES THIS WORK?
+	
+end
+
+-------------------------------------------------------------------------------
+-- Parses the information inside a block comment.
+-- @param block.comment comment text of the block
+-- @return block parameter
+
+local function parse_comment (block)
+	
+	local set_or_insert = function (table, fieldname)
+		return function (text)
+			if table[fieldname] == nil then
+				table[fieldname] = text
+			elseif type(table[fieldname]) == "string" then
+				table[fieldname] = text
+			elseif type(table[fieldname]) == "table" then
+				table.insert(table[fieldname], text)
+			end
+		end
+	end
+	
+	local set_or_append = function (table, fieldname)
+		return function (text)
+			if table[fieldname] == nil then
+				table[fieldname] = text
+			else
+				table[fieldname] = string.format("%s %s", table[fieldname], text)
+			end
+		end
+	end
+
+	local section
+	local process = set_or_append(block, "description")
+
+	table.foreachi(block.comment, function (i, line)
+		line = util.trim_comment(line)
+		
+		local r, _, section, text = string.find(line, "@([_%w]+)%s+(.-)")
+		if r ~= nil then
+			-- found subsection
+			process = set_or_insert(block, section)
+		else
+			process(line)
+		end
+	end)
+	
+	-- TODO: discover class of block
+	block.class = "function"
+	block.name = "TODO: name"
+	block.param_list = "TODO: param_list"
+	block.resume = "TODO: resume"
+	
+	return block
+end
+
+-------------------------------------------------------------------------------
 -- Parses a block of comment, started with ---. Read until the next block of
 -- comment.
 -- @param f file handle
@@ -80,6 +150,10 @@ local function parse_block (f, line, modulename)
 			-- reached end of comment, read the code below it
 			-- TODO: allow empty lines
 			line, block.code, modulename = parse_code(f, line, modulename)
+			
+			-- parse information in block comment
+			block = parse_comment(block)
+			
 			return line, block, modulename
 		else
 			table.insert(block.comment, line)
@@ -87,6 +161,10 @@ local function parse_block (f, line, modulename)
 		end
 	end
 	-- reached end of file
+	
+	-- parse information in block comment
+	block = parse_comment(block)
+	
 	return line, block, modulename
 end
 

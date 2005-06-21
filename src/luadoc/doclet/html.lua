@@ -110,7 +110,7 @@ function start (doc)
 		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
-		lp.include("luadoc/doclet/html/file.lp", { table=table, io=io, lp=lp, tonumber=tonumber, tostring=tostring, type=type, luadoc=luadoc, doc=file_doc })
+		lp.include("luadoc/doclet/html/file.lp", { table=table, io=io, lp=lp, ipairs=ipairs, tonumber=tonumber, tostring=tostring, type=type, luadoc=luadoc, doc=file_doc.doc })
 		f:close()
 	end
 	
@@ -123,7 +123,7 @@ function start (doc)
 		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
-		lp.include("luadoc/doclet/html/module.lp", { table=table, io=io, lp=lp, tonumber=tonumber, type=type, luadoc=luadoc, doc=module_doc })
+		lp.include("luadoc/doclet/html/module.lp", { table=table, io=io, lp=lp, ipairs=ipairs, tonumber=tonumber, type=type, luadoc=luadoc, doc=module_doc })
 		f:close()
 	end
 end

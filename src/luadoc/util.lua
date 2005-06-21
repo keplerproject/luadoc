@@ -21,7 +21,7 @@ end
 -- @return trimmed string
 
 function trim_comment (s)
-	-- TODO
+	s = string.gsub(s, "%-%-+(.*)$", "%1")
 	return trim(s)
 end
 
