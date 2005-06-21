@@ -14,7 +14,7 @@ module "luadoc"
 require "lfs"
 require "logging"
 require "logging.console"
-logger = logging.console()
+logger = logging.console("[%level] %message\n")
 --logger = logging.file("luadoc.log")
 
 -------------------------------------------------------------------------------
@@ -165,6 +165,12 @@ function main ()
 		print_help ()
 	end
 	local files, options = process_options (arg)
+	
+	if options.verbose then
+		logger:setLevel(logging.INFO)
+	else
+		logger:setLevel(logging.WARN)
+	end
 
 	-- recurse subdirectories
 --	files = filelist(files)

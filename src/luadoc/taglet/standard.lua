@@ -8,10 +8,11 @@ require "lfs"
 -------------------------------------------------------------------------------
 -- Checks if the line contains a module definition.
 -- @param line string with line text
+-- @param currentmodule module already found, if any
 -- @return the name of the defined module, or nil if there is no module 
 -- definition
 
-local function check_module (line)
+local function check_module (line, currentmodule)
 	line = util.trim(line)
 	
 	-- module"x.y"
@@ -20,37 +21,35 @@ local function check_module (line)
 	-- module("x.y")
 	-- module('x.y')
 	-- module([[x.y]])
+	-- module(...)
 
 	-- TODO: support all the above formats
 	local r, _, modulename = string.find(line, "^module%s*[\"'](.-)[\"']")
 	if r then
 		-- found module definition
-		luadoc.logger:debug(string.format("found module definition on `%s'", line))
-		
-		-- now looks for the module name
-		local modulename
+		luadoc.logger:debug(string.format("found module `%s'", modulename))
 		return modulename
 	end
-	return nil
+	return currentmodule
 end
 
 -------------------------------------------------------------------------------
 -- @param f file handle
 -- @param line current line being parsed
+-- @param modulename module already found, if any
 -- @return current line
 -- @return code block
 -- @return modulename if found
 
-local function parse_code (f, line)
+local function parse_code (f, line, modulename)
 	local code = {}
-	local modulename
 	while line ~= nil do
 		if string.find(line, "^%-%-%-") then
 			-- reached another luadoc block, end this parsing
 			return line, code, modulename
 		else
 			-- look for a module definition
-			modulename = check_module(line)
+			modulename = check_module(line, modulename)
 			
 			table.insert(code, line)
 			line = f:read()
@@ -65,22 +64,22 @@ end
 -- comment.
 -- @param f file handle
 -- @param line being parsed
+-- @param modulename module already found, if any
 -- @return line
 -- @return block parsed
 -- @return modulename if found
 
-local function parse_block (f, line)
+local function parse_block (f, line, modulename)
 	local block = {
 		comment = {},
 		code = {},
 	}
-	local modulename
 	
 	while line ~= nil do
 		if string.find(line, "^%-%-") == nil then
 			-- reached end of comment, read the code below it
 			-- TODO: allow empty lines
-			line, block.code, modulename = parse_code(f, line)
+			line, block.code, modulename = parse_code(f, line, modulename)
 			return line, block, modulename
 		else
 			table.insert(block.comment, line)
@@ -99,7 +98,7 @@ end
 
 function parse_file (filepath, doc)
 	local blocks = {}
-	local modulename
+	local modulename = nil
 	
 	-- read each line
 	local f = io.open(filepath, "r")
@@ -109,11 +108,11 @@ function parse_file (filepath, doc)
 		if string.find(line, "^%-%-%-") then
 			-- reached a luadoc block
 			local block
-			line, block = parse_block(f, line)
+			line, block, modulename = parse_block(f, line, modulename)
 			table.insert(blocks, block)
 		else
 			-- look for a module definition
-			modulename = check_module(line)
+			modulename = check_module(line, modulename)
 			
 			line = f:read()
 		end
@@ -129,9 +128,15 @@ function parse_file (filepath, doc)
 	})
 	
 	-- if module definition is found, store in module hierarchy
-	-- TODO find module definition
+	-- TODO find a way to write module level comments
+	-- TODO make hierarchy
 	if modulename ~= nil then
-		doc.modules[modulename] = blocks
+		if doc.modules[modulename] ~= nil then
+			-- module is already defined, just add the blocks
+			table.foreachi(blocks, function (i, v) table.insert(doc.modules[modulename], v) end)
+		else
+			doc.modules[modulename] = blocks
+		end
 	end
 	
 	return doc

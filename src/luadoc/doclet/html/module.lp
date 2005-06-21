@@ -27,22 +27,37 @@
 </div> <!-- id="navigation" -->
 
 <div id="content">
-<h2><a name="files"></a>Files</h2>
+<h2><a name="functions"></a>Functions</h2>
 
-<ul>
-<%for i, file_doc in doc.files do%>
-	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
-<%end%>
-</ul>
+<dl>
+<%
+for i, func in doc do
+    if (type(func) == "table") and (func.class == "function") then
+%>
+	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;<%=func.param_list%></dt>
+	<dd><%=func.resume or ""%></dd>
+	<br>
+<%
+    end
+end
+%>
+</dl>
 
-<h2><a name="modules"></a>Modules</h2>
+<h2><a name="functions"></a>Functions</h2>
 
-<ul>
-<%for modulename, module_doc in doc.modules do%>
-	<li><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
-<%end%>
-</ul>
-
+<dl>
+<%
+for i, func in doc do
+    if (type(func) == "table") and (func.class == "function") then
+%>
+<%=lp.include("luadoc/doclet/html/function.lp", { io=io, table=table, type=type, func=func })%>
+<br>
+<hr/>
+<%
+    end
+end
+%>
+</dl>
 
 </div> <!-- id="content" -->
 
