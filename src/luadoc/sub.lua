@@ -1,4 +1,7 @@
 
+---------------------------------------------------------------------------
+-- "Parser" rules for interpreting the input files.
+
 module "luadoc.sub"
 
 require "luadoc.analyze"
@@ -7,9 +10,6 @@ local Tcreate = luadoc.analyze.Tcreate
 local Uappend = luadoc.analyze.Uappend
 local Tinsert = luadoc.analyze.Tinsert
 local Ucreate = luadoc.analyze.Ucreate
-
----------------------------------------------------------------------------
--- "Parser" rules for interpreting the input files.
 
 ---------------------------------------------------------------------------
 -- Begin comment.

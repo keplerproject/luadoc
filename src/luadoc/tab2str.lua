@@ -1,26 +1,26 @@
 
-module "luadoc.tab2str"
-
 -----------------------------------------------------------------------------
 -- Tab2str: Table to String.
 -- Produce a string with Lua code that can rebuild the given table.
 
+module "luadoc.tab2str"
+
 -----------------------------------------------------------------------------
 -- "Imprime" uma tabela em uma string.
--- Os campos são gerados na ordem que vierem da função next.
--- Os campos de valores numéricos não são separados dos campos "string"
--- e os outros tipos (userdata, função e tabela) são ignorados.
--- Se o parâmetro [[spacing]] for nulo, é considerado como se fosse [[""]].
--- caso contrário, seu valor é usado na indentação e um [[\n]] é acrescentado
+-- Os campos sao gerados na ordem que vierem da funcao next.
+-- Os campos de valores numericos nao sao separados dos campos "string"
+-- e os outros tipos (userdata, funcao e tabela) sao ignorados.
+-- Se o parametro [[spacing]] for nulo, eh considerado como se fosse [[""]].
+-- caso contrario, seu valor eh usado na indentacao e um [[\n]] eh acrescentado
 -- entre os elementos.
--- Cada tabela listada ganha um número (indicado entre [[<]] e [[>]],
--- logo depois da [[{]] inicial) que serve para referência cruzada de
--- tabelas já listadas.  Neste caso, as tabelas já listadas são
--- representadas por [[{@]] seguido do número da tabela e [[}]].
--- @param t Número a ser "impresso".
--- @param spacing String de espaçamento entre elementos da tabela.
--- @param indent String com a indentação inicial (este parâmetro é utilizado
---	pela própria função para acumular a indentação de tabelas internas).
+-- Cada tabela listada ganha um numero (indicado entre [[<]] e [[>]],
+-- logo depois da [[{]] inicial) que serve para referencia cruzada de
+-- tabelas ja listadas.  Neste caso, as tabelas ja listadas sao
+-- representadas por [[{@]] seguido do numero da tabela e [[}]].
+-- @param t Numero a ser "impresso".
+-- @param spacing String de espacamento entre elementos da tabela.
+-- @param indent String com a indentacao inicial (este parametro eh utilizado
+--	pela propria funcao para acumular a indentacao de tabelas internas).
 -- @return String com o resultado.
 
 function tab2str (t, spacing, indent)

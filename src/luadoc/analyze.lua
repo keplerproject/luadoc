@@ -1,10 +1,10 @@
 
-module "luadoc.analyze"
-
 -----------------------------------------------------------------
 -- General file comment.
 -- Implement the substitution methods of source files.
 -- $Id $
+
+module "luadoc.analyze"
 
 -----------------------------------------------------------------
 -- Build an append function for the global table.

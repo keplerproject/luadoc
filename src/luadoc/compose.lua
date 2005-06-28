@@ -1,10 +1,10 @@
 
-module "luadoc.compose"
-
 ---------------------------------------------------------------------------
 -- Compose documentation.
 -- This file defines the functions responsible for the generation of the
 -- output document.
+
+module "luadoc.compose"
 
 ---------------------------------------------------------------------------
 -- The global object.

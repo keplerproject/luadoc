@@ -1,11 +1,11 @@
 
+-----------------------------------------------------------------
+-- Composition rules for generating the output files.
+
 module "luadoc.cmp"
 
 require "luadoc.compose"
 local CMP = luadoc.compose.CMP
-
------------------------------------------------------------------
--- Composition rules for generating the output files.
 
 -----------------------------------------------------------------
 -- Table of expected Lua types to be bolded on the output.

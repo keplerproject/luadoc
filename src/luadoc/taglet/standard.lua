@@ -6,6 +6,26 @@ local util = require "luadoc.util"
 require "lfs"
 
 -------------------------------------------------------------------------------
+-- Checks if the line contains a function definition
+-- @param line string with line text
+-- @return function information or nil if no function definition found
+
+local function check_function (line)
+	line = util.trim(line)
+	
+	-- function x.y:z (a, b, ...)
+	-- local function x.y:z (a, b, ...)
+
+	-- TODO: support "local function"
+--	local r, _, identifier, param_list = string.find(line, "^local%s+function%s+([^%(%s])%s*%((.-)%)")
+	local r, _, identifier, param_list = string.find(line, "^function%s+([^%(%s]+)%s*%((.-)%)")
+	
+	if r ~= nil then
+		return identifier, param_list
+	end
+end
+
+-------------------------------------------------------------------------------
 -- Checks if the line contains a module definition.
 -- @param line string with line text
 -- @param currentmodule module already found, if any
@@ -72,8 +92,7 @@ local function parse_tag (block)
 	-- @return <name>, <name>, <name> REALLY SUPPORT THIS?
 	-- @usage
 	-- @deprecated
-	-- @field HOW DOES THIS WORK?
-	
+	-- @field HOW DOES THIS WORK?	
 end
 
 -------------------------------------------------------------------------------
@@ -83,30 +102,37 @@ end
 
 local function parse_comment (block)
 	
-	local set_or_insert = function (table, fieldname)
+	-- set a string field on a table key, or if there is already a string
+	-- in that key, make an array of strings
+	local set_insert = function (t, fieldname)
 		return function (text)
-			if table[fieldname] == nil then
-				table[fieldname] = text
-			elseif type(table[fieldname]) == "string" then
-				table[fieldname] = text
-			elseif type(table[fieldname]) == "table" then
-				table.insert(table[fieldname], text)
-			end
-		end
-	end
-	
-	local set_or_append = function (table, fieldname)
-		return function (text)
-			if table[fieldname] == nil then
-				table[fieldname] = text
-			else
-				table[fieldname] = string.format("%s %s", table[fieldname], text)
+			if t[fieldname] == nil then
+				t[fieldname] = text
+			elseif type(t[fieldname]) == "string" then
+				t[fieldname] = { t[fieldname], text }
+			elseif type(t[fieldname]) == "table" then
+				table.insert(t[fieldname], text)
 			end
 		end
 	end
 
+	-- set a string field on a table key, or if there is already a string
+	-- in that key, concatenate the strings
+	local set_append = function (t, fieldname, separator)
+		separator = separator or " "
+		return function (text)
+			if t[fieldname] == nil then
+				t[fieldname] = text
+			else
+				t[fieldname] = string.format("%s%s%s", t[fieldname], separator, text)
+			end
+		end
+	end
+
+	-- parse @ tags
 	local section
-	local process = set_or_append(block, "description")
+	local process = set_append(block, "description")
+	local process = function () end
 
 	table.foreachi(block.comment, function (i, line)
 		line = util.trim_comment(line)
@@ -114,16 +140,41 @@ local function parse_comment (block)
 		local r, _, section, text = string.find(line, "@([_%w]+)%s+(.-)")
 		if r ~= nil then
 			-- found subsection
-			process = set_or_insert(block, section)
+			-- TODO: use set_insert in any tag type?
+			--process = set_insert(block, section)
+			--process = insert(block, section)
+			process = function () end
+			process(line)
 		else
 			process(line)
 		end
 	end)
 	
 	-- TODO: discover class of block
-	block.class = "function"
-	block.name = "TODO: name"
-	block.param_list = "TODO: param_list"
+	-- parse first line of code
+	
+	-- get the first non-empty line of code
+	local code = table.foreachi(block.code, function(i, line)
+		if not util.line_empty(line) then
+			return line
+		end
+	end)
+	
+	if code ~= nil then
+		local func_name, param_list = check_function(code)
+		local module_name = check_module(code)
+		
+		if func_name then
+			block.class = "function"
+			block.name = func_name
+			block.param_list = param_list
+			block.resume = "TODO: resume"
+		elseif module_name then
+			block.class = "module"
+			block.name = module_name
+		end
+	end	
+	
 	block.resume = "TODO: resume"
 	
 	return block

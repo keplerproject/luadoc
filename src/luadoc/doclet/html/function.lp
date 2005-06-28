@@ -1,5 +1,5 @@
 <div class="function">
-<dt><a name="<%=func.name%>"><strong><%=func.name%></strong></a><%=func.param_list%></dt>
+<dt><a name="<%=func.name%>"><strong><%=func.name%></strong></a>&nbsp;(<%=func.param_list%>)</dt>
 <dd><strong><%=func.resume or ""%></strong><%=func.description or ""%></dd>
 
 <%if type(func.param) == "table" and table.getn(func.param) > 0 then%>
