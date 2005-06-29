@@ -16,7 +16,7 @@
 
 <%if type(func.ret) == "string" then%>
 <em>Return value:</em>
-<%=func.ret or ""%>
+<%=func.ret%>
 <br>
 <%end%>
 

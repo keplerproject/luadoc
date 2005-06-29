@@ -13,15 +13,26 @@ require "lfs"
 local function check_function (line)
 	line = util.trim(line)
 	
-	-- function x.y:z (a, b, ...)
-	-- local function x.y:z (a, b, ...)
-
-	-- TODO: support "local function"
---	local r, _, identifier, param_list = string.find(line, "^local%s+function%s+([^%(%s])%s*%((.-)%)")
-	local r, _, identifier, param_list = string.find(line, "^function%s+([^%(%s]+)%s*%((.-)%)")
+	-- TODO: parse param_list
 	
+	-- function x.y:z (a, b, ...)
+	local r, _, identifier, param_list = string.find(line, "^function%s+([^%(%s]+)%s*%((.-)%)")
 	if r ~= nil then
-		return identifier, param_list
+		return {
+			name = identifier,
+			param_list = param_list,
+			private = false,
+		}
+	end
+
+	-- local function x.y:z (a, b, ...)
+	local r, _, identifier, param_list = string.find(line, "^local%s+function%s+([^%(%s]+)%s*%((.-)%)")
+	if r ~= nil then
+		return {
+			name = identifier,
+			param_list = param_list,
+			private = true,
+		}
 	end
 end
 
@@ -82,7 +93,8 @@ end
 -------------------------------------------------------------------------------
 
 local function parse_tag (block)
-	-- @author <text>
+	-- @author tuler Danilo Tuler de Oliveira
+	-- @author carregal
 	-- @param <name> <text>
 	-- @see <identifier>
 	-- @see <identifier> <text>
@@ -96,60 +108,73 @@ local function parse_tag (block)
 end
 
 -------------------------------------------------------------------------------
--- Parses the information inside a block comment.
+-- Parses the information inside a block comment
 -- @param block.comment comment text of the block
 -- @return block parameter
 
 local function parse_comment (block)
-	
-	-- set a string field on a table key, or if there is already a string
-	-- in that key, make an array of strings
-	local set_insert = function (t, fieldname)
-		return function (text)
-			if t[fieldname] == nil then
-				t[fieldname] = text
-			elseif type(t[fieldname]) == "string" then
-				t[fieldname] = { t[fieldname], text }
-			elseif type(t[fieldname]) == "table" then
-				table.insert(t[fieldname], text)
-			end
-		end
-	end
-
-	-- set a string field on a table key, or if there is already a string
-	-- in that key, concatenate the strings
-	local set_append = function (t, fieldname, separator)
-		separator = separator or " "
-		return function (text)
-			if t[fieldname] == nil then
-				t[fieldname] = text
-			else
-				t[fieldname] = string.format("%s%s%s", t[fieldname], separator, text)
-			end
-		end
-	end
-
 	-- parse @ tags
-	local section
-	local process = set_append(block, "description")
-	local process = function () end
+	local currenttag = "description"
+	local currenttext
+	
+	local tag_handlers = {
+		["description"] = function (tag, block, text)
+			block[tag] = text
+		end,
+
+		["return"] = function (tag, block, text)
+			tag = "ret"
+			if type(block[tag]) == "string" then
+				block[tag] = { block[tag], text }
+			elseif type(block[tag]) == "table" then
+				table.insert(block[tag], text)
+			else
+				block[tag] = text
+			end
+		end,
+		
+		-- same as return
+		["see"] = function (tag, block, text)
+			if type(block[tag]) == "string" then
+				block[tag] = { block[tag], text }
+			elseif type(block[tag]) == "table" then
+				table.insert(block[tag], text)
+			else
+				block[tag] = text
+			end
+		end,
+		
+		["param"] = function (tag, block, text)
+			block[tag] = block[tag] or {}
+			-- TODO: make this pattern more flexible, accepting empty descriptions
+			local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
+			assert(name, "parameter name not defined")
+			-- TODO do what when it's alredy defined?
+			table.insert(block[tag], name)
+			block[tag][name] = desc
+		end,
+	}
 
 	table.foreachi(block.comment, function (i, line)
 		line = util.trim_comment(line)
 		
-		local r, _, section, text = string.find(line, "@([_%w]+)%s+(.-)")
+		local r, _, tag, text = string.find(line, "@([_%w%.]+)%s+(.*)")
 		if r ~= nil then
-			-- found subsection
-			-- TODO: use set_insert in any tag type?
-			--process = set_insert(block, section)
-			--process = insert(block, section)
-			process = function () end
-			process(line)
+			-- found new tag, add previous one, and start a new one
+			-- TODO: what to do with invalid tags? issue an error? or log a warning?
+			assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
+			tag_handlers[currenttag](currenttag, block, currenttext)
+			
+			currenttag = tag
+			currenttext = text
 		else
-			process(line)
+			currenttext = util.concat(currenttext, line)
 		end
 	end)
-	
+	assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
+	tag_handlers[currenttag](currenttag, block, currenttext)
+
+	-- TODO: parse code before comment, because of param_list and other automatic fields	
 	-- TODO: discover class of block
 	-- parse first line of code
 	
@@ -161,20 +186,20 @@ local function parse_comment (block)
 	end)
 	
 	if code ~= nil then
-		local func_name, param_list = check_function(code)
+		local func_info = check_function(code)
 		local module_name = check_module(code)
 		
-		if func_name then
+		if func_info then
 			block.class = "function"
-			block.name = func_name
-			block.param_list = param_list
-			block.resume = "TODO: resume"
+			block.name = func_info.name
+			block.param_list = func_info.param_list
 		elseif module_name then
 			block.class = "module"
 			block.name = module_name
 		end
 	end	
-	
+
+	-- TODO: what is block.resume?
 	block.resume = "TODO: resume"
 	
 	return block

@@ -35,9 +35,23 @@ function line_empty (line)
 end
 
 -------------------------------------------------------------------------------
+-- Appends two string, but if the first one is nil, use to second one
+-- @param str1 first string, can be nil
+-- @param str2 second string
+-- @return str1 .. " " .. str2, or str2 if str1 is nil
+
+function concat (str1, str2)
+	if str1 == nil then
+		return str2
+	else
+		return str1 .. " " .. str2
+	end
+end
+
+-------------------------------------------------------------------------------
 -- Opens a file, creating the directories if necessary
 -- @param filename full path of the file to open (or create)
--- @param mode
+-- @param mode mode of opening
 -- @return file handle
 
 function lfs.open(filename, mode)
