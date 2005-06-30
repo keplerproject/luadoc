@@ -274,7 +274,10 @@ end
 -- @return table with documentation
 
 function parse_file (filepath, doc)
-	local blocks = {}
+	local blocks = {
+		modulename = nil,
+		filepath = filepath,
+	}
 	local modulename = nil
 	
 	-- read each line
@@ -308,9 +311,12 @@ function parse_file (filepath, doc)
 	-- TODO find a way to write module level comments
 	-- TODO make hierarchy
 	if modulename ~= nil then
+		blocks.modulename = modulename
 		if doc.modules[modulename] ~= nil then
 			-- module is already defined, just add the blocks
-			table.foreachi(blocks, function (i, v) table.insert(doc.modules[modulename], v) end)
+			table.foreachi(blocks, function (i, v)
+				table.insert(doc.modules[modulename], v)
+			end)
 		else
 			doc.modules[modulename] = blocks
 		end
