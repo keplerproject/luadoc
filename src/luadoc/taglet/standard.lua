@@ -12,28 +12,31 @@ require "lfs"
 
 local function check_function (line)
 	line = util.trim(line)
+
+	local patterns = {
+		"^()function%s+([^%(%s]+)%s*%(%s*(.-)%s*%)",
+		"^(local)%s+function%s+([^%(%s]+)%s*%(*s*(.-)%s*%)",
+	}
 	
-	-- TODO: parse param_list
-	
-	-- function x.y:z (a, b, ...)
-	local r, _, identifier, param_list = string.find(line, "^function%s+([^%(%s]+)%s*%((.-)%)")
-	if r ~= nil then
-		return {
-			name = identifier,
-			param_list = param_list,
-			private = false,
-		}
+	local info = table.foreachi(patterns, function (i, pattern)
+		local info = {}
+		local r, _, l, id, param = string.find(line, pattern)
+		if r ~= nil then
+			return {
+				name = id,
+				private = (l == "local"),
+				param = util.split("%s*,%s*", param),
+			}
+		end
+	end)
+
+	-- TODO: remove these assert's?
+	if info ~= nil then
+		assert(info.name, "function name undefined")
+		assert(info.param, string.format("undefined param list for function `%s'", info.name))
 	end
 
-	-- local function x.y:z (a, b, ...)
-	local r, _, identifier, param_list = string.find(line, "^local%s+function%s+([^%(%s]+)%s*%((.-)%)")
-	if r ~= nil then
-		return {
-			name = identifier,
-			param_list = param_list,
-			private = true,
-		}
-	end
+	return info
 end
 
 -------------------------------------------------------------------------------
@@ -109,10 +112,36 @@ end
 
 -------------------------------------------------------------------------------
 -- Parses the information inside a block comment
--- @param block.comment comment text of the block
+-- @param block block with comment field
 -- @return block parameter
 
 local function parse_comment (block)
+
+	-- get the first non-empty line of code
+	local code = table.foreachi(block.code, function(i, line)
+		if not util.line_empty(line) then
+			return line
+		end
+	end)
+	
+	-- parse first line of code
+	if code ~= nil then
+		local func_info = check_function(code)
+		local module_name = check_module(code)
+		
+		if func_info then
+			block.class = "function"
+			block.name = func_info.name
+			block.param = func_info.param
+		elseif module_name then
+			block.class = "module"
+			block.name = module_name
+		end
+	else
+		-- TODO: comment without any code. Does this means we are dealing
+		-- with a file comment?
+	end	
+
 	-- parse @ tags
 	local currenttag = "description"
 	local currenttext
@@ -149,10 +178,29 @@ local function parse_comment (block)
 			-- TODO: make this pattern more flexible, accepting empty descriptions
 			local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
 			assert(name, "parameter name not defined")
-			-- TODO do what when it's alredy defined?
-			table.insert(block[tag], name)
+			local i = table.foreachi(block[tag], function (i, v)
+				if v == name then
+					return i
+				end
+			end)
+			if i == nil then
+				luadoc.logger:warn(string.format("documenting undefined parameter `%s'", name))
+				table.insert(block[tag], name)
+			end
 			block[tag][name] = desc
 		end,
+
+		-- same as return
+		["usage"] = function (tag, block, text)
+			if type(block[tag]) == "string" then
+				block[tag] = { block[tag], text }
+			elseif type(block[tag]) == "table" then
+				table.insert(block[tag], text)
+			else
+				block[tag] = text
+			end
+		end,
+		
 	}
 
 	table.foreachi(block.comment, function (i, line)
@@ -173,31 +221,6 @@ local function parse_comment (block)
 	end)
 	assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
 	tag_handlers[currenttag](currenttag, block, currenttext)
-
-	-- TODO: parse code before comment, because of param_list and other automatic fields	
-	-- TODO: discover class of block
-	-- parse first line of code
-	
-	-- get the first non-empty line of code
-	local code = table.foreachi(block.code, function(i, line)
-		if not util.line_empty(line) then
-			return line
-		end
-	end)
-	
-	if code ~= nil then
-		local func_info = check_function(code)
-		local module_name = check_module(code)
-		
-		if func_info then
-			block.class = "function"
-			block.name = func_info.name
-			block.param_list = func_info.param_list
-		elseif module_name then
-			block.class = "module"
-			block.name = module_name
-		end
-	end	
 
 	-- TODO: what is block.resume?
 	block.resume = "TODO: resume"

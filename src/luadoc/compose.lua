@@ -108,7 +108,7 @@ end
 ---------------------------------------------------------------------------
 -- Compose the output.
 -- @param in_tab Table with the descriptions.
--- @param cmp Table with output formatting rules.
+-- @param doclet Table with output formatting rules.
 -- @param out_file String with the name of the output file.
 
 function file (in_tab, doclet, out_file)

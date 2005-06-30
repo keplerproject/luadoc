@@ -34,7 +34,7 @@
 for i, func in doc do
     if (type(func) == "table") and (func.class == "function") then
 %>
-	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=func.param_list%>)</dt>
+	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
 	<dd><%=func.resume or ""%></dd>
 	<br>
 <%

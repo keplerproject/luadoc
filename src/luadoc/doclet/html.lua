@@ -47,7 +47,7 @@ options = {
 -------------------------------------------------------------------------------
 -- Returns the name of the html file to be generated from a module.
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
--- @param filename Name of the file to be processed, may be a .lua file or
+-- @param modulename Name of the module to be processed, may be a .lua file or
 -- a .luadoc file.
 
 function html_module (modulename)
