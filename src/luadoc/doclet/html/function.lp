@@ -7,8 +7,7 @@
 <ul>
 	<%for p = 1, table.getn(func.param) do%>
 	<li>
-	  <%=func.param[p]%>:
-	  <%=func.param[func.param[p]] or ""%></li>
+	  <%=func.param[p]%>: <%=func.param[func.param[p]] or ""%></li>
 	</li>
 	<%end%>
 </ul>

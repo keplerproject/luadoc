@@ -101,7 +101,7 @@ function lfs.open(filename, mode)
 		local dir = ""
 		for d in string.gfind(filename, ".-/") do
 			dir = dir .. d
---			lfs.mkdir(dir)
+			lfs.mkdir(dir)
 		end
 		f = io.open(filename, mode)
 	end

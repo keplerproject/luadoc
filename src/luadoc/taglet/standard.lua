@@ -146,6 +146,7 @@ local function parse_comment (block)
 	local currenttag = "description"
 	local currenttext
 	
+	-- TODO: remove these handlers from here
 	local tag_handlers = {
 		["description"] = function (tag, block, text)
 			block[tag] = text
