@@ -140,7 +140,7 @@ local function parse_comment (block)
 	else
 		-- TODO: comment without any code. Does this means we are dealing
 		-- with a file comment?
-	end	
+	end
 
 	-- parse @ tags
 	local currenttag = "description"
@@ -319,6 +319,7 @@ function parse_file (filepath, doc)
 				table.insert(doc.modules[modulename], v)
 			end)
 		else
+			table.insert(doc.modules, modulename)
 			doc.modules[modulename] = blocks
 		end
 	end
@@ -388,7 +389,10 @@ function start (files, doc)
 		elseif attr.mode == "directory" then
 			doc = directory(path, doc)
 		end
-	end)	
+	end)
 	
+	-- order modules array alphabetically
+	table.sort(doc.modules)
+		
 	return doc
 end

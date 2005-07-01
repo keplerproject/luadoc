@@ -21,16 +21,16 @@
 <div id="navigation">
 <h1>LuaDoc</h1>
 	<ul>
-		<li><a href="index.html">Index</a></li>
+		<li><a href="../index.html">Index</a></li>
 	</ul>
 
 <h1>Modules</h1>
 <ul>
-<%for modulename, _ in doc.modules do
+<%for _, modulename in ipairs(doc.modules) do
 	if modulename == module_doc.modulename then%>
 	<li><strong><%=modulename%></strong></li>
 	<%else%>
-	<li><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
+	<li><a href="../<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
 <%	end
 end%>
 </ul>
@@ -38,7 +38,7 @@ end%>
 <h1>Files</h1>
 <ul>
 <%for i, file_doc in doc.files do%>
-	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
+	<li><a href="../<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
 <%end%>
 </ul>
 

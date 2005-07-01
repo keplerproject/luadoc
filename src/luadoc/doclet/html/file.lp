@@ -26,7 +26,7 @@
 
 <h1>Modules</h1>
 <ul>
-<%for modulename, _ in doc.modules do%>
+<%for _, modulename in ipairs(doc.modules) do%>
 	<li><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
 <%end%>
 </ul>

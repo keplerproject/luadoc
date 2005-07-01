@@ -49,9 +49,11 @@ options = {
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
 -- @param modulename Name of the module to be processed, may be a .lua file or
 -- a .luadoc file.
+-- @return name of the generated html file for the module
 
 function html_module (modulename)
 	-- TODO: replace "." by "/" to create directories?
+	-- TODO: how to deal with module names with "/"?
 	return string.format("modules/%s.html", modulename)
 end
 
@@ -60,6 +62,7 @@ end
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
 -- @param filename Name of the file to be processed, may be a .lua file or
 -- a .luadoc file.
+-- @return name of the generated html file
 
 function html_file (filename)
 	local h = filename
@@ -100,6 +103,7 @@ function start (doc)
 		lp.include("luadoc/doclet/html/index.lp", {
 			table=table, 
 			io=io, 
+			ipairs=ipairs, 
 			tonumber=tonumber, 
 			tostring=tostring, 
 			type=type, 
@@ -109,7 +113,8 @@ function start (doc)
 	end
 	
 	-- Process modules
-	for modulename, module_doc in doc.modules do
+	for i, modulename in ipairs(doc.modules) do
+		local module_doc = doc.modules[modulename]
 		-- assembly the filename
 		local filename = out_module(modulename)
 		luadoc.logger:info(string.format("generating file `%s' for module `%s'", filename, modulename))
@@ -132,6 +137,7 @@ function start (doc)
 	end
 
 	-- Process files
+	-- TODO: change to ipairs(doc.files)
 	for i, file_doc in doc.files do
 		-- assembly the filename
 		local filename = out_file(file_doc.name)
