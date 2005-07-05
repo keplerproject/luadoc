@@ -19,7 +19,6 @@ local function check_function (line)
 	}
 	
 	local info = table.foreachi(patterns, function (i, pattern)
-		local info = {}
 		local r, _, l, id, param = string.find(line, pattern)
 		if r ~= nil then
 			return {
@@ -33,7 +32,7 @@ local function check_function (line)
 	-- TODO: remove these assert's?
 	if info ~= nil then
 		assert(info.name, "function name undefined")
-		assert(info.param, string.format("undefined param list for function `%s'", info.name))
+		assert(info.param, string.format("undefined parameter list for function `%s'", info.name))
 	end
 
 	return info
@@ -73,7 +72,7 @@ end
 -- description of the item. It is important to write crisp and informative 
 -- initial sentences that can stand on their own
 -- @param description text with item description
--- @return summary summary string or nil if description is nil
+-- @return summary string or nil if description is nil
 
 local function parse_summary (description)
 	-- summary is never nil...
@@ -247,7 +246,7 @@ local function parse_comment (block)
 	assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
 	tag_handlers[currenttag](currenttag, block, currenttext)
 
-	-- TODO: what is block.summary?
+	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
 	
 	return block
@@ -302,6 +301,7 @@ function parse_file (filepath, doc)
 	local blocks = {
 		modulename = nil,
 		filepath = filepath,
+		-- TODO: make iterators for functions, module or tables (based on class field)
 	}
 	local modulename = nil
 	
@@ -339,6 +339,8 @@ function parse_file (filepath, doc)
 		blocks.modulename = modulename
 		if doc.modules[modulename] ~= nil then
 			-- module is already defined, just add the blocks
+			-- TODO: what to do with blocks.filepath in case of several files 
+			-- contributing to a single module
 			table.foreachi(blocks, function (i, v)
 				table.insert(doc.modules[modulename], v)
 			end)

@@ -48,6 +48,16 @@ end%>
 
 <h1>Module <code><%=module_doc.modulename%></code></h1>
 
+<%
+for _, mod in module_doc do
+    if (type(mod) == "table") and (mod.class == "module") then
+%>
+	<p><%=mod.description%></p>
+<%
+    end
+end
+%>
+
 <h2><a name="functions"></a>Functions</h2>
 <dl>
 <%

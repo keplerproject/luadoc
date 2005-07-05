@@ -27,7 +27,9 @@
 <h1>Modules</h1>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do%>
-	<li><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
+	<li>
+		<a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a>
+	</li>
 <%end%>
 </ul>
 
@@ -44,11 +46,33 @@
 <div id="content">
 
 <h2><a name="modules"></a>Modules</h2>
-<ul>
+<dl>
 <%for _, modulename in ipairs(doc.modules) do%>
-	<li><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
+	<dt><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></dt>
+	<dd>
+		<%for _, mod in ipairs(doc.modules[modulename]) do
+			if mod.class == "module" then%>
+				<%=mod.summary%>
+		<%	end
+		end%>
+	</dd>
 <%end%>
-</ul>
+</dl>
+
+<table>
+<%for _, modulename in ipairs(doc.modules) do%>
+	<tr>
+	<td><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></td>
+	<td>
+		<%for _, mod in ipairs(doc.modules[modulename]) do
+			if mod.class == "module" then%>
+				<%=mod.summary%>
+		<%	end
+		end%>
+	</td>
+	</tr>
+<%end%>
+</table>
 
 <h2><a name="files"></a>Files</h2>
 <ul>

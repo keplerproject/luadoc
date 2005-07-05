@@ -2,7 +2,7 @@
 -----------------------------------------------------------------
 -- General file comment.
 -- Implement the substitution methods of source files.
--- $Id $
+-- $Id: analyze.lua,v 1.8 2005/07/05 05:02:15 tuler Exp $
 
 module "luadoc.analyze"
 
