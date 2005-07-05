@@ -41,7 +41,7 @@ end
 -- @return str1 .. " " .. str2, or str2 if str1 is nil
 
 function concat (str1, str2)
-	if str1 == nil then
+	if str1 == nil or string.len(str1) == 0 then
 		return str2
 	else
 		return str1 .. " " .. str2
@@ -91,12 +91,51 @@ function split(delim, text)
 end
 
 -------------------------------------------------------------------------------
+-- Comments a paragraph.
+-- @param text text to comment with "--", may contain several lines
+-- @return commented text
+
+function comment (text)
+	text = string.gsub(text, "\n", "\n-- ")
+	return "-- " .. text
+end
+
+-------------------------------------------------------------------------------
+-- Wrap a string into a paragraph.
+-- @param s string to wrap
+-- @param w width to wrap to [80]
+-- @param i1 indent of first line [0]
+-- @param i2 indent of subsequent lines [0]
+-- @return wrapped paragraph
+
+function wrap(s, w, i1, i2)
+	w = w or 80
+	i1 = i1 or 0
+	i2 = i2 or 0
+	assert(i1 < w and i2 < w, "the indents must be less than the line width")
+	s = string.rep(" ", i1) .. s
+	local lstart, len = 1, string.len(s)
+	while len - lstart > w do
+		local i = lstart + w
+		while i > lstart and string.sub(s, i, i) ~= " " do i = i - 1 end
+		local j = i
+		while j > lstart and string.sub(s, j, j) == " " do j = j - 1 end
+		s = string.sub(s, 1, j) .. "\n" .. string.rep(" ", i2) ..
+			string.sub(s, i + 1, -1)
+		local change = i2 + 1 - (i - j)
+		lstart = j + change
+		len = len + change
+	end
+	return s
+end
+
+-------------------------------------------------------------------------------
 -- Opens a file, creating the directories if necessary
 -- @param filename full path of the file to open (or create)
 -- @param mode mode of opening
 -- @return file handle
 
-function lfs.open(filename, mode)
+function lfs.open (filename, mode)
 	local f = io.open(filename, mode)
 	if f == nil then
 		filename = string.gsub(filename, "\\", "/")

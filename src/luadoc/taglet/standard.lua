@@ -241,6 +241,7 @@ local function parse_comment (block)
 			currenttext = text
 		else
 			currenttext = util.concat(currenttext, line)
+			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, line))
 		end
 	end)
 	assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
@@ -248,6 +249,8 @@ local function parse_comment (block)
 
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
+	
+	assert(string.sub(block.description, 1, 1) ~= " ", string.format("`%s'", block.description))
 	
 	return block
 end
@@ -318,6 +321,8 @@ function parse_file (filepath, doc)
 		else
 			-- look for a module definition
 			modulename = check_module(line, modulename)
+			
+			-- TODO: keep beginning of file somewhere
 			
 			line = f:read()
 		end
