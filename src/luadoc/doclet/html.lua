@@ -117,7 +117,7 @@ function start (doc)
 		local module_doc = doc.modules[modulename]
 		-- assembly the filename
 		local filename = out_module(modulename)
-		luadoc.logger:info(string.format("generating file `%s' for module `%s'", filename, modulename))
+		luadoc.logger:info(string.format("generating file `%s'", filename))
 		
 		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))

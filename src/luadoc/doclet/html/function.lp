@@ -1,6 +1,6 @@
 <div class="function">
-<dt><a name="<%=func.name%>"><strong><%=func.name%></strong></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
-<dd><strong><%=func.resume or ""%></strong><%=func.description or ""%></dd>
+<dt><a name="<%=func.name%>"></a><strong><%=func.name%></strong>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
+<dd><%=func.description or ""%></dd>
 
 <%if type(func.param) == "table" and table.getn(func.param) > 0 then%>
 <em>Parameters</em>

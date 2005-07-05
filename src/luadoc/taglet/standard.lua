@@ -68,6 +68,30 @@ local function check_module (line, currentmodule)
 end
 
 -------------------------------------------------------------------------------
+-- Extracts summary information from a description. The first sentence of each 
+-- doc comment should be a summary sentence, containing a concise but complete 
+-- description of the item. It is important to write crisp and informative 
+-- initial sentences that can stand on their own
+-- @param description text with item description
+-- @return summary summary string or nil if description is nil
+
+local function parse_summary (description)
+	-- summary is never nil...
+	description = description or ""
+	
+	-- append an " " at the end to make the pattern work in all cases
+	description = string.gsub(description, "(.)$", "%1 ")
+
+	-- read until the first period followed by a space or tab	
+	local _, _, summary = string.find(description, "([^%.]*%.)[%s\t]")
+	
+	-- if pattern did not find the first sentence, summary is the whole description
+	summary = summary or description
+	
+	return summary
+end
+
+-------------------------------------------------------------------------------
 -- @param f file handle
 -- @param line current line being parsed
 -- @param modulename module already found, if any
@@ -223,8 +247,8 @@ local function parse_comment (block)
 	assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
 	tag_handlers[currenttag](currenttag, block, currenttext)
 
-	-- TODO: what is block.resume?
-	block.resume = "TODO: resume"
+	-- TODO: what is block.summary?
+	block.summary = parse_summary(block.description)
 	
 	return block
 end

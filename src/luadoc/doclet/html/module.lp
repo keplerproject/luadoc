@@ -55,7 +55,7 @@ for i, func in module_doc do
     if (type(func) == "table") and (func.class == "function") then
 %>
 	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
-	<dd><%=func.resume or ""%></dd>
+	<dd><%=func.summary%></dd>
 	<br>
 <%
     end

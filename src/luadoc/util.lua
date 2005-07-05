@@ -3,7 +3,7 @@
 -- Module with several utilities that could not fit in a specific module
 
 module "luadoc.util"
---require "lfs"
+require "lfs"
 
 -------------------------------------------------------------------------------
 -- Removes spaces from the begining and end of a given string
@@ -56,6 +56,8 @@ end
 -- @usage split(",%s*", "Anna, Bob, Charlie,Dolores")
 -- @usage split(""," x y") gives {"x","y"}
 -- @usage split("%s+"," x y") gives {"", "x","y"}
+-- @return array with strings
+
 function split(delim, text)
 	local list = {}
 	if string.len(text) > 0 then
