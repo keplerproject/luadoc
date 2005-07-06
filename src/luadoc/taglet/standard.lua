@@ -18,7 +18,7 @@ local function check_function (line)
 		"^(local)%s+function%s+([^%(%s]+)%s*%(*s*(.-)%s*%)",
 	}
 	
-	local info = table.foreachi(patterns, function (i, pattern)
+	local info = table.foreachi(patterns, function (_, pattern)
 		local r, _, l, id, param = string.find(line, pattern)
 		if r ~= nil then
 			return {
@@ -141,7 +141,7 @@ end
 local function parse_comment (block)
 
 	-- get the first non-empty line of code
-	local code = table.foreachi(block.code, function(i, line)
+	local code = table.foreachi(block.code, function(_, line)
 		if not util.line_empty(line) then
 			return line
 		end
@@ -227,7 +227,7 @@ local function parse_comment (block)
 		
 	}
 
-	table.foreachi(block.comment, function (i, line)
+	table.foreachi(block.comment, function (_, line)
 		line = util.trim_comment(line)
 		
 		local r, _, tag, text = string.find(line, "@([_%w%.]+)%s+(.*)")
@@ -302,8 +302,8 @@ end
 
 function parse_file (filepath, doc)
 	local blocks = {
-		modulename = nil,
-		filepath = filepath,
+--		modulename = nil,
+--		filepath = filepath,
 		-- TODO: make iterators for functions, module or tables (based on class field)
 	}
 	local modulename = nil
@@ -326,6 +326,7 @@ function parse_file (filepath, doc)
 			
 			line = f:read()
 		end
+		i = i + 1
 	end
 	f:close()
 	
@@ -348,7 +349,7 @@ function parse_file (filepath, doc)
 			-- module is already defined, just add the blocks
 			-- TODO: what to do with blocks.filepath in case of several files 
 			-- contributing to a single module
-			table.foreachi(blocks, function (i, v)
+			table.foreachi(blocks, function (_, v)
 				table.insert(doc.modules[modulename].doc, v)
 			end)
 		else
@@ -417,7 +418,7 @@ function start (files, doc)
 		modules = {},
 	}
 	
-	table.foreachi(files, function (i, path)
+	table.foreachi(files, function (_, path)
 		local attr = lfs.attributes(path)
 		assert(attr, string.format("error stating path `%s'", path))
 		
