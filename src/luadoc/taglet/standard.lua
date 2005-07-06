@@ -331,11 +331,13 @@ function parse_file (filepath, doc)
 	
 	-- store blocks in file hierarchy
 	-- TODO make hierarchy
-	table.insert(doc.files, {
+	assert(doc.files[filepath] == nil, string.format("doc for file `%s' already defined", filepath))
+	table.insert(doc.files, filepath)
+	doc.files[filepath] = {
 		type = "file",
 		name = filepath,
 		doc = blocks,
-	})
+	}
 	
 	-- if module definition is found, store in module hierarchy
 	-- TODO find a way to write module level comments
@@ -347,11 +349,15 @@ function parse_file (filepath, doc)
 			-- TODO: what to do with blocks.filepath in case of several files 
 			-- contributing to a single module
 			table.foreachi(blocks, function (i, v)
-				table.insert(doc.modules[modulename], v)
+				table.insert(doc.modules[modulename].doc, v)
 			end)
 		else
 			table.insert(doc.modules, modulename)
-			doc.modules[modulename] = blocks
+			doc.modules[modulename] = {
+				type = "module",
+				name = modulename,
+				doc = blocks,
+			}
 		end
 	end
 	
@@ -422,7 +428,8 @@ function start (files, doc)
 		end
 	end)
 	
-	-- order modules array alphabetically
+	-- order arrays alphabetically
+	table.sort(doc.files)
 	table.sort(doc.modules)
 		
 	return doc

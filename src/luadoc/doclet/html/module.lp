@@ -37,8 +37,8 @@ end%>
 
 <h1>Files</h1>
 <ul>
-<%for i, file_doc in doc.files do%>
-	<li><a href="../<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
+<%for _, filepath in ipairs(doc.files) do%>
+	<li><a href="../<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></li>
 <%end%>
 </ul>
 

@@ -94,7 +94,7 @@ end
 
 function start (doc)
 	-- Generate index file
-	if (table.getn(doc.files) > 0) and (not options.noindexpage) then
+	if (table.getn(doc.files) > 0 and table.getn(doc.modules) > 0) and (not options.noindexpage) then
 		local filename = options.output_dir.."index.html"
 		luadoc.logger:info(string.format("generating file `%s'", filename))
 		local f = lfs.open(filename, "w")
@@ -113,7 +113,7 @@ function start (doc)
 	end
 	
 	-- Process modules
-	for i, modulename in ipairs(doc.modules) do
+	for _, modulename in ipairs(doc.modules) do
 		local module_doc = doc.modules[modulename]
 		-- assembly the filename
 		local filename = out_module(modulename)
@@ -132,13 +132,13 @@ function start (doc)
 			type=type, 
 			luadoc=luadoc, 
 			doc=doc, 
-			module_doc=module_doc, })
+			module_doc=module_doc.doc, })
 		f:close()
 	end
 
 	-- Process files
-	-- TODO: change to ipairs(doc.files)
-	for i, file_doc in doc.files do
+	for _, filepath in ipairs(doc.files) do
+		local file_doc = doc.files[filepath]
 		-- assembly the filename
 		local filename = out_file(file_doc.name)
 		luadoc.logger:info(string.format("generating file `%s'", filename))

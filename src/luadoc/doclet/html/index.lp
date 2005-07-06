@@ -35,8 +35,8 @@
 
 <h1>Files</h1>
 <ul>
-<%for i, file_doc in doc.files do%>
-	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
+<%for _, filepath in ipairs(doc.files) do%>
+	<li><a href="<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></li>
 <%end%>
 </ul>
 
@@ -50,7 +50,7 @@
 <%for _, modulename in ipairs(doc.modules) do%>
 	<dt><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></dt>
 	<dd>
-		<%for _, mod in ipairs(doc.modules[modulename]) do
+		<%for _, mod in ipairs(doc.modules[modulename].doc) do
 			if mod.class == "module" then%>
 				<%=mod.summary%>
 		<%	end
@@ -59,12 +59,13 @@
 <%end%>
 </dl>
 
-<table>
+<table class="module_list">
+<tr><td colspan="2">Modules</td></tr>
 <%for _, modulename in ipairs(doc.modules) do%>
 	<tr>
 	<td><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></td>
 	<td>
-		<%for _, mod in ipairs(doc.modules[modulename]) do
+		<%for _, mod in ipairs(doc.modules[modulename].doc) do
 			if mod.class == "module" then%>
 				<%=mod.summary%>
 		<%	end
@@ -76,10 +77,20 @@
 
 <h2><a name="files"></a>Files</h2>
 <ul>
-<%for i, file_doc in doc.files do%>
-	<li><a href="<%=luadoc.doclet.html.html_file(file_doc.name)%>"><%=file_doc.name%></a></li>
+<%for _, filepath in ipairs(doc.files) do%>
+	<li><a href="<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></li>
 <%end%>
 </ul>
+
+<table class="file_list">
+<tr><td colspan="2">Files</td></tr>
+<%for _, filepath in ipairs(doc.files) do%>
+	<tr>
+		<td><a href="<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></td>
+		<td></td>
+	</tr>
+<%end%>
+</table>
 
 
 </div> <!-- id="content" -->

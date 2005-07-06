@@ -33,11 +33,11 @@
 
 <h1>Files</h1>
 <ul>
-<%for i, d in doc.files do
-	if d.name == file_doc.filepath then%>
-	<li><strong><%=d.name%></strong></li>
+<%for _, filepath in ipairs(doc.files) do
+	if filepath == file_doc.name then%>
+	<li><strong><%=filepath%></strong></li>
 	<%else%>
-	<li><a href="<%=luadoc.doclet.html.html_file(d.name)%>"><%=d.name%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></li>
 <%	end
 end%>
 </ul>
