@@ -27,7 +27,7 @@
 <h1>Modules</h1>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do%>
-	<li><a href="<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_module(modulename, file_doc.name)%>"><%=modulename%></a></li>
 <%end%>
 </ul>
 
@@ -37,7 +37,7 @@
 	if filepath == file_doc.name then%>
 	<li><strong><%=filepath%></strong></li>
 	<%else%>
-	<li><a href="<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_file(filepath, file_doc.name)%>"><%=filepath%></a></li>
 <%	end
 end%>
 </ul>
@@ -46,12 +46,12 @@ end%>
 
 <div id="content">
 
-<h1>File <code><%=tostring(file_doc.filepath)%></code></h1>
+<h1>File <code><%=tostring(file_doc.name)%></code></h1>
 
 <h2><a name="functions"></a>Functions</h2>
 <dl>
 <%
-for i, func in ipairs(file_doc) do
+for i, func in ipairs(file_doc.doc) do
     if (type(func) == "table") and (func.class == "function") then
 %>
 	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
@@ -66,7 +66,7 @@ end
 <h2><a name="functions"></a>Functions</h2>
 <dl>
 <%
-for i, func in ipairs(file_doc) do
+for i, func in ipairs(file_doc.doc) do
     if (type(func) == "table") and (func.class == "function") then
 %>
 <%=lp.include("luadoc/doclet/html/function.lp", { io=io, table=table, type=type, func=func })%>

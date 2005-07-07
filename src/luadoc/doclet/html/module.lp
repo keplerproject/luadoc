@@ -30,7 +30,7 @@
 	if modulename == module_doc.modulename then%>
 	<li><strong><%=modulename%></strong></li>
 	<%else%>
-	<li><a href="../<%=luadoc.doclet.html.html_module(modulename)%>"><%=modulename%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_module(modulename, module_doc.modulename)%>"><%=modulename%></a></li>
 <%	end
 end%>
 </ul>
@@ -38,7 +38,7 @@ end%>
 <h1>Files</h1>
 <ul>
 <%for _, filepath in ipairs(doc.files) do%>
-	<li><a href="../<%=luadoc.doclet.html.html_file(filepath)%>"><%=filepath%></a></li>
+	<li><a href="<%=luadoc.doclet.html.html_file(filepath, module_doc.modulename)%>"><%=filepath%></a></li>
 <%end%>
 </ul>
 

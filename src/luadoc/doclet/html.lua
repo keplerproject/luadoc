@@ -51,10 +51,14 @@ options = {
 -- a .luadoc file.
 -- @return name of the generated html file for the module
 
-function html_module (modulename)
+function html_module (modulename, base)
 	-- TODO: replace "." by "/" to create directories?
 	-- TODO: how to deal with module names with "/"?
-	return string.format("modules/%s.html", modulename)
+	local h = modulename .. ".html"
+	base = base or ""
+	h = "../modules/" .. h
+	string.gsub(base, "/", function () h = "../" .. h end)
+	return h
 end
 
 -------------------------------------------------------------------------------
@@ -62,22 +66,30 @@ end
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
 -- @param filename Name of the file to be processed, may be a .lua file or
 -- a .luadoc file.
+-- @param base path of where am I, based on this we append ..'s to the
+-- beginning of path
 -- @return name of the generated html file
 
-function html_file (filename)
+function html_file (filename, base)
 	local h = filename
+	base = base or ""
 	h = string.gsub(h, "lua$", "html")
 	h = string.gsub(h, "luadoc$", "html")
-	return "files/"..h
+	h = "../files/" .. h
+	string.gsub(base, "/", function () h = "../" .. h end)
+	return h
 end
 
 -------------------------------------------------------------------------------
 -- Assembly the output filename for an input file.
 -- TODO: change the name of this function
 function out_file (filename)
-	local h = html_file(filename)
---	h = options.output_dir..string.gsub (h, "^.-([%w_]+%.html)$", "%1")
-	h = options.output_dir..h
+	local h = filename
+	h = string.gsub(h, "lua$", "html")
+	h = string.gsub(h, "luadoc$", "html")
+	h = "files/" .. h
+--	h = options.output_dir .. string.gsub (h, "^.-([%w_]+%.html)$", "%1")
+	h = options.output_dir .. h
 	return h
 end
 
@@ -85,7 +97,10 @@ end
 -- Assembly the output filename for a module.
 -- TODO: change the name of this function
 function out_module (modulename)
-	return options.output_dir..html_module(modulename)
+	local h = modulename .. ".html"
+	h = "modules/" .. h
+	h = options.output_dir .. h
+	return h
 end
 
 -----------------------------------------------------------------
@@ -156,7 +171,7 @@ function start (doc)
 			type=type, 
 			luadoc=luadoc, 
 			doc=doc, 
-			file_doc=file_doc.doc })
+			file_doc=file_doc })
 		f:close()
 	end
 end

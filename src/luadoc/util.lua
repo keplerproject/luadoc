@@ -19,6 +19,7 @@ end
 -- string is inside a lua comment.
 -- @param s string to be trimmed
 -- @return trimmed string
+-- @see trim
 
 function trim_comment (s)
 	s = string.gsub(s, "%-%-+(.*)$", "%1")
