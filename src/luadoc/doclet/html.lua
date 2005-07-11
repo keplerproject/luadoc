@@ -1,13 +1,24 @@
--- $Id: html.lua,v 1.15 2005/07/11 15:03:46 uid20006 Exp $
+-- $Id: html.lua,v 1.16 2005/07/11 16:28:37 uid20006 Exp $
+
+-------------------------------------------------------------------------------
+-- Doclet that generates HTML output. This doclet generates a set of html files
+-- based on a group of templates. The main templates are: 
+-- <ul>
+-- <li>index.lp: index of modules and files;</li>
+-- <li>file.lp: documentation for a lua file;</li>
+-- <li>module.lp: documentation for a lua module;</li>
+-- <li>function.lp: documentation for a lua function. This is a 
+-- sub-template used by the others.</li>
+-- </ul>
 
 module "luadoc.doclet.html"
 
-local lp = require "cgilua.lp"
+local lp = require "luadoc.lp"
 require "luadoc.util"
 
-----------------------------------------------------------------------------
+-------------------------------------------------------------------------------
 -- Preprocess and include the content of a mixed HTML file into the 
---  currently 'open' HTML document. 
+-- currently 'open' HTML document. 
 
 function lp2func (filename, doc)
 	local fh = assert (io.open (filename))
@@ -41,9 +52,24 @@ function lp.include (filename, env)
 	envexec (prog, env)
 end
 
-options = {
-	output_dir = "./",
-}
+-------------------------------------------------------------------------------
+-- Include the result of a lp template into the current stream.
+
+function include (template, env)
+	local templatepath = options.template_dir .. template
+	env = env or {}
+	env.table = table
+	env.io = io
+	env.lp = lp
+	env.ipairs = ipairs
+	env.tonumber = tonumber
+	env.tostring = tostring
+	env.type = type
+	env.luadoc = luadoc
+	env.options = options
+	
+	return lp.include(templatepath, env)
+end
 
 -------------------------------------------------------------------------------
 -- Returns a link to a html file, appending "../" to the link to make it right.
@@ -128,16 +154,7 @@ function start (doc)
 		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
-		lp.include("luadoc/doclet/html/index.lp", {
-			table=table, 
-			io=io, 
-			ipairs=ipairs, 
-			tonumber=tonumber, 
-			tostring=tostring, 
-			type=type, 
-			luadoc=luadoc, 
-			options=options, 
-			doc=doc })
+		include("index.lp", { doc = doc })
 		f:close()
 	end
 	
@@ -152,18 +169,7 @@ function start (doc)
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
-			lp.include("luadoc/doclet/html/module.lp", { 
-				table=table, 
-				io=io, 
-				lp=lp, 
-				ipairs=ipairs, 
-				tonumber=tonumber, 
-				tostring=tostring, 
-				type=type, 
-				luadoc=luadoc, 
-				doc=doc, 
-				options=options, 
-				module_doc=module_doc.doc, })
+			include("module.lp", { doc = doc, module_doc = module_doc.doc })
 			f:close()
 		end
 	end
@@ -179,18 +185,7 @@ function start (doc)
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
-			lp.include("luadoc/doclet/html/file.lp", {
-				table=table, 
-				io=io, 
-				lp=lp, 
-				ipairs=ipairs, 
-				tonumber=tonumber, 
-				tostring=tostring, 
-				type=type, 
-				luadoc=luadoc, 
-				doc=doc, 
-				options=options, 
-				file_doc=file_doc })
+			include("file.lp", { doc = doc, file_doc = file_doc} )
 			f:close()
 		end
 	end

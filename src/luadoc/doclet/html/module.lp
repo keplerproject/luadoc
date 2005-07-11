@@ -83,7 +83,7 @@ end
 for i, func in module_doc do
     if (type(func) == "table") and (func.class == "function") then
 %>
-<%=lp.include("luadoc/doclet/html/function.lp", { io=io, table=table, type=type, func=func })%>
+<%=luadoc.doclet.html.include("function.lp", { func=func })%>
 <br>
 <hr/>
 <%
