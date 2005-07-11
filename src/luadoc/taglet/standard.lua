@@ -341,7 +341,6 @@ function parse_file (filepath, doc)
 	}
 	
 	-- if module definition is found, store in module hierarchy
-	-- TODO find a way to write module level comments
 	-- TODO make hierarchy
 	if modulename ~= nil then
 		blocks.modulename = modulename
@@ -367,13 +366,14 @@ end
 
 -------------------------------------------------------------------------------
 -- Checks if the file is terminated by ".lua" or ".luadoc" and calls the 
--- that does the actual parsing
+-- function that does the actual parsing
 -- @param filepath full path of the file to parse
 -- @param doc table with documentation
 -- @return table with documentation
+-- @see parse_file
 
 function file (filepath, doc)
-	local patterns = { ".*%.lua$", ".*%.luadoc$" }
+	local patterns = { "%.lua$", "%.luadoc$" }
 	local valid = table.foreachi(patterns, function (_, pattern)
 		if string.find(filepath, pattern) ~= nil then
 			return true
@@ -417,6 +417,8 @@ function start (files, doc)
 		files = {},
 		modules = {},
 	}
+	assert(doc.files, "undefined `files' field")
+	assert(doc.modules, "undefined `modules' field")
 	
 	table.foreachi(files, function (_, path)
 		local attr = lfs.attributes(path)
