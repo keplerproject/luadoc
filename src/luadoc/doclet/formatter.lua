@@ -1,3 +1,4 @@
+-- $Id: formatter.lua,v 1.2 2005/07/11 15:03:46 uid20006 Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet to format source code according to LuaDoc standard tags. This doclet

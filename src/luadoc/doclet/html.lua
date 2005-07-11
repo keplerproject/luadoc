@@ -1,3 +1,4 @@
+-- $Id: html.lua,v 1.15 2005/07/11 15:03:46 uid20006 Exp $
 
 module "luadoc.doclet.html"
 
@@ -45,19 +46,31 @@ options = {
 }
 
 -------------------------------------------------------------------------------
+-- Returns a link to a html file, appending "../" to the link to make it right.
+-- @param html Name of the html file to link to
+-- @return link to the html file
+
+function link (html, from)
+	local h = html
+	from = from or ""
+	string.gsub(from, "/", function () h = "../" .. h end)
+	return h
+end
+
+-------------------------------------------------------------------------------
 -- Returns the name of the html file to be generated from a module.
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
 -- @param modulename Name of the module to be processed, may be a .lua file or
 -- a .luadoc file.
 -- @return name of the generated html file for the module
 
-function html_module (modulename, base)
+function module_link (modulename, from)
 	-- TODO: replace "." by "/" to create directories?
 	-- TODO: how to deal with module names with "/"?
 	local h = modulename .. ".html"
-	base = base or ""
-	h = "../modules/" .. h
-	string.gsub(base, "/", function () h = "../" .. h end)
+	from = from or ""
+	h = "modules/" .. h
+	string.gsub(from, "/", function () h = "../" .. h end)
 	return h
 end
 
@@ -70,13 +83,13 @@ end
 -- beginning of path
 -- @return name of the generated html file
 
-function html_file (filename, base)
-	local h = filename
-	base = base or ""
+function file_link (to, from)
+	local h = to
+	from = from or ""
 	h = string.gsub(h, "lua$", "html")
 	h = string.gsub(h, "luadoc$", "html")
-	h = "../files/" .. h
-	string.gsub(base, "/", function () h = "../" .. h end)
+	h = "files/" .. h
+	string.gsub(from, "/", function () h = "../" .. h end)
 	return h
 end
 
@@ -123,55 +136,62 @@ function start (doc)
 			tostring=tostring, 
 			type=type, 
 			luadoc=luadoc, 
+			options=options, 
 			doc=doc })
 		f:close()
 	end
 	
 	-- Process modules
-	for _, modulename in ipairs(doc.modules) do
-		local module_doc = doc.modules[modulename]
-		-- assembly the filename
-		local filename = out_module(modulename)
-		luadoc.logger:info(string.format("generating file `%s'", filename))
-		
-		local f = lfs.open(filename, "w")
-		assert(f, string.format("could not open `%s' for writing", filename))
-		io.output(f)
-		lp.include("luadoc/doclet/html/module.lp", { 
-			table=table, 
-			io=io, 
-			lp=lp, 
-			ipairs=ipairs, 
-			tonumber=tonumber, 
-			tostring=tostring, 
-			type=type, 
-			luadoc=luadoc, 
-			doc=doc, 
-			module_doc=module_doc.doc, })
-		f:close()
+	if not options.nomodules then
+		for _, modulename in ipairs(doc.modules) do
+			local module_doc = doc.modules[modulename]
+			-- assembly the filename
+			local filename = out_module(modulename)
+			luadoc.logger:info(string.format("generating file `%s'", filename))
+			
+			local f = lfs.open(filename, "w")
+			assert(f, string.format("could not open `%s' for writing", filename))
+			io.output(f)
+			lp.include("luadoc/doclet/html/module.lp", { 
+				table=table, 
+				io=io, 
+				lp=lp, 
+				ipairs=ipairs, 
+				tonumber=tonumber, 
+				tostring=tostring, 
+				type=type, 
+				luadoc=luadoc, 
+				doc=doc, 
+				options=options, 
+				module_doc=module_doc.doc, })
+			f:close()
+		end
 	end
 
 	-- Process files
-	for _, filepath in ipairs(doc.files) do
-		local file_doc = doc.files[filepath]
-		-- assembly the filename
-		local filename = out_file(file_doc.name)
-		luadoc.logger:info(string.format("generating file `%s'", filename))
-		
-		local f = lfs.open(filename, "w")
-		assert(f, string.format("could not open `%s' for writing", filename))
-		io.output(f)
-		lp.include("luadoc/doclet/html/file.lp", {
-			table=table, 
-			io=io, 
-			lp=lp, 
-			ipairs=ipairs, 
-			tonumber=tonumber, 
-			tostring=tostring, 
-			type=type, 
-			luadoc=luadoc, 
-			doc=doc, 
-			file_doc=file_doc })
-		f:close()
+	if not options.nofiles then
+		for _, filepath in ipairs(doc.files) do
+			local file_doc = doc.files[filepath]
+			-- assembly the filename
+			local filename = out_file(file_doc.name)
+			luadoc.logger:info(string.format("generating file `%s'", filename))
+			
+			local f = lfs.open(filename, "w")
+			assert(f, string.format("could not open `%s' for writing", filename))
+			io.output(f)
+			lp.include("luadoc/doclet/html/file.lp", {
+				table=table, 
+				io=io, 
+				lp=lp, 
+				ipairs=ipairs, 
+				tonumber=tonumber, 
+				tostring=tostring, 
+				type=type, 
+				luadoc=luadoc, 
+				doc=doc, 
+				options=options, 
+				file_doc=file_doc })
+			f:close()
+		end
 	end
 end

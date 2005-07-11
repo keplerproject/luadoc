@@ -1,3 +1,4 @@
+-- $Id: raw.lua,v 1.2 2005/07/11 15:03:46 uid20006 Exp $
 
 module "luadoc.doclet.raw"
 require "luadoc.tab2str"

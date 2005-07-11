@@ -1,3 +1,4 @@
+-- $Id: util.lua,v 1.10 2005/07/11 15:03:46 uid20006 Exp $
 
 -------------------------------------------------------------------------------
 -- Module with several utilities that could not fit in a specific module

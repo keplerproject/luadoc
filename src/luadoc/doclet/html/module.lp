@@ -21,26 +21,30 @@
 <div id="navigation">
 <h1>LuaDoc</h1>
 	<ul>
-		<li><a href="../index.html">Index</a></li>
+		<li><a href="<%=luadoc.doclet.html.link("index.html", "modules/"..module_doc.modulename)%>">Index</a></li>
 	</ul>
 
+<%if not options.nomodules then%>
 <h1>Modules</h1>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do
 	if modulename == module_doc.modulename then%>
 	<li><strong><%=modulename%></strong></li>
 	<%else%>
-	<li><a href="<%=luadoc.doclet.html.html_module(modulename, module_doc.modulename)%>"><%=modulename%></a></li>
+	<li><a href="<%=luadoc.doclet.html.module_link(modulename, "modules/"..module_doc.modulename)%>"><%=modulename%></a></li>
 <%	end
 end%>
 </ul>
+<%end%>
 
+<%if not options.nofiles then%>
 <h1>Files</h1>
 <ul>
 <%for _, filepath in ipairs(doc.files) do%>
-	<li><a href="<%=luadoc.doclet.html.html_file(filepath, module_doc.modulename)%>"><%=filepath%></a></li>
+	<li><a href="<%=luadoc.doclet.html.file_link(filepath, "modules/"..module_doc.modulename)%>"><%=filepath%></a></li>
 <%end%>
 </ul>
+<%end%>
 
 </div><!-- id="navigation" -->
 

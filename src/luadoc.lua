@@ -124,38 +124,6 @@ function process_options (arg)
 	return files, options
 end 
 
--------------------------------------------------------------------------------
--- Creates a list of files, based on the given list of files/directories, 
--- recursing into directories. Only files with some defined extensions are
--- included in the list.
-
-function filelist (files, t)
-	local patterns = { ".*%.lua$", ".*%.luadoc$" }
-	t = t or {}
-	for i = 1, table.getn(files) do
-		local f = files[i]
-		local attr = lfs.attributes(f)
-		assert(attr, string.format("error stating file `%s'", f))
-		if attr.mode == "file" then
-			for j = 1, table.getn(patterns) do
-				if string.find(f, patterns[j]) ~= nil then
-					table.insert(t, f)
-					break
-				end
-			end
-		elseif attr.mode == "directory" then
-			for file in lfs.dir(f) do
-				if file ~= "." and file ~= ".." then
-					filelist({ f .. "/" .. file }, t)
-				end
-			end
-		else
-			error(string.format("invalid file `%s': %s", f, attr.mode))
-		end
-	end
-	return t
-end
-
 function main ()
 	-- Process options.
 	local argc = table.getn(arg)
@@ -170,9 +138,6 @@ function main ()
 		logger:setLevel(logging.WARN)
 	end
 
-	-- recurse subdirectories
---	files = filelist(files)
-	
 	-- load config file
 	if options.config ~= nil then
 		-- load specified config file
@@ -186,12 +151,10 @@ function main ()
 	local doclet = require(options.doclet)
 
 	-- analyze input
---	local doc = luadoc.analyze.analyze(files, taglet, options, FILTERS)
 	taglet.options = options
 	local doc = taglet.start(files)
 
 	-- generate output
---	luadoc.compose.compose(doc, doclet, options)
 	doclet.options = options
 	doclet.start(doc)
 end

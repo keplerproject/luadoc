@@ -91,7 +91,7 @@
 </ul>
 <%end%>
 
-<%if not options.nofile then%>
+<%if not options.nofiles then%>
 <table class="file_list">
 <tr><td colspan="2">Files</td></tr>
 <%for _, filepath in ipairs(doc.files) do%>
