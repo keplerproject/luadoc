@@ -25,10 +25,6 @@ _DESCRIPTION = "Documentation Generator Tool for the Lua language"
 _VERSION = "3.0.0"
 _COPYRIGHT = "Copyright (c) 2003-2005 The Kepler Project"
 
--- Load sub-modules
-require "luadoc.analyze"
-require "luadoc.compose"
-
 -- Print version number.
 function print_version ()
 	print (string.format("%s %s\n%s\n%s", _NAME, _VERSION, _DESCRIPTION, _COPYRIGHT))
@@ -43,6 +39,8 @@ Extract documentation from files.  Available options are:
   -g "<find>=<repl>"    define a substitution filter (string.gsub patterns)
   -h, --help            print this help and exit
       --noindexpage     do not generate global index page
+      --nofiles         do not generate documentation for files
+      --nomodules       do not generate documentation for modules
       --doclet doclet   doclet module to generate output
       --taglet taglet   taglet module to parse input code
   -q, --quiet           suppress all normal output
