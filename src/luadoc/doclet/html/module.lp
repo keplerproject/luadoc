@@ -27,6 +27,8 @@
 
 <h1>Module <code><%=module_doc.name%></code></h1>
 
+<p><%=module_doc.description%></p>
+
 <%
 for _, mod in module_doc do
     if (type(mod) == "table") and (mod.class == "module") then

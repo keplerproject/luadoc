@@ -31,13 +31,7 @@
 <%for _, modulename in ipairs(doc.modules) do%>
 	<tr>
 	<td><a href="<%=luadoc.doclet.html.module_link(modulename, doc)%>"><%=modulename%></a></td>
-	<td>
-		<%for _, mod in ipairs(doc.modules[modulename].doc) do
-			if mod.class == "module" then%>
-				<%=mod.summary%>
-		<%	end
-		end%>
-	</td>
+	<td><%=doc.modules[modulename].summary%></td>
 	</tr>
 <%end%>
 </table>

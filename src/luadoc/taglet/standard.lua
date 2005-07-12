@@ -281,15 +281,13 @@ function parse_file (filepath, doc)
 	
 	-- if module definition is found, store in module hierarchy
 	if modulename ~= nil then
-		blocks.modulename = modulename
 		if doc.modules[modulename] ~= nil then
 			-- module is already defined, just add the blocks
-			-- TODO: what to do with blocks.filepath in case of several files 
-			-- contributing to a single module
 			table.foreachi(blocks, function (_, v)
 				table.insert(doc.modules[modulename].doc, v)
 			end)
 		else
+			-- TODO: put this in a different module
 			table.insert(doc.modules, modulename)
 			doc.modules[modulename] = {
 				type = "module",
@@ -298,6 +296,18 @@ function parse_file (filepath, doc)
 				functions = class_iterator(blocks, "function"),
 				tables = class_iterator(blocks, "table"),
 			}
+			
+			-- find module description
+			doc.modules[modulename].description = ""
+			doc.modules[modulename].summary = ""
+			for m in class_iterator(blocks, "module")() do
+				doc.modules[modulename].description = util.concat(
+					doc.modules[modulename].description, 
+					m.description)
+				doc.modules[modulename].summary = util.concat(
+					doc.modules[modulename].summary, 
+					m.summary)
+			end
 		end
 	end
 	
