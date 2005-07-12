@@ -25,33 +25,25 @@
 
 <div id="content">
 
-<h1>File <code><%=tostring(file_doc.name)%></code></h1>
+<h1>File <code><%=file_doc.name%></code></h1>
 
 <h2><a name="functions"></a>Functions</h2>
 <table>
-<%
-for func in file_doc.functions() do
-%>
+<%for func in file_doc.functions() do%>
 	<tr>
 	<td nowrap><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</td>
 	<td><%=func.summary%></td>
 	</tr>
-<%
-end
-%>
+<%end%>
 </table>
 
 <h2><a name="functions"></a>Functions</h2>
 <dl>
-<%
-for func in file_doc.functions() do
-%>
+<%for func in file_doc.functions() do%>
 <%=luadoc.doclet.html.include("function.lp", { doc=doc, file_doc=file_doc, func=func })%>
 <br>
 <hr/>
-<%
-end
-%>
+<%end%>
 </dl>
 
 </div> <!-- id="content" -->

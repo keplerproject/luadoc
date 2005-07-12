@@ -36,7 +36,7 @@ end
 <%elseif type(func.see) == "table" and table.getn(func.see) > 0 then %>
 <em>See also:</em>
 	<%for i = 1, table.getn(func.see) do%>
-	<a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, from)%>">
+	<a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from)%>">
 		<%=func.see[i]%>
 	</a>
 	<%if i < table.getn(func.see) then %>, <%end%>

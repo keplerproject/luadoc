@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.17 2005/07/12 05:19:35 uid20006 Exp $
+-- $Id: html.lua,v 1.18 2005/07/12 18:39:17 uid20006 Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -110,7 +110,7 @@ end
 -------------------------------------------------------------------------------
 -- Returns the name of the html file to be generated from a lua(doc) file.
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
--- @param filename Name of the file to be processed, may be a .lua file or
+-- @param to Name of the file to be processed, may be a .lua file or
 -- a .luadoc file.
 -- @param from path of where am I, based on this we append ..'s to the
 -- beginning of path
@@ -130,50 +130,56 @@ end
 
 -------------------------------------------------------------------------------
 -- Returns a link to a function
--- @param functioname name of the function to link to.
+-- @param fname name of the function to link to.
 -- @param doc documentation table
 
-function function_link (functionname, doc, module_doc, from)
-	assert(functionname)
+function function_link (fname, doc, module_doc, file_doc, from)
+	assert(fname)
 	assert(doc)
 	from = from or ""
 	
-	local _, _, modulename, functionname = string.find(functionname, "^(.-)[%.%:]?([^%.%:]*)$")
-	assert(functionname)
+	if file_doc then
+		for func in file_doc.functions() do
+			if func.name == fname then
+				return file_link(file_doc.name, from) .. "#" .. fname
+			end
+		end
+	end
+	
+	local _, _, modulename, fname = string.find(fname, "^(.-)[%.%:]?([^%.%:]*)$")
+	assert(fname)
 
-	-- if functionname does not specify a module, use the module_doc
+	-- if fname does not specify a module, use the module_doc
 	if string.len(modulename) == 0 and module_doc then
 		modulename = module_doc.name
 	end
-	
+
 	local module_doc = doc.modules[modulename]
 	if not module_doc then
---		luadoc.logger:error(string.format("unresolved reference to function `%s': module `%s' not found", functionname, modulename))
+--		luadoc.logger:error(string.format("unresolved reference to function `%s': module `%s' not found", fname, modulename))
 		return
 	end
 	
 	for func in module_doc.functions() do
-		if func.name == functionname then
-			local href = "modules/" .. modulename .. ".html" .. "#" .. functionname
-			string.gsub(from, "/", function () href = "../" .. href end)
-			return href
+		if func.name == fname then
+			return module_link(modulename, doc, from) .. "#" .. fname
 		end
 	end
 	
---	luadoc.logger:error(string.format("unresolved reference to function `%s' of module `%s'", functionname, modulename))
+--	luadoc.logger:error(string.format("unresolved reference to function `%s' of module `%s'", fname, modulename))
 end
 
 -------------------------------------------------------------------------------
 -- Make a link to a file, module or function
 
-function symbol_link (symbol, doc, module_doc, from)
+function symbol_link (symbol, doc, module_doc, file_doc, from)
 	assert(symbol)
 	assert(doc)
 	
 	local href = 
 --		file_link(symbol, from) or
 		module_link(symbol, doc, from) or 
-		function_link(symbol, doc, module_doc, from)
+		function_link(symbol, doc, module_doc, file_doc, from)
 	
 	if not href then
 		luadoc.logger:error(string.format("unresolved reference to symbol `%s'", symbol))

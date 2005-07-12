@@ -51,15 +51,11 @@ end
 
 <h2><a name="functions"></a>Functions</h2>
 <dl>
-<%
-for func in module_doc.functions() do
-%>
+<%for func in module_doc.functions() do%>
 <%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=func })%>
 <br>
 <hr/>
-<%
-end
-%>
+<%end%>
 </dl>
 
 </div> <!-- id="content" -->

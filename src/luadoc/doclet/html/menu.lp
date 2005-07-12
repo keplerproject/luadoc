@@ -23,7 +23,7 @@ end
 <h1>Modules</h1>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do
-	if module_doc and module_doc.modulename == modulename then%>
+	if module_doc and module_doc.name == modulename then%>
 	<li><strong><%=modulename%></strong></li>
 	<%else%>
 	<li>
