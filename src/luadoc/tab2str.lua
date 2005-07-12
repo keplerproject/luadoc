@@ -20,7 +20,7 @@ module "luadoc.tab2str"
 -- @param t Numero a ser "impresso".
 -- @param spacing String de espacamento entre elementos da tabela.
 -- @param indent String com a indentacao inicial (este parametro eh utilizado
---	pela propria funcao para acumular a indentacao de tabelas internas).
+--pela propria funcao para acumular a indentacao de tabelas internas).
 -- @return String com o resultado.
 
 function tab2str (t, spacing, indent)
@@ -69,6 +69,8 @@ function tab2str (t, spacing, indent)
       return "<"..tipo..">"
    end
 end
+
+-------------------------------------------------------------------------------
 
 function t2s (t, s, i)
    local old_table = _table_

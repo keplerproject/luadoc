@@ -6,6 +6,25 @@ local util = require "luadoc.util"
 require "lfs"
 
 -------------------------------------------------------------------------------
+-- Creates an iterator for an array base on a class type.
+-- @param t array to iterate over
+-- @param class name of the class to iterate over
+
+function class_iterator (t, class)
+	return function ()
+		local i = 1
+		return function ()
+			while t[i] and t[i].class ~= class do
+				i = i + 1
+			end
+			local v = t[i]
+			i = i + 1
+			return v
+		end
+	end
+end
+
+-------------------------------------------------------------------------------
 -- Checks if the line contains a function definition
 -- @param line string with line text
 -- @return function information or nil if no function definition found
@@ -188,13 +207,17 @@ local function parse_comment (block)
 		
 		-- same as return
 		["see"] = function (tag, block, text)
-			if type(block[tag]) == "string" then
-				block[tag] = { block[tag], text }
-			elseif type(block[tag]) == "table" then
-				table.insert(block[tag], text)
-			else
-				block[tag] = text
-			end
+			-- see is always an array
+			block[tag] = block[tag] or {}
+			
+			-- remove trailing "."
+			text = string.gsub(text, "(.*)%.$", "%1")
+			
+			local s = util.split("%s*,%s*", text)			
+			
+			table.foreachi(s, function (_, v)
+				table.insert(block[tag], v)
+			end)
 		end,
 		
 		["param"] = function (tag, block, text)
@@ -338,6 +361,8 @@ function parse_file (filepath, doc)
 		type = "file",
 		name = filepath,
 		doc = blocks,
+		functions = class_iterator(blocks, "function"),
+		tables = class_iterator(blocks, "table"),
 	}
 	
 	-- if module definition is found, store in module hierarchy
@@ -357,6 +382,8 @@ function parse_file (filepath, doc)
 				type = "module",
 				name = modulename,
 				doc = blocks,
+				functions = class_iterator(blocks, "function"),
+				tables = class_iterator(blocks, "table"),
 			}
 		end
 	end

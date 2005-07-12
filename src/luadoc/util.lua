@@ -1,4 +1,4 @@
--- $Id: util.lua,v 1.10 2005/07/11 15:03:46 uid20006 Exp $
+-- $Id: util.lua,v 1.11 2005/07/12 05:19:35 uid20006 Exp $
 
 -------------------------------------------------------------------------------
 -- Module with several utilities that could not fit in a specific module
@@ -59,6 +59,7 @@ end
 -- @usage split(""," x y") gives {"x","y"}
 -- @usage split("%s+"," x y") gives {"", "x","y"}
 -- @return array with strings
+-- @see table.concat
 
 function split(delim, text)
 	local list = {}

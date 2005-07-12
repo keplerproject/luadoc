@@ -11,7 +11,7 @@
 <div id="container">
 
 <div id="product">
-	<div id="product_logo"></a></div>
+	<div id="product_logo"></div>
 	<div id="product_name"><big><b></b></big></div>
 	<div id="product_description"></div>
 </div> <!-- id="product" -->
@@ -19,38 +19,13 @@
 <div id="main">
 
 <div id="navigation">
-<h1>LuaDoc</h1>
-	<ul>
-		<li><a href="<%=luadoc.doclet.html.link("index.html", "modules/"..module_doc.modulename)%>">Index</a></li>
-	</ul>
-
-<%if not options.nomodules then%>
-<h1>Modules</h1>
-<ul>
-<%for _, modulename in ipairs(doc.modules) do
-	if modulename == module_doc.modulename then%>
-	<li><strong><%=modulename%></strong></li>
-	<%else%>
-	<li><a href="<%=luadoc.doclet.html.module_link(modulename, "modules/"..module_doc.modulename)%>"><%=modulename%></a></li>
-<%	end
-end%>
-</ul>
-<%end%>
-
-<%if not options.nofiles then%>
-<h1>Files</h1>
-<ul>
-<%for _, filepath in ipairs(doc.files) do%>
-	<li><a href="<%=luadoc.doclet.html.file_link(filepath, "modules/"..module_doc.modulename)%>"><%=filepath%></a></li>
-<%end%>
-</ul>
-<%end%>
+<%=luadoc.doclet.html.include("menu.lp", { doc=doc, module_doc=module_doc })%>
 
 </div><!-- id="navigation" -->
 
 <div id="content">
 
-<h1>Module <code><%=module_doc.modulename%></code></h1>
+<h1>Module <code><%=module_doc.name%></code></h1>
 
 <%
 for _, mod in module_doc do
@@ -63,31 +38,26 @@ end
 %>
 
 <h2><a name="functions"></a>Functions</h2>
-<dl>
-<%
-for i, func in module_doc do
-    if (type(func) == "table") and (func.class == "function") then
-%>
-	<dt><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
-	<dd><%=func.summary%></dd>
-	<br>
-<%
-    end
-end
-%>
-</dl>
+
+<table>
+<%for func in module_doc.functions() do%>
+	<tr>
+	<td nowrap><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</td>
+	<td><%=func.summary%></td>
+	</tr>
+<%end%>
+</table>
+
 
 <h2><a name="functions"></a>Functions</h2>
 <dl>
 <%
-for i, func in module_doc do
-    if (type(func) == "table") and (func.class == "function") then
+for func in module_doc.functions() do
 %>
-<%=luadoc.doclet.html.include("function.lp", { func=func })%>
+<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=func })%>
 <br>
 <hr/>
 <%
-    end
 end
 %>
 </dl>

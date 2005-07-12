@@ -11,7 +11,7 @@
 <div id="container">
 
 <div id="product">
-	<div id="product_logo"><a href="http://www.keplerproject.org/luadoc"></a></div>
+	<div id="product_logo"></div>
 	<div id="product_name"><big><b></b></big></div>
 	<div id="product_description"></div>
 </div> <!-- id="product" -->
@@ -19,57 +19,18 @@
 <div id="main">
 
 <div id="navigation">
-<h1>LuaDoc</h1>
-	<ul>
-		<li><a href="index.html">Index</a></li>
-	</ul>
-
-<%if not options.nomodules then%>
-<h1>Modules</h1>
-<ul>
-<%for _, modulename in ipairs(doc.modules) do%>
-	<li>
-		<a href="<%=luadoc.doclet.html.module_link(modulename)%>"><%=modulename%></a>
-	</li>
-<%end%>
-</ul>
-<%end%>
-
-<%if not options.nofiles then%>
-<h1>Files</h1>
-<ul>
-<%for _, filepath in ipairs(doc.files) do%>
-	<li><a href="<%=luadoc.doclet.html.file_link(filepath)%>"><%=filepath%></a></li>
-<%end%>
-</ul>
-<%end%>
+<%=luadoc.doclet.html.include("menu.lp", { doc=doc })%>
 
 </div> <!-- id="navigation" -->
 
 <div id="content">
 
 <%if not options.nomodules then%>
-<h2><a name="modules"></a>Modules</h2>
-<dl>
-<%for _, modulename in ipairs(doc.modules) do%>
-	<dt><a href="<%=luadoc.doclet.html.module_link(modulename)%>"><%=modulename%></a></dt>
-	<dd>
-		<%for _, mod in ipairs(doc.modules[modulename].doc) do
-			if mod.class == "module" then%>
-				<%=mod.summary%>
-		<%	end
-		end%>
-	</dd>
-<%end%>
-</dl>
-<%end%>
-
-<%if not options.nomodules then%>
 <table class="module_list">
 <tr><td colspan="2">Modules</td></tr>
 <%for _, modulename in ipairs(doc.modules) do%>
 	<tr>
-	<td><a href="<%=luadoc.doclet.html.module_link(modulename)%>"><%=modulename%></a></td>
+	<td><a href="<%=luadoc.doclet.html.module_link(modulename, doc)%>"><%=modulename%></a></td>
 	<td>
 		<%for _, mod in ipairs(doc.modules[modulename].doc) do
 			if mod.class == "module" then%>
@@ -80,15 +41,6 @@
 	</tr>
 <%end%>
 </table>
-<%end%>
-
-<%if not options.nofiles then%>
-<h2><a name="files"></a>Files</h2>
-<ul>
-<%for _, filepath in ipairs(doc.files) do%>
-	<li><a href="<%=luadoc.doclet.html.file_link(filepath)%>"><%=filepath%></a></li>
-<%end%>
-</ul>
 <%end%>
 
 <%if not options.nofiles then%>

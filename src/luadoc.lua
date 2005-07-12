@@ -126,6 +126,11 @@ function process_options (arg)
 	return files, options
 end 
 
+-------------------------------------------------------------------------------
+-- Main function
+-- @see luadoc.doclet.html, luadoc.doclet.formatter, luadoc.doclet.raw
+-- @see luadoc.taglet.standard
+
 function main ()
 	-- Process options.
 	local argc = table.getn(arg)

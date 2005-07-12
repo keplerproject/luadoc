@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.16 2005/07/11 16:28:37 uid20006 Exp $
+-- $Id: html.lua,v 1.17 2005/07/12 05:19:35 uid20006 Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -90,14 +90,21 @@ end
 -- a .luadoc file.
 -- @return name of the generated html file for the module
 
-function module_link (modulename, from)
+function module_link (modulename, doc, from)
 	-- TODO: replace "." by "/" to create directories?
 	-- TODO: how to deal with module names with "/"?
-	local h = modulename .. ".html"
+	assert(modulename)
+	assert(doc)
 	from = from or ""
-	h = "modules/" .. h
-	string.gsub(from, "/", function () h = "../" .. h end)
-	return h
+	
+	if doc.modules[modulename] == nil then
+--		luadoc.logger:error(string.format("unresolved reference to module `%s'", modulename))
+		return
+	end
+	
+	local href = "modules/" .. modulename .. ".html"
+	string.gsub(from, "/", function () href = "../" .. href end)
+	return href
 end
 
 -------------------------------------------------------------------------------
@@ -105,18 +112,74 @@ end
 -- Files with "lua" or "luadoc" extensions are replaced by "html" extension.
 -- @param filename Name of the file to be processed, may be a .lua file or
 -- a .luadoc file.
--- @param base path of where am I, based on this we append ..'s to the
+-- @param from path of where am I, based on this we append ..'s to the
 -- beginning of path
 -- @return name of the generated html file
 
 function file_link (to, from)
-	local h = to
+	assert(to)
 	from = from or ""
-	h = string.gsub(h, "lua$", "html")
-	h = string.gsub(h, "luadoc$", "html")
-	h = "files/" .. h
-	string.gsub(from, "/", function () h = "../" .. h end)
-	return h
+	
+	local href = to
+	href = string.gsub(href, "lua$", "html")
+	href = string.gsub(href, "luadoc$", "html")
+	href = "files/" .. href
+	string.gsub(from, "/", function () href = "../" .. href end)
+	return href
+end
+
+-------------------------------------------------------------------------------
+-- Returns a link to a function
+-- @param functioname name of the function to link to.
+-- @param doc documentation table
+
+function function_link (functionname, doc, module_doc, from)
+	assert(functionname)
+	assert(doc)
+	from = from or ""
+	
+	local _, _, modulename, functionname = string.find(functionname, "^(.-)[%.%:]?([^%.%:]*)$")
+	assert(functionname)
+
+	-- if functionname does not specify a module, use the module_doc
+	if string.len(modulename) == 0 and module_doc then
+		modulename = module_doc.name
+	end
+	
+	local module_doc = doc.modules[modulename]
+	if not module_doc then
+--		luadoc.logger:error(string.format("unresolved reference to function `%s': module `%s' not found", functionname, modulename))
+		return
+	end
+	
+	for func in module_doc.functions() do
+		if func.name == functionname then
+			local href = "modules/" .. modulename .. ".html" .. "#" .. functionname
+			string.gsub(from, "/", function () href = "../" .. href end)
+			return href
+		end
+	end
+	
+--	luadoc.logger:error(string.format("unresolved reference to function `%s' of module `%s'", functionname, modulename))
+end
+
+-------------------------------------------------------------------------------
+-- Make a link to a file, module or function
+
+function symbol_link (symbol, doc, module_doc, from)
+	assert(symbol)
+	assert(doc)
+	
+	local href = 
+--		file_link(symbol, from) or
+		module_link(symbol, doc, from) or 
+		function_link(symbol, doc, module_doc, from)
+	
+	if not href then
+		luadoc.logger:error(string.format("unresolved reference to symbol `%s'", symbol))
+	end
+	
+	return href or ""
 end
 
 -------------------------------------------------------------------------------
@@ -169,7 +232,7 @@ function start (doc)
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
-			include("module.lp", { doc = doc, module_doc = module_doc.doc })
+			include("module.lp", { doc = doc, module_doc = module_doc })
 			f:close()
 		end
 	end
