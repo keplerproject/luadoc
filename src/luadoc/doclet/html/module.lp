@@ -37,7 +37,7 @@ for _, mod in module_doc do
 end
 %>
 
-<h2><a name="functions"></a>Functions</h2>
+<h2>Functions</h2>
 
 <table>
 <%for func in module_doc.functions() do%>
@@ -53,6 +53,15 @@ end
 <dl>
 <%for func in module_doc.functions() do%>
 <%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=func })%>
+<br>
+<hr/>
+<%end%>
+</dl>
+
+<h2><a name="tables"></a>Tables</h2>
+<dl>
+<%for tab in module_doc.tables() do%>
+<%=luadoc.doclet.html.include("table.lp", { doc=doc, module_doc=module_doc, tab=tab })%>
 <br>
 <hr/>
 <%end%>

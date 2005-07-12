@@ -1,0 +1,17 @@
+<div class="table">
+
+<dt><a name="<%=tab.name%>"></a><strong><%=tab.name%></strong></dt>
+<dd><%=tab.description%></dd>
+
+<%if type(tab.field) == "table" and table.getn(tab.field) > 0 then%>
+<em>Fields</em>
+<ul>
+	<%for p = 1, table.getn(tab.field) do%>
+	<li>
+	  <%=tab.field[p]%>: <%=tab.field[tab.field[p]] or ""%>
+	</li>
+	<%end%>
+</ul>
+<%end%>
+
+</div>

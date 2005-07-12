@@ -11,7 +11,6 @@ end
 
 module "luadoc"
 
-require "lfs"
 require "logging"
 require "logging.console"
 logger = logging.console("[%level] %message\n")
@@ -25,35 +24,39 @@ _DESCRIPTION = "Documentation Generator Tool for the Lua language"
 _VERSION = "3.0.0"
 _COPYRIGHT = "Copyright (c) 2003-2005 The Kepler Project"
 
+-------------------------------------------------------------------------------
 -- Print version number.
+
 function print_version ()
 	print (string.format("%s %s\n%s\n%s", _NAME, _VERSION, _DESCRIPTION, _COPYRIGHT))
 end
 
+-------------------------------------------------------------------------------
 -- Print usage message.
+
 function print_help ()
 	print ("Usage: "..arg[0]..[[ [options|files]
 Extract documentation from files.  Available options are:
-  -d path               output directory path
-  -f "<find>=<repl>"    define a substitution filter (only string patterns)
-  -g "<find>=<repl>"    define a substitution filter (string.gsub patterns)
-  -h, --help            print this help and exit
-      --noindexpage     do not generate global index page
-      --nofiles         do not generate documentation for files
-      --nomodules       do not generate documentation for modules
-      --doclet doclet   doclet module to generate output
-      --taglet taglet   taglet module to parse input code
-  -q, --quiet           suppress all normal output
-  -v, --version         print version information]])
+  -d path                      output directory path
+  -h, --help                   print this help and exit
+      --noindexpage            do not generate global index page
+      --nofiles                do not generate documentation for files
+      --nomodules              do not generate documentation for modules
+      --doclet doclet_module   doclet module to generate output
+      --taglet taglet_module   taglet module to parse input code
+  -q, --quiet                  suppress all normal output
+  -v, --version                print version information]])
 end
 
 function off_messages (arg, i, options)
 	options.verbose = nil
 end
 
--- Global filters.
-FILTERS = {}
--- Process options.
+-------------------------------------------------------------------------------
+-- Process options
+-- @class table
+-- @name OPTIONS
+
 OPTIONS = {
 	d = function (arg, i, options)
 		local dir = arg[i+1]
@@ -61,22 +64,6 @@ OPTIONS = {
 			dir = dir..'/'
 		end
 		options.output_dir = dir
-		return 1
-	end,
-	f = function (arg, i, options)
-		local sub = arg[i+1]
-		local find = string.gsub (sub, '^([^=]+)%=.*$', '%1')
-		find = string.gsub (find, "(%p)", "%%%1")
-		local repl = string.gsub (sub, '^.-%=([^"]+)$', '%1')
-		repl = string.gsub (repl, "(%p)", "%%%1")
-		table.insert (FILTERS, { find, repl })
-		return 1
-	end,
-	g = function (arg, i, options)
-		local sub = arg[i+1]
-		local find = string.gsub (sub, '^([^=]+)%=.*$', '%1')
-		local repl = string.gsub (sub, '^.-%=([^"]+)$', '%1')
-		table.insert (FILTERS, { find, repl })
 		return 1
 	end,
 	h = print_help,
@@ -94,17 +81,12 @@ OPTIONS = {
 		return 1
 	end,
 }
-DEFAULT_OPTIONS = {
-	output_dir = "",
-	taglet = "luadoc.taglet.standard",
-	doclet = "luadoc.doclet.html",
-	-- TODO: find a way to define doclet specific options
-	template_dir = "luadoc/doclet/html/",
-	verbose = 1,
-}
+
+-------------------------------------------------------------------------------
+
 function process_options (arg)
 	local files = {}
-	local options = DEFAULT_OPTIONS
+	local options = require "luadoc.config"
 	for i = 1, table.getn(arg) do
 		local argi = arg[i]
 		if string.sub (argi, 1, 1) ~= '-' then
@@ -116,7 +98,7 @@ function process_options (arg)
 			end
 			if OPTIONS[opt] then
 				if OPTIONS[opt] (arg, i, options) then
-					i = i+1
+					i = i + 1
 				end
 			else
 				options[opt] = 1
@@ -132,7 +114,7 @@ end
 -- @see luadoc.taglet.standard
 
 function main ()
-	-- Process options.
+	-- Process options
 	local argc = table.getn(arg)
 	if argc < 1 then
 		print_help ()

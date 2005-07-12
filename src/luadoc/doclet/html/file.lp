@@ -27,7 +27,7 @@
 
 <h1>File <code><%=file_doc.name%></code></h1>
 
-<h2><a name="functions"></a>Functions</h2>
+<h2>Functions</h2>
 <table>
 <%for func in file_doc.functions() do%>
 	<tr>

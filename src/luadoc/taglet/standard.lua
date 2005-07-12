@@ -1,9 +1,10 @@
 
 module 'luadoc.taglet.standard'
 
+require "lfs"
 require "luadoc"
 local util = require "luadoc.util"
-require "lfs"
+local tags = require "luadoc.taglet.standard.tags"
 
 -------------------------------------------------------------------------------
 -- Creates an iterator for an array base on a class type.
@@ -136,23 +137,6 @@ local function parse_code (f, line, modulename)
 end
 
 -------------------------------------------------------------------------------
-
-local function parse_tag (block)
-	-- @author tuler Danilo Tuler de Oliveira
-	-- @author carregal
-	-- @param <name> <text>
-	-- @see <identifier>
-	-- @see <identifier> <text>
-	-- @see <identifier>, <identifier> REALLY SUPPORT THIS?
-	-- @return <name> <text>
-	-- @return <name> <text>
-	-- @return <name>, <name>, <name> REALLY SUPPORT THIS?
-	-- @usage
-	-- @deprecated
-	-- @field HOW DOES THIS WORK?	
-end
-
--------------------------------------------------------------------------------
 -- Parses the information inside a block comment
 -- @param block block with comment field
 -- @return block parameter
@@ -188,68 +172,6 @@ local function parse_comment (block)
 	local currenttag = "description"
 	local currenttext
 	
-	-- TODO: remove these handlers from here
-	local tag_handlers = {
-		["description"] = function (tag, block, text)
-			block[tag] = text
-		end,
-
-		["return"] = function (tag, block, text)
-			tag = "ret"
-			if type(block[tag]) == "string" then
-				block[tag] = { block[tag], text }
-			elseif type(block[tag]) == "table" then
-				table.insert(block[tag], text)
-			else
-				block[tag] = text
-			end
-		end,
-		
-		-- same as return
-		["see"] = function (tag, block, text)
-			-- see is always an array
-			block[tag] = block[tag] or {}
-			
-			-- remove trailing "."
-			text = string.gsub(text, "(.*)%.$", "%1")
-			
-			local s = util.split("%s*,%s*", text)			
-			
-			table.foreachi(s, function (_, v)
-				table.insert(block[tag], v)
-			end)
-		end,
-		
-		["param"] = function (tag, block, text)
-			block[tag] = block[tag] or {}
-			-- TODO: make this pattern more flexible, accepting empty descriptions
-			local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
-			assert(name, "parameter name not defined")
-			local i = table.foreachi(block[tag], function (i, v)
-				if v == name then
-					return i
-				end
-			end)
-			if i == nil then
-				luadoc.logger:warn(string.format("documenting undefined parameter `%s'", name))
-				table.insert(block[tag], name)
-			end
-			block[tag][name] = desc
-		end,
-
-		-- same as return
-		["usage"] = function (tag, block, text)
-			if type(block[tag]) == "string" then
-				block[tag] = { block[tag], text }
-			elseif type(block[tag]) == "table" then
-				table.insert(block[tag], text)
-			else
-				block[tag] = text
-			end
-		end,
-		
-	}
-
 	table.foreachi(block.comment, function (_, line)
 		line = util.trim_comment(line)
 		
@@ -257,8 +179,7 @@ local function parse_comment (block)
 		if r ~= nil then
 			-- found new tag, add previous one, and start a new one
 			-- TODO: what to do with invalid tags? issue an error? or log a warning?
-			assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
-			tag_handlers[currenttag](currenttag, block, currenttext)
+			tags.handle(currenttag, block, currenttext)
 			
 			currenttag = tag
 			currenttext = text
@@ -267,12 +188,10 @@ local function parse_comment (block)
 			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, line))
 		end
 	end)
-	assert(tag_handlers[currenttag], string.format("undefined handler for tag `%s'", currenttag))
-	tag_handlers[currenttag](currenttag, block, currenttext)
+	tags.handle(currenttag, block, currenttext)
 
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
-	
 	assert(string.sub(block.description, 1, 1) ~= " ", string.format("`%s'", block.description))
 	
 	return block
@@ -324,11 +243,7 @@ end
 -- @return table with documentation
 
 function parse_file (filepath, doc)
-	local blocks = {
---		modulename = nil,
---		filepath = filepath,
-		-- TODO: make iterators for functions, module or tables (based on class field)
-	}
+	local blocks = {}
 	local modulename = nil
 	
 	-- read each line
@@ -354,7 +269,6 @@ function parse_file (filepath, doc)
 	f:close()
 	
 	-- store blocks in file hierarchy
-	-- TODO make hierarchy
 	assert(doc.files[filepath] == nil, string.format("doc for file `%s' already defined", filepath))
 	table.insert(doc.files, filepath)
 	doc.files[filepath] = {
@@ -366,7 +280,6 @@ function parse_file (filepath, doc)
 	}
 	
 	-- if module definition is found, store in module hierarchy
-	-- TODO make hierarchy
 	if modulename ~= nil then
 		blocks.modulename = modulename
 		if doc.modules[modulename] ~= nil then
