@@ -29,15 +29,6 @@
 
 <p><%=module_doc.description%></p>
 
-<%
-for _, mod in module_doc do
-    if (type(mod) == "table") and (mod.class == "module") then
-%>
-	<p><%=mod.description%></p>
-<%
-    end
-end
-%>
 
 <h2>Functions</h2>
 
