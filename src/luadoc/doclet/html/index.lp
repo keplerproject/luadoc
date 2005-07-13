@@ -26,7 +26,7 @@
 <div id="content">
 
 
-<%if not options.nomodules then%>
+<%if options.modules then%>
 <h2>Modules</h2>
 <table class="module_list">
 <!--<tr><td colspan="2">Modules</td></tr>-->
@@ -41,7 +41,7 @@
 
 
 
-<%if not options.nofiles then%>
+<%if options.files then%>
 <h2>Files</h2>
 <table class="file_list">
 <!--<tr><td colspan="2">Files</td></tr>-->

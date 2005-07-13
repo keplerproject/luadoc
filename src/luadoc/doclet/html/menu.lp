@@ -19,7 +19,7 @@ end
 
 
 <!-- Module list -->
-<%if not options.nomodules then%>
+<%if options.modules then%>
 <h1>Modules</h1>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do
@@ -36,7 +36,7 @@ end%>
 
 
 <!-- File list -->
-<%if not options.nofiles then%>
+<%if options.files then%>
 <h1>Files</h1>
 <ul>
 <%for _, filepath in ipairs(doc.files) do

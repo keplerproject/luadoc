@@ -1,4 +1,4 @@
-#!/usr/local/bin/lua
+#!/usr/local/bin/lua50
 
 -- compatibility code for Lua version 5.0 providing 5.1 behavior
 if string.find (_VERSION, "Lua 5.0") and not package then
@@ -38,10 +38,11 @@ function print_help ()
 	print ("Usage: "..arg[0]..[[ [options|files]
 Extract documentation from files.  Available options are:
   -d path                      output directory path
+  -t path                      template directory path
   -h, --help                   print this help and exit
       --noindexpage            do not generate global index page
-      --nofiles                do not generate documentation for files
-      --nomodules              do not generate documentation for modules
+      --files                  generate documentation for files
+      --modules                generate documentation for modules
       --doclet doclet_module   doclet module to generate output
       --taglet taglet_module   taglet module to parse input code
   -q, --quiet                  suppress all normal output
@@ -64,6 +65,14 @@ OPTIONS = {
 			dir = dir..'/'
 		end
 		options.output_dir = dir
+		return 1
+	end,
+	t = function (arg, i, options)
+		local dir = arg[i+1]
+		if string.sub (dir, -2) ~= "/" then
+			dir = dir..'/'
+		end
+		options.template_dir = dir
 		return 1
 	end,
 	h = print_help,

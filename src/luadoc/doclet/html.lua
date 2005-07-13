@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.20 2005/07/13 17:17:46 tuler Exp $
+-- $Id: html.lua,v 1.21 2005/07/13 18:45:15 tuler Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -228,7 +228,7 @@ function start (doc)
 	end
 	
 	-- Process modules
-	if not options.nomodules then
+	if options.modules then
 		for _, modulename in ipairs(doc.modules) do
 			local module_doc = doc.modules[modulename]
 			-- assembly the filename
@@ -244,7 +244,7 @@ function start (doc)
 	end
 
 	-- Process files
-	if not options.nofiles then
+	if options.files then
 		for _, filepath in ipairs(doc.files) do
 			local file_doc = doc.files[filepath]
 			-- assembly the filename
