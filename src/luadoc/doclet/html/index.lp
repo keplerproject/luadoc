@@ -3,7 +3,7 @@
 <html>
 <head>
     <title>Reference</title>
-    <link rel="stylesheet" href="http://www.keplerproject.org/doc.css" type="text/css" />
+    <link rel="stylesheet" href="<%=luadoc.doclet.html.link("luadoc.css")%>" type="text/css" />
 	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
 </head>
 

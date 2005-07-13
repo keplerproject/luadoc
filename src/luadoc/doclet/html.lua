@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.18 2005/07/12 18:39:17 uid20006 Exp $
+-- $Id: html.lua,v 1.19 2005/07/13 14:05:48 tuler Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -258,4 +258,10 @@ function start (doc)
 			f:close()
 		end
 	end
+	
+	-- copy extra files
+	local f = lfs.open(options.output_dir.."luadoc.css", "w")
+	io.output(f)
+	include("luadoc.css")
+	f:close()
 end
