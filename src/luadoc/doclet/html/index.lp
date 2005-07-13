@@ -25,25 +25,30 @@
 
 <div id="content">
 
+
 <%if not options.nomodules then%>
+<h2>Modules</h2>
 <table class="module_list">
-<tr><td colspan="2">Modules</td></tr>
+<!--<tr><td colspan="2">Modules</td></tr>-->
 <%for _, modulename in ipairs(doc.modules) do%>
 	<tr>
-	<td><a href="<%=luadoc.doclet.html.module_link(modulename, doc)%>"><%=modulename%></a></td>
-	<td><%=doc.modules[modulename].summary%></td>
+		<td class="name"><a href="<%=luadoc.doclet.html.module_link(modulename, doc)%>"><%=modulename%></a></td>
+		<td class="summary"><%=doc.modules[modulename].summary%></td>
 	</tr>
 <%end%>
 </table>
 <%end%>
 
+
+
 <%if not options.nofiles then%>
+<h2>Files</h2>
 <table class="file_list">
-<tr><td colspan="2">Files</td></tr>
+<!--<tr><td colspan="2">Files</td></tr>-->
 <%for _, filepath in ipairs(doc.files) do%>
 	<tr>
-		<td><a href="<%=luadoc.doclet.html.file_link(filepath)%>"><%=filepath%></a></td>
-		<td></td>
+		<td class="name"><a href="<%=luadoc.doclet.html.file_link(filepath)%>"><%=filepath%></a></td>
+		<td class="summary"></td>
 	</tr>
 <%end%>
 </table>

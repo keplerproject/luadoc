@@ -28,11 +28,11 @@
 <h1>File <code><%=file_doc.name%></code></h1>
 
 <h2>Functions</h2>
-<table>
+<table class="function_list">
 <%for func in file_doc.functions() do%>
 	<tr>
-	<td nowrap><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</td>
-	<td><%=func.summary%></td>
+	<td class="name" nowrap><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</td>
+	<td class="summary"><%=func.summary%></td>
 	</tr>
 <%end%>
 </table>
