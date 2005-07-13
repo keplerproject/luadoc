@@ -29,36 +29,59 @@
 
 <p><%=module_doc.description%></p>
 
-
+<%if table.getn(module_doc.functions) > 0 then%>
 <h2>Functions</h2>
-
 <table class="function_list">
-<%for func in module_doc.functions() do%>
+<%for _, func_name in ipairs(module_doc.functions) do%>
 	<tr>
-	<td class="name" nowrap><a href="#<%=func.name%>"><%=func.name%></a>&nbsp;(<%=table.concat(func.param, ", ")%>)</td>
-	<td class="summary"><%=func.summary%></td>
+	<td class="name" nowrap><a href="#<%=func_name%>"><%=func_name%></a>&nbsp;(<%=table.concat(module_doc.functions[func_name].param, ", ")%>)</td>
+	<td class="summary"><%=module_doc.functions[func_name].summary%></td>
 	</tr>
 <%end%>
 </table>
+<%end%>
 
 
+<%if table.getn(module_doc.tables) > 0 then%>
+<h2>Tables</h2>
+<table class="table_list">
+<%for _, tab_name in ipairs(module_doc.tables) do%>
+	<tr>
+	<td class="name" nowrap><a href="#<%=tab_name%>"><%=tab_name%></a></td>
+	<td class="summary"><%=module_doc.tables[tab_name].summary%></td>
+	</tr>
+<%end%>
+</table>
+<%end%>
+
+
+<br/>
+<br/>
+
+
+<%if table.getn(module_doc.functions) > 0 then%>
 <h2><a name="functions"></a>Functions</h2>
 <dl>
-<%for func in module_doc.functions() do%>
-<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=func })%>
+<%for _, func_name in ipairs(module_doc.functions) do%>
+<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=module_doc.functions[func_name] })%>
 <br>
 <hr/>
 <%end%>
 </dl>
+<%end%>
 
+
+<%if table.getn(module_doc.tables) > 0 then%>
 <h2><a name="tables"></a>Tables</h2>
 <dl>
-<%for tab in module_doc.tables() do%>
-<%=luadoc.doclet.html.include("table.lp", { doc=doc, module_doc=module_doc, tab=tab })%>
+<%for _, tab_name in ipairs(module_doc.tables) do%>
+<%=luadoc.doclet.html.include("table.lp", { doc=doc, module_doc=module_doc, tab=module_doc.tables[tab_name] })%>
 <br>
 <hr/>
 <%end%>
 </dl>
+<%end%>
+
 
 </div> <!-- id="content" -->
 

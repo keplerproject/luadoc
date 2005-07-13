@@ -275,8 +275,8 @@ function parse_file (filepath, doc)
 		type = "file",
 		name = filepath,
 		doc = blocks,
-		functions = class_iterator(blocks, "function"),
-		tables = class_iterator(blocks, "table"),
+--		functions = class_iterator(blocks, "function"),
+--		tables = class_iterator(blocks, "table"),
 	}
 	
 	-- if module definition is found, store in module hierarchy
@@ -293,8 +293,8 @@ function parse_file (filepath, doc)
 				type = "module",
 				name = modulename,
 				doc = blocks,
-				functions = class_iterator(blocks, "function"),
-				tables = class_iterator(blocks, "table"),
+--				functions = class_iterator(blocks, "function"),
+--				tables = class_iterator(blocks, "table"),
 			}
 			
 			-- find module description
@@ -309,6 +309,34 @@ function parse_file (filepath, doc)
 					m.summary)
 			end
 		end
+		
+		-- make functions table
+		doc.modules[modulename].functions = {}
+		for f in class_iterator(blocks, "function")() do
+			table.insert(doc.modules[modulename].functions, f.name)
+			doc.modules[modulename].functions[f.name] = f
+		end
+		
+		-- make tables table
+		doc.modules[modulename].tables = {}
+		for t in class_iterator(blocks, "table")() do
+			table.insert(doc.modules[modulename].tables, t.name)
+			doc.modules[modulename].tables[t.name] = t
+		end
+	end
+	
+	-- make functions table
+	doc.files[filepath].functions = {}
+	for f in class_iterator(blocks, "function")() do
+		table.insert(doc.files[filepath].functions, f.name)
+		doc.files[filepath].functions[f.name] = f
+	end
+	
+	-- make tables table
+	doc.files[filepath].tables = {}
+	for t in class_iterator(blocks, "table")() do
+		table.insert(doc.files[filepath].tables, t.name)
+		doc.files[filepath].tables[t.name] = t
 	end
 	
 	return doc

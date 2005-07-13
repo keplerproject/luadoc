@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.19 2005/07/13 14:05:48 tuler Exp $
+-- $Id: html.lua,v 1.20 2005/07/13 17:17:46 tuler Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -139,8 +139,8 @@ function function_link (fname, doc, module_doc, file_doc, from)
 	from = from or ""
 	
 	if file_doc then
-		for func in file_doc.functions() do
-			if func.name == fname then
+		for _, func_name in file_doc.functions do
+			if func_name == fname then
 				return file_link(file_doc.name, from) .. "#" .. fname
 			end
 		end
@@ -160,8 +160,8 @@ function function_link (fname, doc, module_doc, file_doc, from)
 		return
 	end
 	
-	for func in module_doc.functions() do
-		if func.name == fname then
+	for _, func_name in module_doc.functions do
+		if func_name == fname then
 			return module_link(modulename, doc, from) .. "#" .. fname
 		end
 	end
