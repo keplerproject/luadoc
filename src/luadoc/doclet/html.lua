@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.21 2005/07/13 18:45:15 tuler Exp $
+-- $Id: html.lua,v 1.22 2005/07/14 14:08:54 tuler Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -53,10 +53,32 @@ function lp.include (filename, env)
 end
 
 -------------------------------------------------------------------------------
+-- Looks for a file `name' in given path. Removed from compat-5.1
+
+local function search (path, name)
+  for c in string.gfind(path, "[^;]+") do
+    c = string.gsub(c, "%?", name)
+    local f = io.open(c)
+    if f then   -- file exist?
+      f:close()
+      return c
+    end
+  end
+  return nil    -- file not found
+end
+
+-------------------------------------------------------------------------------
 -- Include the result of a lp template into the current stream.
 
 function include (template, env)
+	-- template_dir is relative to package.path
 	local templatepath = options.template_dir .. template
+	
+	-- search using package.path (modified to search .lp instead of .lua
+	local search_path = string.gsub(package.path, "%.lua", "")
+	local templatepath = search(search_path, templatepath)
+	assert(templatepath, string.format("template `%s' not found", template))
+	
 	env = env or {}
 	env.table = table
 	env.io = io

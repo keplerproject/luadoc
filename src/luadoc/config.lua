@@ -26,6 +26,7 @@ local default_options = {
 	-- TODO: find a way to define doclet specific options
 	template_dir = "luadoc/doclet/html/",
 	modules = 1,
+	files = 1,
 	verbose = 1,
 }
 

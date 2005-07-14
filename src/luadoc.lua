@@ -122,11 +122,12 @@ end
 -- @see luadoc.doclet.html, luadoc.doclet.formatter, luadoc.doclet.raw
 -- @see luadoc.taglet.standard
 
-function main ()
+function main (arg)
 	-- Process options
 	local argc = table.getn(arg)
 	if argc < 1 then
 		print_help ()
+		return
 	end
 	local files, options = process_options (arg)
 	
@@ -157,4 +158,4 @@ function main ()
 	doclet.start(doc)
 end
 
-main()
+main(arg)

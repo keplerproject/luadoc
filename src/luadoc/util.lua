@@ -1,4 +1,4 @@
--- $Id: util.lua,v 1.11 2005/07/12 05:19:35 uid20006 Exp $
+-- $Id: util.lua,v 1.12 2005/07/14 14:13:28 tuler Exp $
 
 -------------------------------------------------------------------------------
 -- Module with several utilities that could not fit in a specific module
@@ -151,4 +151,3 @@ function lfs.open (filename, mode)
 	end
 	return f
 end
-
