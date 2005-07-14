@@ -162,6 +162,9 @@ local function parse_comment (block)
 		elseif module_name then
 			block.class = "module"
 			block.name = module_name
+			block.param = {}
+		else
+			block.param = {}
 		end
 	else
 		-- TODO: comment without any code. Does this means we are dealing

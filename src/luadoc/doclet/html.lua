@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.22 2005/07/14 14:08:54 tuler Exp $
+-- $Id: html.lua,v 1.23 2005/07/14 19:02:22 tuler Exp $
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -239,7 +239,7 @@ end
 
 function start (doc)
 	-- Generate index file
-	if (table.getn(doc.files) > 0 and table.getn(doc.modules) > 0) and (not options.noindexpage) then
+	if (table.getn(doc.files) > 0 or table.getn(doc.modules) > 0) and (not options.noindexpage) then
 		local filename = options.output_dir.."index.html"
 		luadoc.logger:info(string.format("generating file `%s'", filename))
 		local f = lfs.open(filename, "w")

@@ -26,7 +26,7 @@
 <div id="content">
 
 
-<%if options.modules then%>
+<%if options.modules and table.getn(doc.modules) > 0 then%>
 <h2>Modules</h2>
 <table class="module_list">
 <!--<tr><td colspan="2">Modules</td></tr>-->
@@ -41,7 +41,7 @@
 
 
 
-<%if options.files then%>
+<%if options.files and table.getn(doc.files) > 0 then%>
 <h2>Files</h2>
 <table class="file_list">
 <!--<tr><td colspan="2">Files</td></tr>-->
