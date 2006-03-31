@@ -274,5 +274,13 @@ table.table_list td
 table.table_list td.name { background-color: #f0f0f0; }
 table.table_list td.summary { width: 100%; }
 
+dl.function dt {border-top: 1px solid #ccc; padding-top: 1em;}
+dl.function dd {padding-bottom: 1em;}
+dl.function h3 {padding: 0; margin: 0; font-size: medium;}
+
+dl.table dt {border-top: 1px solid #ccc; padding-top: 1em;}
+dl.table dd {padding-bottom: 1em;}
+dl.table h3 {padding: 0; margin: 0; font-size: medium;}
+
 #TODO: make module_list, file_list, function_list, table_list inherit from a list
 

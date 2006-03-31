@@ -61,11 +61,9 @@
 
 <%if table.getn(module_doc.functions) > 0 then%>
 <h2><a name="functions"></a>Functions</h2>
-<dl>
+<dl class="function">
 <%for _, func_name in ipairs(module_doc.functions) do%>
 <%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=module_doc.functions[func_name] })%>
-<br>
-<hr/>
 <%end%>
 </dl>
 <%end%>
@@ -73,11 +71,9 @@
 
 <%if table.getn(module_doc.tables) > 0 then%>
 <h2><a name="tables"></a>Tables</h2>
-<dl>
+<dl class="table">
 <%for _, tab_name in ipairs(module_doc.tables) do%>
 <%=luadoc.doclet.html.include("table.lp", { doc=doc, module_doc=module_doc, tab=module_doc.tables[tab_name] })%>
-<br>
-<hr/>
 <%end%>
 </dl>
 <%end%>

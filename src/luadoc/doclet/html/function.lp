@@ -8,12 +8,12 @@ else
 end
 %>
 
-<div class="function">
 <dt><a name="<%=func.name%>"></a><strong><%=func.name%></strong>&nbsp;(<%=table.concat(func.param, ", ")%>)</dt>
-<dd><%=func.description or ""%></dd>
+<dd>
+<%=func.description or ""%>
 
 <%if type(func.param) == "table" and table.getn(func.param) > 0 then%>
-<em>Parameters</em>
+<h3>Parameters</h3>
 <ul>
 	<%for p = 1, table.getn(func.param) do%>
 	<li>
@@ -25,13 +25,12 @@ end
 
 
 <%if type(func.ret) == "string" then%>
-<em>Return value:</em>
+<h3>Return value:</h3>
 <%=func.ret%>
-<br>
 <%end%>
 
 <%if type(func.see) == "string" then %>
-<em>See also:</em>
+<h3>See also:</h3>
 	<a href="<%=func.see%>"><%=func.see%></a>
 <%elseif type(func.see) == "table" and table.getn(func.see) > 0 then %>
 <em>See also:</em>
@@ -41,7 +40,5 @@ end
 	</a>
 	<%if i < table.getn(func.see) then %>, <%end%>
 	<%end%>
-<br>
 <%end%>
-
-</div>
+</dd>
