@@ -1,7 +1,6 @@
--- $Id: debug.lua,v 1.1 2006/03/30 20:26:27 tuler Exp $
+-- $Id: debug.lua,v 1.2 2006/03/31 18:03:14 tuler Exp $
 
 module "luadoc.doclet.debug"
-require "logging"
 
 function printline()
 	print(string.rep('-', 79))

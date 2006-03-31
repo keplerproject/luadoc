@@ -1,10 +1,12 @@
--- $Id: util.lua,v 1.12 2005/07/14 14:13:28 tuler Exp $
+-- $Id: util.lua,v 1.13 2006/03/31 18:03:14 tuler Exp $
+
+local lfs = require "lfs"
+local type, table, string, io, assert, tostring = type, table, string, io, assert, tostring
 
 -------------------------------------------------------------------------------
 -- Module with several utilities that could not fit in a specific module
 
 module "luadoc.util"
-require "lfs"
 
 -------------------------------------------------------------------------------
 -- Removes spaces from the begining and end of a given string

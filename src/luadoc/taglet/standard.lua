@@ -1,10 +1,11 @@
 
-module 'luadoc.taglet.standard'
-
-require "lfs"
-require "luadoc"
+local lfs = require "lfs"
+local luadoc = require "luadoc"
 local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
+local type, table, string, io, assert, tostring, print = type, table, string, io, assert, tostring, print
+
+module 'luadoc.taglet.standard'
 
 -------------------------------------------------------------------------------
 -- Creates an iterator for an array base on a class type.
@@ -80,7 +81,7 @@ local function check_module (line, currentmodule)
 	local r, _, modulename = string.find(line, "^module%s*[\"'](.-)[\"']")
 	if r then
 		-- found module definition
-		luadoc.logger:debug(string.format("found module `%s'", modulename))
+		logger:debug(string.format("found module `%s'", modulename))
 		return modulename
 	end
 	return currentmodule
@@ -362,7 +363,7 @@ function file (filepath, doc)
 	end)
 	
 	if valid then
-		luadoc.logger:info(string.format("processing file `%s'", filepath))
+		logger:info(string.format("processing file `%s'", filepath))
 		doc = parse_file(filepath, doc)
 	end
 	

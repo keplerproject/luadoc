@@ -1,4 +1,6 @@
--- $Id: formatter.lua,v 1.2 2005/07/11 15:03:46 uid20006 Exp $
+-- $Id: formatter.lua,v 1.3 2006/03/31 18:03:14 tuler Exp $
+
+local util = require "luadoc.util"
 
 -------------------------------------------------------------------------------
 -- Doclet to format source code according to LuaDoc standard tags. This doclet
@@ -6,8 +8,6 @@
 -- 80 columns and function parameters are added based on code analysis.
 
 module "luadoc.doclet.formatter"
-
-local util = require "luadoc.util"
 
 options = {
 	output_dir = "./",

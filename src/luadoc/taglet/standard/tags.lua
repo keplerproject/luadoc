@@ -2,9 +2,11 @@
 -------------------------------------------------------------------------------
 -- Handlers for several tags
 
-module "luadoc.taglet.standard.tags"
-
 local util = require "luadoc.util"
+local string, table = string, table
+local assert, type, tostring = assert, type, tostring
+
+module "luadoc.taglet.standard.tags"
 
 -------------------------------------------------------------------------------
 

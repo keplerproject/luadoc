@@ -1,4 +1,12 @@
--- $Id: html.lua,v 1.23 2005/07/14 19:02:22 tuler Exp $
+-- $Id: html.lua,v 1.24 2006/03/31 18:03:14 tuler Exp $
+
+local lp = require "luadoc.lp"
+local lfs = require "lfs"
+local type, table, string, io, assert, tostring, tonumber = type, table, string, io, assert, tostring, tonumber
+local pairs, ipairs = pairs, ipairs
+local loadstring, getfenv, setfenv = loadstring, getfenv, setfenv
+local package = package
+local luadoc = luadoc
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -13,14 +21,11 @@
 
 module "luadoc.doclet.html"
 
-local lp = require "luadoc.lp"
-require "luadoc.util"
-
 -------------------------------------------------------------------------------
 -- Preprocess and include the content of a mixed HTML file into the 
 -- currently 'open' HTML document. 
 
-function lp2func (filename, doc)
+--[[function lp2func (filename, doc)
 	local fh = assert (io.open (filename))
 	local prog = fh:read("*a")
 	fh:close()
@@ -51,7 +56,7 @@ function lp.include (filename, env)
 	local prog = lp2func (filename)
 	envexec (prog, env)
 end
-
+]]
 -------------------------------------------------------------------------------
 -- Looks for a file `name' in given path. Removed from compat-5.1
 
@@ -120,7 +125,7 @@ function module_link (modulename, doc, from)
 	from = from or ""
 	
 	if doc.modules[modulename] == nil then
---		luadoc.logger:error(string.format("unresolved reference to module `%s'", modulename))
+--		logger:error(string.format("unresolved reference to module `%s'", modulename))
 		return
 	end
 	
@@ -178,7 +183,7 @@ function function_link (fname, doc, module_doc, file_doc, from)
 
 	local module_doc = doc.modules[modulename]
 	if not module_doc then
---		luadoc.logger:error(string.format("unresolved reference to function `%s': module `%s' not found", fname, modulename))
+--		logger:error(string.format("unresolved reference to function `%s': module `%s' not found", fname, modulename))
 		return
 	end
 	
@@ -188,7 +193,7 @@ function function_link (fname, doc, module_doc, file_doc, from)
 		end
 	end
 	
---	luadoc.logger:error(string.format("unresolved reference to function `%s' of module `%s'", fname, modulename))
+--	logger:error(string.format("unresolved reference to function `%s' of module `%s'", fname, modulename))
 end
 
 -------------------------------------------------------------------------------
@@ -204,7 +209,7 @@ function symbol_link (symbol, doc, module_doc, file_doc, from)
 		function_link(symbol, doc, module_doc, file_doc, from)
 	
 	if not href then
-		luadoc.logger:error(string.format("unresolved reference to symbol `%s'", symbol))
+		logger:error(string.format("unresolved reference to symbol `%s'", symbol))
 	end
 	
 	return href or ""
@@ -241,7 +246,7 @@ function start (doc)
 	-- Generate index file
 	if (table.getn(doc.files) > 0 or table.getn(doc.modules) > 0) and (not options.noindexpage) then
 		local filename = options.output_dir.."index.html"
-		luadoc.logger:info(string.format("generating file `%s'", filename))
+		logger:info(string.format("generating file `%s'", filename))
 		local f = lfs.open(filename, "w")
 		assert(f, string.format("could not open `%s' for writing", filename))
 		io.output(f)
@@ -250,12 +255,12 @@ function start (doc)
 	end
 	
 	-- Process modules
-	if options.modules then
+	if not options.nomodules then
 		for _, modulename in ipairs(doc.modules) do
 			local module_doc = doc.modules[modulename]
 			-- assembly the filename
 			local filename = out_module(modulename)
-			luadoc.logger:info(string.format("generating file `%s'", filename))
+			logger:info(string.format("generating file `%s'", filename))
 			
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
@@ -266,12 +271,12 @@ function start (doc)
 	end
 
 	-- Process files
-	if options.files then
+	if not options.nofiles then
 		for _, filepath in ipairs(doc.files) do
 			local file_doc = doc.files[filepath]
 			-- assembly the filename
 			local filename = out_file(file_doc.name)
-			luadoc.logger:info(string.format("generating file `%s'", filename))
+			logger:info(string.format("generating file `%s'", filename))
 			
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
