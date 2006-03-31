@@ -25,9 +25,9 @@ h2 { font-size:1.25em; }
 h3 { font-size:1.15em; }
 h4 { font-size:1.06em; }
 
-a { font-weight:bold; color: #004080; text-decoration: none; }
+a:link { font-weight:bold; color: #004080; text-decoration: none; }
 a:visited { font-weight:bold; color: #006699; text-decoration: none; }
-a:hover { text-decoration:underline; }
+a:link:hover { text-decoration:underline; }
 hr { color:#cccccc }
 img { border-width: 0px; }
 
@@ -62,7 +62,7 @@ pre.example {
     margin-left: 1em;
     margin-right: 1em;
     font-family: "Andale Mono", monospace; 
-    font-size: small;
+    font-size: smaller;
 }
 
 
@@ -79,12 +79,26 @@ table.index { border: 1px #00007f; }
 table.index td { text-align: left; vertical-align: top; }
 table.index ul { padding-top: 0em; margin-top: 0em; }
 
+table {
+    border: 1px solid black;
+	border-collapse: collapse;
+    margin-left: auto;
+    margin-right: auto;
+}
+th {
+    border: 1px solid black;
+    padding: 0.5em;
+}
+td {
+    border: 1px solid black;
+    padding: 0.5em;
+}
 div.header, div.footer { margin-left: 0em; }
 
 #container
 {
-	margin-left: 10%;
-	margin-right: 10%;
+	margin-left: 1em;
+	margin-right: 1em;
 	background-color: #f0f0f0;
 }
 
@@ -120,55 +134,48 @@ div.header, div.footer { margin-left: 0em; }
 #navigation
 {
 	float: left;
-	width: 250px;
+	width: 18em;
 	margin: 0;
-	font-size: small;
 	vertical-align: top;
 	background-color: #f0f0f0;
+	overflow:visible;
 }
 
 #navigation h1 {
-	white-space:nowrap;
 	background-color:#e7e7e7;
 	font-size:1.1em;
 	color:#000000;
 	text-align:left;
 	margin:0px;
-	padding:3px;
+	padding:0.2em;
 	border-top:1px solid #dddddd;
 	border-bottom:1px solid #dddddd;
 }
 
 #navigation ul
 {
-	white-space:nowrap;
 	font-size:1em;
-	margin:3px;
 	list-style-type: none;
 	padding: 0;
-	margin: 0;
+	margin: 1px;
 }
 
 #navigation li
 {
-	margin: 0;
+	text-indent: -1em;
+	margin: 0em 0em 0em 0.5em;
 	display: block;
-	padding: 3px 12px 0px 8px;
+	padding: 3px 0px 0px 12px;
 }
 
 #navigation li li a
 {
-	padding: 0px 3px 0px 17px;
-}
-
-#navigation li li strong
-{
-	padding: 0px 3px 0px 17px;
+	padding: 0px 3px 0px -1em;
 }
 
 #content
 {
-	margin-left: 250px;
+	margin-left: 18em;
 	padding: 1em;
 	border-left: 2px solid #cccccc;
 	border-right: 2px solid #cccccc;
@@ -184,13 +191,26 @@ div.header, div.footer { margin-left: 0em; }
 	background-color: #ffffff;
 }
 
-table.module_list
-{
-	border-width: 1px;
-	border-style: solid;
-	border-color: #cccccc;
-	border-collapse: collapse;
+@media print {
+	body { 
+		font: 12pt "Times New Roman", "TimeNR", Times, serif;
+	}
+	a { font-weight:bold; color: #004080; text-decoration: underline; }
+	
+	#main	{		background-color: #ffffff;		border-left: 0px;	}	
+	#container	{		margin-left: 2%;		margin-right: 2%;		background-color: #ffffff;	}
+	
+	#content	{		margin-left: 0px;		padding: 1em;		border-left: 0px;		border-right: 0px;		background-color: #ffffff;	}
+	
+	#navigation	{		display: none;
+	}
+	pre.example {
+		font-family: "Andale Mono", monospace; 
+		font-size: 10pt;
+		page-break-inside: avoid;
+	}
 }
+
 table.module_list td
 {
 	border-width: 1px;
@@ -199,7 +219,7 @@ table.module_list td
 	border-color: #cccccc;
 }
 table.module_list td.name { background-color: #f0f0f0; }
-table.file_list td.summary { width: 100%; }
+table.module_list td.summary { width: 100%; }
 
 table.file_list
 {
