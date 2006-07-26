@@ -115,6 +115,12 @@ end
 
 -------------------------------------------------------------------------------
 
+local function release (tag, block, text)
+	block[tag] = text
+end
+
+-------------------------------------------------------------------------------
+
 local handlers = {}
 handlers["description"] = description
 handlers["return"] = ret
@@ -124,6 +130,7 @@ handlers["usage"] = usage
 handlers["name"] = name
 handlers["class"] = class
 handlers["field"] = field
+handlers["release"] = release
 
 -------------------------------------------------------------------------------
 
