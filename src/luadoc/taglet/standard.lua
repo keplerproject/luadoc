@@ -304,6 +304,7 @@ function parse_file (filepath, doc)
 			-- find module description
 			doc.modules[modulename].description = ""
 			doc.modules[modulename].summary = ""
+			doc.modules[modulename].release = ""
 			for m in class_iterator(blocks, "module")() do
 				doc.modules[modulename].description = util.concat(
 					doc.modules[modulename].description, 
@@ -311,6 +312,9 @@ function parse_file (filepath, doc)
 				doc.modules[modulename].summary = util.concat(
 					doc.modules[modulename].summary, 
 					m.summary)
+				doc.modules[modulename].release = util.concat(
+					doc.modules[modulename].release, 
+					m.release)
 			end
 		end
 		

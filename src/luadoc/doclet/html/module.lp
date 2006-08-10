@@ -28,6 +28,9 @@
 <h1>Module <code><%=module_doc.name%></code></h1>
 
 <p><%=module_doc.description%></p>
+<%if module_doc.release then%>
+<p><small><b>Release:</b> <%=module_doc.release%></small></p>
+<%end%>
 
 <%if table.getn(module_doc.functions) > 0 then%>
 <h2>Functions</h2>
