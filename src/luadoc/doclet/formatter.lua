@@ -1,6 +1,9 @@
--- $Id: formatter.lua,v 1.3 2006/03/31 18:03:14 tuler Exp $
+-- $Id: formatter.lua,v 1.4 2006/08/10 19:06:45 tomas Exp $
 
 local util = require "luadoc.util"
+local assert, ipairs, pairs, type = assert, ipairs, pairs, type
+local string = require"string"
+local table = require"table"
 
 -------------------------------------------------------------------------------
 -- Doclet to format source code according to LuaDoc standard tags. This doclet
@@ -23,7 +26,7 @@ function out_file (filename)
 end
 
 -------------------------------------------------------------------------------
--- Generate a new lua file for each input lua file. Is the user does not 
+-- Generate a new lua file for each input lua file. If the user does not 
 -- specify a different output directory input files will be rewritten.
 -- @param doc documentation table
 
@@ -31,8 +34,7 @@ function start (doc)
 	local todo = "<TODO>"
 	
 	-- Process files
-	-- TODO: change to ipairs(doc.files)
-	for i, file_doc in doc.files do
+	for i, file_doc in ipairs(doc.files) do
 		-- assembly the filename
 		local filename = out_file(file_doc.name)
 		luadoc.logger:info(string.format("generating file `%s'", filename))
