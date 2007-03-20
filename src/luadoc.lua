@@ -1,13 +1,8 @@
-#!/usr/local/bin/lua50
-
--- compatibility code for Lua version 5.0 providing 5.1 behavior
-if string.find (_VERSION, "Lua 5.0") and not _COMPAT51 then
-	if not LUA_PATH then
-		LUA_PATH = [[./?.lua;./?/?.lua;./?/init.lua;../../lualogging/src/?.lua;../../lualogging/src/?/?.lua]]
-	end
-	require"compat-5.1"
-	package.cpath = [[./?.dll;../../luafilesystem/bin/vc6/?.dll]]
-end
+#!/usr/local/bin/lua5.1
+-------------------------------------------------------------------------------
+-- LuaDoc launcher.
+-- $Id: luadoc.lua,v 1.24 2007/03/20 18:23:21 tomas Exp $
+-------------------------------------------------------------------------------
 
 require "luadoc.core"
 
