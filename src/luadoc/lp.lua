@@ -1,7 +1,7 @@
 ----------------------------------------------------------------------------
 -- HTML Preprocessor.
 --
--- $Id: lp.lua,v 1.3 2006/03/31 18:03:14 tuler Exp $
+-- $Id: lp.lua,v 1.4 2007/03/20 18:22:48 tomas Exp $
 ----------------------------------------------------------------------------
 
 local assert, error, loadstring = assert, error, loadstring
@@ -10,7 +10,7 @@ local concat, tinsert = table.concat, table.insert
 local open = io.open
 local getfenv, setfenv = getfenv, setfenv
 
-module (arg and arg[1])
+module (...)
 
 ----------------------------------------------------------------------------
 -- function to do output
@@ -23,7 +23,7 @@ local function out (s, i, f)
 	s = strsub(s, i, f or -1)
 	if s == "" then return s end
 	-- we could use `%q' here, but this way we have better control
-	s = gsub(s, "([\\\n\'])", "\\%1")
+	s = gsub(s, "([\\\r\n\'])", "\\%1")
 	return format(" %s('%s'); ", outfunc, s)
 end
 
