@@ -1,6 +1,6 @@
-# $Id: Makefile,v 1.1 2006/05/05 18:12:00 tomas Exp $
+# $Id: Makefile,v 1.2 2007/03/20 18:25:02 tomas Exp $
 
-LUA_DIR= /usr/local/share/lua/5.0
+LUA_DIR= /usr/local/share/lua/5.1
 LUADOC_DIR= $(LUA_DIR)/luadoc
 DOCLET_DIR= $(LUADOC_DIR)/doclet
 HTML_DIR= $(DOCLET_DIR)/html
@@ -27,7 +27,8 @@ HTML_LUAS= src/luadoc/doclet/html/file.lp \
 TAGLET_LUAS= src/luadoc/taglet/standard.lua
 STANDARD_LUAS= src/luadoc/taglet/standard/tags.lua
 
-LAUNCHER= src/luadoc.lua
+LAUNCHER= $(LAUNCHER_DIR)/luadoc
+LAUNCHER_SRC= src/luadoc.lua
 
 
 build clean:
@@ -44,8 +45,9 @@ install:
 	mkdir -p $(STANDARD_DIR)
 	cp $(STANDARD_LUAS) $(STANDARD_DIR)
 	mkdir -p $(LAUNCHER_DIR)
-	cp $(LAUNCHER) $(LAUNCHER_DIR)
+	cp $(LAUNCHER_SRC) $(LAUNCHER)
+	chmod a+x $(LAUNCHER)
 
 refman:
 	mkdir -p $(LUADOC_REFMAN)
-	$(LAUNCHER_DIR)/luadoc.lua -d $(LUADOC_REFMAN) src/luadoc
+	$(LAUNCHER) -d $(LUADOC_REFMAN) src/luadoc
