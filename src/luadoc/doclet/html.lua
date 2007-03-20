@@ -1,12 +1,13 @@
--- $Id: html.lua,v 1.24 2006/03/31 18:03:14 tuler Exp $
+-- $Id: html.lua,v 1.25 2007/03/20 18:21:35 tomas Exp $
 
-local lp = require "luadoc.lp"
+local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
+local io = require"io"
 local lfs = require "lfs"
-local type, table, string, io, assert, tostring, tonumber = type, table, string, io, assert, tostring, tonumber
-local pairs, ipairs = pairs, ipairs
-local loadstring, getfenv, setfenv = loadstring, getfenv, setfenv
+local lp = require "luadoc.lp"
+local luadoc = require"luadoc"
 local package = package
-local luadoc = luadoc
+local string = require"string"
+local table = require"table"
 
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
@@ -166,7 +167,7 @@ function function_link (fname, doc, module_doc, file_doc, from)
 	from = from or ""
 	
 	if file_doc then
-		for _, func_name in file_doc.functions do
+		for _, func_name in pairs(file_doc.functions) do
 			if func_name == fname then
 				return file_link(file_doc.name, from) .. "#" .. fname
 			end
@@ -187,7 +188,7 @@ function function_link (fname, doc, module_doc, file_doc, from)
 		return
 	end
 	
-	for _, func_name in module_doc.functions do
+	for _, func_name in pairs(module_doc.functions) do
 		if func_name == fname then
 			return module_link(modulename, doc, from) .. "#" .. fname
 		end
