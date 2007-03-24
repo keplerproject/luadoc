@@ -100,10 +100,10 @@ local function parse_summary (description)
 	description = description or ""
 	
 	-- append an " " at the end to make the pattern work in all cases
-	description = string.gsub(description, "(.)$", "%1 ")
+	description = description.." "
 
 	-- read until the first period followed by a space or tab	
-	local _, _, summary = string.find(description, "([^%.]*%.)[%s\t]")
+	local summary = string.match(description, "(.-%.)[%s\t]")
 	
 	-- if pattern did not find the first sentence, summary is the whole description
 	summary = summary or description
