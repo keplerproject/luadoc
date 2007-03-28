@@ -27,6 +27,13 @@ end
 <%if type(func.ret) == "string" then%>
 <h3>Return value:</h3>
 <%=func.ret%>
+<%elseif type(func.ret) == "table" then%>
+<h3>Return values:</h3>
+<ol>
+	<%for _, ret in ipairs(func.ret) do%>
+	<li><%= ret %>
+	<%end%>
+</ol>
 <%end%>
 
 <%if type(func.see) == "string" then %>
