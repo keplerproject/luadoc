@@ -27,7 +27,14 @@
 
 <h1>File <code><%=file_doc.name%></code></h1>
 
-<%if table.getn(file_doc.functions) > 0 then%>
+<%if file_doc.description then%>
+<p><%=file_doc.description%></p>
+<%end%>
+<%if file_doc.release then%>
+<p><small><b>Release:</b> <%=file_doc.release%></small></p>
+<%end%>
+
+<%if #file_doc.functions > 0 then%>
 <h2>Functions</h2>
 <table class="function_list">
 <%for _, func_name in ipairs(file_doc.functions) do%>
@@ -40,7 +47,7 @@
 <%end%>
 
 
-<%if table.getn(file_doc.tables) > 0 then%>
+<%if #file_doc.tables > 0 then%>
 <h2>Tables</h2>
 <table class="table_list">
 <%for _, tab_name in ipairs(file_doc.tables) do%>
@@ -58,7 +65,7 @@
 
 
 
-<%if table.getn(file_doc.functions) > 0 then%>
+<%if #file_doc.functions > 0 then%>
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
 <%for _, func_name in ipairs(file_doc.functions) do%>
@@ -68,7 +75,7 @@
 <%end%>
 
 
-<%if table.getn(file_doc.tables) > 0 then%>
+<%if #file_doc.tables > 0 then%>
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 <%for _, tab_name in ipairs(file_doc.tables) do%>
