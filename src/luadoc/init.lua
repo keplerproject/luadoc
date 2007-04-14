@@ -11,9 +11,9 @@ logger = logging.console("[%level] %message\n")
 -------------------------------------------------------------------------------
 -- LuaDoc version number.
 
-_COPYRIGHT = "Copyright (c) 2003-2006 The Kepler Project"
+_COPYRIGHT = "Copyright (c) 2003-2007 The Kepler Project"
 _DESCRIPTION = "Documentation Generator Tool for the Lua language"
-_VERSION = "LuaDoc 3.0 alpha 1"
+_VERSION = "LuaDoc 3.0.0"
 
 -------------------------------------------------------------------------------
 -- Main function
