@@ -1,9 +1,12 @@
 
+local assert, pairs, tostring, type = assert, pairs, tostring, type
+local io = require "io"
 local lfs = require "lfs"
 local luadoc = require "luadoc"
 local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
-local type, table, string, io, assert, tostring = type, table, string, io, assert, tostring
+local string = require "string"
+local table = require "table"
 
 module 'luadoc.taglet.standard'
 
@@ -282,7 +285,7 @@ function parse_file (filepath, doc)
 	}
 --
 	local first = doc.files[filepath].doc[1]
-	if first and (not first.class or first.class == "module") then
+	if first and modulename then
 		doc.files[filepath].description = first.description
 		doc.files[filepath].release = first.release
 		doc.files[filepath].summary = first.summary
@@ -308,12 +311,14 @@ function parse_file (filepath, doc)
 				doc = blocks,
 --				functions = class_iterator(blocks, "function"),
 --				tables = class_iterator(blocks, "table"),
+				description = first.description,
+				release = first.release,
+				summary = first.summary,
 			}
 			
 			-- find module description
-			doc.modules[modulename].description = ""
-			doc.modules[modulename].summary = ""
-			doc.modules[modulename].release = ""
+			doc.modules[modulename].description = doc.modules[modulename].description or ""
+			doc.modules[modulename].summary = doc.modules[modulename].summary or ""
 			for m in class_iterator(blocks, "module")() do
 				doc.modules[modulename].description = util.concat(
 					doc.modules[modulename].description, 
@@ -321,9 +326,9 @@ function parse_file (filepath, doc)
 				doc.modules[modulename].summary = util.concat(
 					doc.modules[modulename].summary, 
 					m.summary)
-				doc.modules[modulename].release = util.concat(
-					doc.modules[modulename].release, 
-					m.release)
+				if m.release then
+					doc.modules[modulename].release = m.release
+				end
 				if m.name then
 					doc.modules[modulename].name = m.name
 				end
@@ -407,6 +412,22 @@ function directory (path, doc)
 	return doc
 end
 
+-- Recursively sorts the documentation table
+local function recsort (tab)
+	table.sort (tab)
+	-- sort list of functions by name alphabetically
+	for f, doc in pairs(tab) do
+		if doc.functions then
+			table.sort(doc.functions)
+		end
+		if doc.tables then
+			table.sort(doc.tables)
+		end
+	end
+end
+
+-------------------------------------------------------------------------------
+
 function start (files, doc)
 	assert(files, "file list not specified")
 	
@@ -430,8 +451,8 @@ function start (files, doc)
 	end)
 	
 	-- order arrays alphabetically
-	table.sort(doc.files)
-	table.sort(doc.modules)
-		
+	recsort(doc.files)
+	recsort(doc.modules)
+
 	return doc
 end
