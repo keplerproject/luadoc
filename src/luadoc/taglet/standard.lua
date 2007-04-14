@@ -311,14 +311,12 @@ function parse_file (filepath, doc)
 				doc = blocks,
 --				functions = class_iterator(blocks, "function"),
 --				tables = class_iterator(blocks, "table"),
-				description = first.description,
-				release = first.release,
-				summary = first.summary,
+				description = "",
+				release = first and first.release,
+				summary = "",
 			}
 			
 			-- find module description
-			doc.modules[modulename].description = doc.modules[modulename].description or ""
-			doc.modules[modulename].summary = doc.modules[modulename].summary or ""
 			for m in class_iterator(blocks, "module")() do
 				doc.modules[modulename].description = util.concat(
 					doc.modules[modulename].description, 
@@ -333,6 +331,8 @@ function parse_file (filepath, doc)
 					doc.modules[modulename].name = m.name
 				end
 			end
+			doc.modules[modulename].description = doc.modules[modulename].description or (first and first.description) or ""
+			doc.modules[modulename].summary = doc.modules[modulename].summary or (first and first.summary) or ""
 		end
 		
 		-- make functions table
