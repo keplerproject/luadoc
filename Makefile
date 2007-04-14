@@ -1,4 +1,4 @@
-# $Id: Makefile,v 1.2 2007/03/20 18:25:02 tomas Exp $
+# $Id: Makefile,v 1.3 2007/04/14 04:20:42 tomas Exp $
 
 LUA_DIR= /usr/local/share/lua/5.1
 LUADOC_DIR= $(LUA_DIR)/luadoc
@@ -10,7 +10,7 @@ LAUNCHER_DIR= /usr/local/bin
 LUADOC_REFMAN= doc/refman
 
 LUADOC_LUAS= src/luadoc/config.lua \
-	src/luadoc/core.lua \
+	src/luadoc/init.lua \
 	src/luadoc/lp.lua \
 	src/luadoc/util.lua
 DOCLET_LUAS= src/luadoc/doclet/debug.lua \
