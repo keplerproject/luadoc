@@ -32,7 +32,7 @@
 <p><small><b>Release:</b> <%=module_doc.release%></small></p>
 <%end%>
 
-<%if table.getn(module_doc.functions) > 0 then%>
+<%if #module_doc.functions > 0 then%>
 <h2>Functions</h2>
 <table class="function_list">
 <%for _, func_name in ipairs(module_doc.functions) do%>
@@ -45,7 +45,7 @@
 <%end%>
 
 
-<%if table.getn(module_doc.tables) > 0 then%>
+<%if #module_doc.tables > 0 then%>
 <h2>Tables</h2>
 <table class="table_list">
 <%for _, tab_name in ipairs(module_doc.tables) do%>
@@ -62,7 +62,7 @@
 <br/>
 
 
-<%if table.getn(module_doc.functions) > 0 then%>
+<%if #module_doc.functions > 0 then%>
 <h2><a name="functions"></a>Functions</h2>
 <dl class="function">
 <%for _, func_name in ipairs(module_doc.functions) do%>
@@ -72,7 +72,7 @@
 <%end%>
 
 
-<%if table.getn(module_doc.tables) > 0 then%>
+<%if #module_doc.tables > 0 then%>
 <h2><a name="tables"></a>Tables</h2>
 <dl class="table">
 <%for _, tab_name in ipairs(module_doc.tables) do%>

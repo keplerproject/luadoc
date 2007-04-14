@@ -1,4 +1,4 @@
--- $Id: html.lua,v 1.25 2007/03/20 18:21:35 tomas Exp $
+-- $Id: html.lua,v 1.26 2007/04/14 02:02:54 tomas Exp $
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
 local io = require"io"
@@ -245,7 +245,7 @@ end
 
 function start (doc)
 	-- Generate index file
-	if (table.getn(doc.files) > 0 or table.getn(doc.modules) > 0) and (not options.noindexpage) then
+	if (#doc.files > 0 or #doc.modules > 0) and (not options.noindexpage) then
 		local filename = options.output_dir.."index.html"
 		logger:info(string.format("generating file `%s'", filename))
 		local f = lfs.open(filename, "w")

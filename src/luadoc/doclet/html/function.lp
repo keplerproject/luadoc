@@ -12,10 +12,10 @@ end
 <dd>
 <%=func.description or ""%>
 
-<%if type(func.param) == "table" and table.getn(func.param) > 0 then%>
+<%if type(func.param) == "table" and #func.param > 0 then%>
 <h3>Parameters</h3>
 <ul>
-	<%for p = 1, table.getn(func.param) do%>
+	<%for p = 1, #func.param do%>
 	<li>
 	  <%=func.param[p]%>: <%=func.param[func.param[p]] or ""%>
 	</li>
@@ -39,13 +39,13 @@ end
 <%if type(func.see) == "string" then %>
 <h3>See also:</h3>
 	<a href="<%=func.see%>"><%=func.see%></a>
-<%elseif type(func.see) == "table" and table.getn(func.see) > 0 then %>
+<%elseif type(func.see) == "table" and #func.see > 0 then %>
 <em>See also:</em>
-	<%for i = 1, table.getn(func.see) do%>
+	<%for i = 1, #func.see do%>
 	<a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from)%>">
 		<%=func.see[i]%>
 	</a>
-	<%if i < table.getn(func.see) then %>, <%end%>
+	<%if i < #func.see then %>, <%end%>
 	<%end%>
 <%end%>
 </dd>

@@ -19,7 +19,7 @@ end
 
 
 <!-- Module list -->
-<%if not options.nomodules and table.getn(doc.modules) > 0 then%>
+<%if not options.nomodules and #doc.modules > 0 then%>
 <h1>Modules</h1>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do
@@ -36,7 +36,7 @@ end%>
 
 
 <!-- File list -->
-<%if not options.nofiles and table.getn(doc.files) > 0 then%>
+<%if not options.nofiles and #doc.files > 0 then%>
 <h1>Files</h1>
 <ul>
 <%for _, filepath in ipairs(doc.files) do
