@@ -3,7 +3,7 @@ local lfs = require "lfs"
 local luadoc = require "luadoc"
 local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
-local type, table, string, io, assert, tostring, print = type, table, string, io, assert, tostring, print
+local type, table, string, io, assert, tostring = type, table, string, io, assert, tostring
 
 module 'luadoc.taglet.standard'
 
@@ -77,8 +77,7 @@ local function check_module (line, currentmodule)
 	-- module([[x.y]])
 	-- module(...)
 
-	-- TODO: support all the above formats
-	local r, _, modulename = string.find(line, "^module%s*[\"'](.-)[\"']")
+	local r, _, modulename = string.find(line, "^module%s*[\"'(%[]+([^,\"')%]]+)")
 	if r then
 		-- found module definition
 		logger:debug(string.format("found module `%s'", modulename))
@@ -271,7 +270,6 @@ function parse_file (filepath, doc)
 		i = i + 1
 	end
 	f:close()
-	
 	-- store blocks in file hierarchy
 	assert(doc.files[filepath] == nil, string.format("doc for file `%s' already defined", filepath))
 	table.insert(doc.files, filepath)
@@ -282,9 +280,20 @@ function parse_file (filepath, doc)
 --		functions = class_iterator(blocks, "function"),
 --		tables = class_iterator(blocks, "table"),
 	}
-	
+--
+	local first = doc.files[filepath].doc[1]
+	if first and (not first.class or first.class == "module") then
+		doc.files[filepath].description = first.description
+		doc.files[filepath].release = first.release
+		doc.files[filepath].summary = first.summary
+	end
+
 	-- if module definition is found, store in module hierarchy
 	if modulename ~= nil then
+		if modulename == "..." then
+				modulename = string.gsub (filepath, "%.lua$", "")
+				modulename = string.gsub (modulename, "/", ".")
+		end
 		if doc.modules[modulename] ~= nil then
 			-- module is already defined, just add the blocks
 			table.foreachi(blocks, function (_, v)
@@ -315,6 +324,9 @@ function parse_file (filepath, doc)
 				doc.modules[modulename].release = util.concat(
 					doc.modules[modulename].release, 
 					m.release)
+				if m.name then
+					doc.modules[modulename].name = m.name
+				end
 			end
 		end
 		
