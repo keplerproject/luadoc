@@ -1,14 +1,15 @@
--- $Id: formatter.lua,v 1.4 2006/08/10 19:06:45 tomas Exp $
+-------------------------------------------------------------------------------
+-- Doclet to format source code according to LuaDoc standard tags. This doclet
+-- (re)write .lua files adding missing standard tags. Texts are formatted to
+-- 80 columns and function parameters are added based on code analysis.
+--
+-- @release $Id: formatter.lua,v 1.5 2007/04/18 14:28:39 tomas Exp $
+-------------------------------------------------------------------------------
 
 local util = require "luadoc.util"
 local assert, ipairs, pairs, type = assert, ipairs, pairs, type
 local string = require"string"
 local table = require"table"
-
--------------------------------------------------------------------------------
--- Doclet to format source code according to LuaDoc standard tags. This doclet
--- (re)write .lua files adding missing standard tags. Texts are formatted to
--- 80 columns and function parameters are added based on code analysis.
 
 module "luadoc.doclet.formatter"
 

@@ -1,4 +1,7 @@
--- $Id: debug.lua,v 1.2 2006/03/31 18:03:14 tuler Exp $
+-----------------------------------------------------------------
+-- LuaDoc debugging facilities.
+-- @release $Id: debug.lua,v 1.3 2007/04/18 14:28:39 tomas Exp $
+-----------------------------------------------------------------
 
 module "luadoc.doclet.debug"
 

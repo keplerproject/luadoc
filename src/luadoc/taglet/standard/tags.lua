@@ -1,6 +1,7 @@
-
 -------------------------------------------------------------------------------
 -- Handlers for several tags
+-- @release $Id: tags.lua,v 1.5 2007/04/18 14:28:39 tomas Exp $
+-------------------------------------------------------------------------------
 
 local luadoc = require "luadoc"
 local util = require "luadoc.util"

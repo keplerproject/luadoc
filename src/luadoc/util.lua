@@ -1,4 +1,7 @@
--- $Id: util.lua,v 1.13 2006/03/31 18:03:14 tuler Exp $
+-------------------------------------------------------------------------------
+-- General utilities.
+-- @release $Id: util.lua,v 1.14 2007/04/18 14:28:39 tomas Exp $
+-------------------------------------------------------------------------------
 
 local lfs = require "lfs"
 local type, table, string, io, assert, tostring = type, table, string, io, assert, tostring

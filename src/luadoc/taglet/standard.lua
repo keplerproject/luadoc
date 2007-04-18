@@ -1,3 +1,6 @@
+-------------------------------------------------------------------------------
+-- @release $Id: standard.lua,v 1.33 2007/04/18 14:28:39 tomas Exp $
+-------------------------------------------------------------------------------
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
 local io = require "io"

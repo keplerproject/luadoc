@@ -1,14 +1,3 @@
--- $Id: html.lua,v 1.26 2007/04/14 02:02:54 tomas Exp $
-
-local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
-local io = require"io"
-local lfs = require "lfs"
-local lp = require "luadoc.lp"
-local luadoc = require"luadoc"
-local package = package
-local string = require"string"
-local table = require"table"
-
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
 -- based on a group of templates. The main templates are: 
@@ -19,6 +8,18 @@ local table = require"table"
 -- <li>function.lp: documentation for a lua function. This is a 
 -- sub-template used by the others.</li>
 -- </ul>
+--
+-- @release $Id: html.lua,v 1.27 2007/04/18 14:28:39 tomas Exp $
+-------------------------------------------------------------------------------
+
+local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
+local io = require"io"
+local lfs = require "lfs"
+local lp = require "luadoc.lp"
+local luadoc = require"luadoc"
+local package = package
+local string = require"string"
+local table = require"table"
 
 module "luadoc.doclet.html"
 
