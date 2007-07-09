@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- @release $Id: standard.lua,v 1.33 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id: standard.lua,v 1.34 2007/07/09 21:03:53 tomas Exp $
 -------------------------------------------------------------------------------
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
@@ -133,7 +133,7 @@ local function parse_code (f, line, modulename)
 		else
 			-- look for a module definition
 			modulename = check_module(line, modulename)
-			
+
 			table.insert(code, line)
 			line = f:read()
 		end
@@ -149,9 +149,9 @@ end
 
 local function parse_comment (block)
 
-	-- get the first non-empty line of code
+	-- get the first non-empty line of code which does not begin with `local'
 	local code = table.foreachi(block.code, function(_, line)
-		if not util.line_empty(line) then
+		if not util.line_empty(line) and not line:find"%s*local" then
 			return line
 		end
 	end)
@@ -160,7 +160,6 @@ local function parse_comment (block)
 	if code ~= nil then
 		local func_info = check_function(code)
 		local module_name = check_module(code)
-		
 		if func_info then
 			block.class = "function"
 			block.name = func_info.name
