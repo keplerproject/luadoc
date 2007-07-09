@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Handlers for several tags
--- @release $Id: tags.lua,v 1.5 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id: tags.lua,v 1.6 2007/07/09 18:22:09 tomas Exp $
 -------------------------------------------------------------------------------
 
 local luadoc = require "luadoc"
@@ -73,7 +73,10 @@ local function param (tag, block, text)
 	block[tag] = block[tag] or {}
 	-- TODO: make this pattern more flexible, accepting empty descriptions
 	local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
-	assert(name, "parameter name not defined")
+	if not name then
+		luadoc.logger:warn("parameter `name' not defined [["..text.."]]: skipping")
+		return
+	end
 	local i = table.foreachi(block[tag], function (i, v)
 		if v == name then
 			return i
