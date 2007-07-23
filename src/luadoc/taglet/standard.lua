@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- @release $Id: standard.lua,v 1.34 2007/07/09 21:03:53 tomas Exp $
+-- @release $Id: standard.lua,v 1.35 2007/07/23 20:35:26 tomas Exp $
 -------------------------------------------------------------------------------
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
@@ -41,8 +41,9 @@ local function check_function (line)
 	line = util.trim(line)
 
 	local patterns = {
-		"^()function%s+([^%(%s]+)%s*%(%s*(.-)%s*%)",
-		"^(local)%s+function%s+([^%(%s]+)%s*%(*s*(.-)%s*%)",
+		"^()%s*function%s+([^%(%s]+)%s*%(%s*(.-)%s*%)",
+		"^%s*(local)%s+function%s+([^%(%s]+)%s*%(*s*(.-)%s*%)",
+		"^()%s*([^%(%s]+)%s*%=%s*function%s*%(*s*(.-)%s*%)"
 	}
 	
 	local info = table.foreachi(patterns, function (_, pattern)
@@ -127,7 +128,7 @@ end
 local function parse_code (f, line, modulename)
 	local code = {}
 	while line ~= nil do
-		if string.find(line, "^%-%-%-") then
+		if string.find(line, "^[\t ]*%-%-%-") then
 			-- reached another luadoc block, end this parsing
 			return line, code, modulename
 		else
@@ -222,7 +223,7 @@ local function parse_block (f, line, modulename)
 	}
 	
 	while line ~= nil do
-		if string.find(line, "^%-%-") == nil then
+		if string.find(line, "^[\t ]*%-%-") == nil then
 			-- reached end of comment, read the code below it
 			-- TODO: allow empty lines
 			line, block.code, modulename = parse_code(f, line, modulename)
@@ -259,7 +260,7 @@ function parse_file (filepath, doc)
 	local i = 1
 	local line = f:read()
 	while line ~= nil do
-		if string.find(line, "^%-%-%-") then
+		if string.find(line, "^[\t ]*%-%-%-") then
 			-- reached a luadoc block
 			local block
 			line, block, modulename = parse_block(f, line, modulename)
