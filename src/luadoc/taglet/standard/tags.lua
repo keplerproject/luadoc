@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- Handlers for several tags
--- @release $Id: tags.lua,v 1.6 2007/07/09 18:22:09 tomas Exp $
+-- @release $Id: tags.lua,v 1.7 2007/07/25 18:43:56 tomas Exp $
 -------------------------------------------------------------------------------
 
 local luadoc = require "luadoc"
@@ -68,6 +68,10 @@ local function see (tag, block, text)
 end
 
 -------------------------------------------------------------------------------
+-- Processes a parameter documentation.
+-- @param tag String with the name of the tag (it must be "param" always).
+-- @param block Table with previous information about the block.
+-- @param text String with the current line beeing processed.
 
 local function param (tag, block, text)
 	block[tag] = block[tag] or {}
