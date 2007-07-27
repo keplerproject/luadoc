@@ -65,8 +65,8 @@
 
 <h2><a name="introduction">Introduction</a></h2>
 <p>LuaDoc is a documentation generation tool for lua source files. It does not 
-impose a documentation format, but suggests one and implements it. The produced 
-documentation can be of any type, one is provided which generates XHTML.
+impose a documentation format, but suggests one (XHTML) and implements it. The produced 
+documentation can be of any type.
 </p>
 
 <p>
@@ -76,8 +76,8 @@ the proposed format.
 
 <h2><a name="installation">Installation</a></h2>
 
-<p>LuaDoc tool is composed by two parts, a library, and a launcher script.
-</p>
+<p>LuaDoc tool is composed by two parts, a library, and a launcher script.</p>
+
 <p>
 The library follows the 
 <a href="http://www.keplerproject.org/compat/">package model</a>
@@ -87,23 +87,25 @@ Compat-5.1 configuration</a> section about how to install it properly.
 </p>
 
 <p>
-The launcher script, namely <code>luadoc.lua</code>, should be installed
-in your PATH, so that it can be executed.
+The launcher script, namely <code>luadoc.lua</code> for Unix and <code>luadoc.bat</code>
+for Windows, should be installed in your system <code>PATH</code>, so that it can be executed.
 </p>
 
 <p>
 LuaDoc also depends on two external packages: 
 <a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a> and 
 <a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and you'll 
-need to install them.
+need to install them accordingly.
 </p>
 
 <p>
 On Unix boxes, the file luadoc.lua could be used as a script; it's the same as:
 </p>
+
 <pre class="example">
-lua50 luadoc.lua [options|files]
+lua5.1 luadoc.lua [options|files]
 </pre>
+
 <p>
 This is the main script: it will load LuaDoc library and process the specified 
 files. Try <code>luadoc.lua --help</code>, it will show you all available options.
@@ -113,7 +115,7 @@ files. Try <code>luadoc.lua --help</code>, it will show you all available option
 <h2><a name="howto">How to comment</a></h2>
 <p>
 LuaDoc looks for the sequence of three minus signs (---).
-These sequence of characters indicate the beginning of a documented comment.
+This sequence of characters indicates the beginning of a documented comment.
 The documentation ends with the first line of code found.
 </p>
 <p>
@@ -166,7 +168,7 @@ LuaDoc directory:
 luadoc.lua *.lua
 </pre>
 <p>
-It will produce one HTML file for each Lua file and the an index file.
+It will produce one HTML file for each Lua file and an index file.
 You can browse them <a href="api/index.html">here</a>.
 </p>
 
@@ -174,7 +176,7 @@ You can browse them <a href="api/index.html">here</a>.
 <h2><a name="tags">Tags</a></h2>
 <p>
 LuaDoc can parse some tags at each function or table documentation.
-Tags are indicated at the source code with a `<code>@</code>' character
+Tags are indicated in the source code with a `<code>@</code>' character
 followed by the name of the tag:
 </p>
 
@@ -183,7 +185,7 @@ followed by the name of the tag:
   <dd>Describe function parameters. It also requires the name of the parameter.</dd>
   
   <dt>@see</dt>
-  <dd>Make reference to other functions or tables.</dd>
+  <dd>Refers to other functions or tables.</dd>
   
   <dt>@return</dt>
   <dd>Describe the returning value or values of the function.</dd>
@@ -251,7 +253,7 @@ The luadoc command line script has some options:
 
 <div id="about">
 	<p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
-	<p><small>$Id: manual.html,v 1.6 2006/08/10 19:15:19 tomas Exp $</small></p>
+	<p><small>$Id: manual.html,v 1.7 2007/07/27 21:10:49 carregal Exp $</small></p>
 </div> <!-- id="about" -->
 
 </div> <!-- id="container" -->	
