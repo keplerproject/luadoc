@@ -1,0 +1,55 @@
+# $Id: Makefile.win,v 1.1 2007/07/30 20:35:38 carregal Exp $
+
+LUA_DIR=c:\lua5.1\lua
+LUADOC_DIR= $(LUA_DIR)\luadoc
+DOCLET_DIR= $(LUADOC_DIR)\doclet
+HTML_DIR= $(DOCLET_DIR)\html
+TAGLET_DIR= $(LUADOC_DIR)\taglet
+STANDARD_DIR= $(TAGLET_DIR)\standard
+LAUNCHER_DIR= c:\lua5.1
+LUADOC_REFMAN= doc\refman
+
+LUADOC_LUAS= src\luadoc\config.lua \
+	src\luadoc\init.lua \
+	src\luadoc\lp.lua \
+	src\luadoc\util.lua
+DOCLET_LUAS= src\luadoc\doclet\debug.lua \
+	src\luadoc\doclet\formatter.lua \
+	src\luadoc\doclet\html.lua \
+	src\luadoc\doclet\raw.lua
+HTML_LUAS= src\luadoc\doclet\html\file.lp \
+	src\luadoc\doclet\html\function.lp \
+	src\luadoc\doclet\html\index.lp \
+	src\luadoc\doclet\html\luadoc.css \
+	src\luadoc\doclet\html\menu.lp \
+	src\luadoc\doclet\html\module.lp \
+	src\luadoc\doclet\html\table.lp
+TAGLET_LUAS= src\luadoc\taglet\standard.lua
+STANDARD_LUAS= src\luadoc\taglet\standard\tags.lua
+
+LAUNCHER= src\luadoc.bat
+LAUNCHER_SRC= src\luadoc.lua
+LAUNCHER_START= luadoc_start.lua
+
+build clean:
+
+install:    
+	IF NOT EXIST $(LUADOC_DIR) mkdir $(LUADOC_DIR)	
+	FOR %F IN ($(LUADOC_LUAS)) DO copy %F $(LUADOC_DIR)
+	IF NOT EXIST $(DOCLET_DIR) mkdir $(DOCLET_DIR)	
+	FOR %F IN ($(DOCLET_LUAS)) DO copy %F $(DOCLET_DIR)
+	IF NOT EXIST $(HTML_DIR) mkdir $(HTML_DIR)	
+	FOR %F IN ($(HTML_LUAS)) DO copy %F $(HTML_DIR)
+	IF NOT EXIST $(TAGLET_DIR) mkdir $(TAGLET_DIR)
+	FOR %F IN ($(TAGLET_LUAS)) DO copy %F $(TAGLET_DIR)	
+	IF NOT EXIST $(STANDARD_DIR) mkdir $(STANDARD_DIR)	
+	FOR %F IN ($(STANDARD_LUAS)) DO copy %F $(STANDARD_DIR)	
+	IF NOT EXIST $(LAUNCHER_DIR) mkdir $(LAUNCHER_DIR)
+	copy $(LAUNCHER) $(LAUNCHER_DIR) 
+	copy $(LAUNCHER_SRC) $(LAUNCHER_DIR)\$(LAUNCHER_START)
+	
+	
+
+refman:
+	IF NOT EXIST $(LUADOC_REFMAN) mkdir $(LUADOC_REFMAN)
+	$(LAUNCHER) -d $(LUADOC_REFMAN) src\luadoc
