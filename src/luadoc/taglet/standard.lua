@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- @release $Id: standard.lua,v 1.35 2007/07/23 20:35:26 tomas Exp $
+-- @release $Id: standard.lua,v 1.36 2007/08/13 16:03:30 carregal Exp $
 -------------------------------------------------------------------------------
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
@@ -43,7 +43,7 @@ local function check_function (line)
 	local patterns = {
 		"^()%s*function%s+([^%(%s]+)%s*%(%s*(.-)%s*%)",
 		"^%s*(local)%s+function%s+([^%(%s]+)%s*%(*s*(.-)%s*%)",
-		"^()%s*([^%(%s]+)%s*%=%s*function%s*%(*s*(.-)%s*%)"
+		"^()%s*([^%(%s]+)%s*%=%s*function%s*%(%s*(.-)%s*%)"
 	}
 	
 	local info = table.foreachi(patterns, function (_, pattern)
