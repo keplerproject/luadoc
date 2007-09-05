@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- @release $Id: standard.lua,v 1.36 2007/08/13 16:03:30 carregal Exp $
+-- @release $Id: standard.lua,v 1.37 2007/09/05 12:39:09 tomas Exp $
 -------------------------------------------------------------------------------
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
@@ -289,6 +289,8 @@ function parse_file (filepath, doc)
 --
 	local first = doc.files[filepath].doc[1]
 	if first and modulename then
+		doc.files[filepath].author = first.author
+		doc.files[filepath].copyright = first.copyright
 		doc.files[filepath].description = first.description
 		doc.files[filepath].release = first.release
 		doc.files[filepath].summary = first.summary
@@ -314,6 +316,8 @@ function parse_file (filepath, doc)
 				doc = blocks,
 --				functions = class_iterator(blocks, "function"),
 --				tables = class_iterator(blocks, "table"),
+				author = first and first.author,
+				copyright = first and first.copyright,
 				description = "",
 				release = first and first.release,
 				summary = "",
@@ -327,6 +331,12 @@ function parse_file (filepath, doc)
 				doc.modules[modulename].summary = util.concat(
 					doc.modules[modulename].summary, 
 					m.summary)
+				if m.author then
+					doc.modules[modulename].author = m.author
+				end
+				if m.copyright then
+					doc.modules[modulename].copyright = m.copyright
+				end
 				if m.release then
 					doc.modules[modulename].release = m.release
 				end

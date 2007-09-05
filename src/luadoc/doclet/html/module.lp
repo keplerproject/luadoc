@@ -28,6 +28,18 @@
 <h1>Module <code><%=module_doc.name%></code></h1>
 
 <p><%=module_doc.description%></p>
+<%if module_doc.author then%>
+<p><b><%= #module_doc.author>1 and "Authors" or "Author" %>:</b>
+<table class="authors_list">
+<%for _, author in ipairs(module_doc.author) do%>
+	<tr><td class="name"><%= author %></td></tr>
+<%end%>
+</table>
+</p>
+<%end%>
+<%if module_doc.copyright then%>
+<p>Copyright&copy; <%=module_doc.copyright%></p>
+<%end%>
 <%if module_doc.release then%>
 <p><small><b>Release:</b> <%=module_doc.release%></small></p>
 <%end%>

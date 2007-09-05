@@ -30,6 +30,18 @@
 <%if file_doc.description then%>
 <p><%=file_doc.description%></p>
 <%end%>
+<%if file_doc.author then%>
+<p><b><%= #file_doc.author>1 and "Authors" or "Author" %>:</b>
+<table class="authors_list">
+<%for _, author in ipairs(file_doc.author) do%>
+	<tr><td class="name"><%= author %></td></tr>
+<%end%>
+</table>
+</p>
+<%end%>
+<%if file_doc.copyright then%>
+<p>Copyright &copy;<%=file_doc.copyright%></p>
+<%end%>
 <%if file_doc.release then%>
 <p><small><b>Release:</b> <%=file_doc.release%></small></p>
 <%end%>
