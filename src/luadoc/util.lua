@@ -1,6 +1,6 @@
 -------------------------------------------------------------------------------
 -- General utilities.
--- @release $Id: util.lua,v 1.14 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id: util.lua,v 1.15 2007/10/15 19:53:16 tomas Exp $
 -------------------------------------------------------------------------------
 
 local lfs = require "lfs"
@@ -26,6 +26,7 @@ end
 -- @param s string to be trimmed
 -- @return trimmed string
 -- @see trim
+-- @see string.gsub
 
 function trim_comment (s)
 	s = string.gsub(s, "%-%-+(.*)$", "%1")
