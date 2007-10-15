@@ -24,6 +24,18 @@ end
 <%end%>
 
 
+<%if type(func.usage) == "string" then%>
+<h3>Usage:</h3>
+<%=func.usage%>
+<%elseif type(func.usage) == "table" then%>
+<h3>Usage</h3>
+<ul>
+	<%for _, usage in ipairs(func.usage) do%>
+	<li><%= usage %>
+	<%end%>
+</ul>
+<%end%>
+
 <%if type(func.ret) == "string" then%>
 <h3>Return value:</h3>
 <%=func.ret%>
