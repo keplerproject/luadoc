@@ -1,7 +1,7 @@
 #!/usr/local/bin/lua5.1
 -------------------------------------------------------------------------------
 -- LuaDoc launcher.
--- @release $Id: luadoc.lua,v 1.27 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id: luadoc.lua,v 1.28 2007/10/16 16:19:17 tomas Exp $
 -------------------------------------------------------------------------------
 
 require "luadoc"
@@ -81,7 +81,8 @@ local OPTIONS = {
 local function process_options (arg)
 	local files = {}
 	local options = require "luadoc.config"
-	for i = 1, #arg do
+	local i = 1
+	while i <= #arg do
 		local argi = arg[i]
 		if string.sub (argi, 1, 1) ~= '-' then
 			table.insert (files, argi)
@@ -98,6 +99,7 @@ local function process_options (arg)
 				options[opt] = 1
 			end
 		end
+		i = i+1
 	end
 	return files, options
 end 
