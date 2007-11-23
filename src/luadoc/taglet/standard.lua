@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- @release $Id: standard.lua,v 1.37 2007/09/05 12:39:09 tomas Exp $
+-- @release $Id: standard.lua,v 1.38 2007/11/23 17:00:46 tomas Exp $
 -------------------------------------------------------------------------------
 
 local assert, pairs, tostring, type = assert, pairs, tostring, type
@@ -84,7 +84,7 @@ local function check_module (line, currentmodule)
 	-- module([[x.y]])
 	-- module(...)
 
-	local r, _, modulename = string.find(line, "^module%s*[\"'(%[]+([^,\"')%]]+)")
+	local r, _, modulename = string.find(line, "^module%s*[%s\"'(%[]+([^,\"')%]]+)")
 	if r then
 		-- found module definition
 		logger:debug(string.format("found module `%s'", modulename))
