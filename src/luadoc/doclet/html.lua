@@ -9,7 +9,7 @@
 -- sub-template used by the others.</li>
 -- </ul>
 --
--- @release $Id: html.lua,v 1.27 2007/04/18 14:28:39 tomas Exp $
+-- @release $Id: html.lua,v 1.28 2007/11/23 17:00:07 tomas Exp $
 -------------------------------------------------------------------------------
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
@@ -158,17 +158,19 @@ function file_link (to, from)
 end
 
 -------------------------------------------------------------------------------
--- Returns a link to a function
--- @param fname name of the function to link to.
+-- Returns a link to a function or to a table
+-- @param fname name of the function or table to link to.
 -- @param doc documentation table
+-- @param kind String specying the kinf of element to link ("functions" or "tables").
 
-function function_link (fname, doc, module_doc, file_doc, from)
+function link_to (fname, doc, module_doc, file_doc, from, kind)
 	assert(fname)
 	assert(doc)
 	from = from or ""
+	kind = kind or "functions"
 	
 	if file_doc then
-		for _, func_name in pairs(file_doc.functions) do
+		for _, func_name in pairs(file_doc[kind]) do
 			if func_name == fname then
 				return file_link(file_doc.name, from) .. "#" .. fname
 			end
@@ -189,7 +191,7 @@ function function_link (fname, doc, module_doc, file_doc, from)
 		return
 	end
 	
-	for _, func_name in pairs(module_doc.functions) do
+	for _, func_name in pairs(module_doc[kind]) do
 		if func_name == fname then
 			return module_link(modulename, doc, from) .. "#" .. fname
 		end
@@ -208,7 +210,8 @@ function symbol_link (symbol, doc, module_doc, file_doc, from)
 	local href = 
 --		file_link(symbol, from) or
 		module_link(symbol, doc, from) or 
-		function_link(symbol, doc, module_doc, file_doc, from)
+		link_to(symbol, doc, module_doc, file_doc, from, "functions") or
+		link_to(symbol, doc, module_doc, file_doc, from, "tables")
 	
 	if not href then
 		logger:error(string.format("unresolved reference to symbol `%s'", symbol))
