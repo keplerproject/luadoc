@@ -49,10 +49,11 @@
 <%if #file_doc.functions > 0 then%>
 <h2>Functions</h2>
 <table class="function_list">
-<%for _, func_name in ipairs(file_doc.functions) do%>
+<%for _, func_name in ipairs(file_doc.functions) do
+  local func_data = file_doc.functions[func_name]%>
 	<tr>
-	<td class="name" nowrap><a href="#<%=func_name%>"><%=func_name%></a>&nbsp;(<%=table.concat(file_doc.functions[func_name].param, ", ")%>)</td>
-	<td class="summary"><%=file_doc.functions[func_name].summary%></td>
+	<td class="name" nowrap><%=func_data.private and "local " or ""%><a href="#<%=func_name%>"><%=func_name%></a>&nbsp;(<%=table.concat(func_data.param, ", ")%>)</td>
+	<td class="summary"><%=func_data.summary%></td>
 	</tr>
 <%end%>
 </table>

@@ -9,7 +9,7 @@
 -- sub-template used by the others.</li>
 -- </ul>
 --
--- @release $Id: html.lua,v 1.28 2007/11/23 17:00:07 tomas Exp $
+-- @release $Id: html.lua,v 1.29 2007/12/21 17:50:48 tomas Exp $
 -------------------------------------------------------------------------------
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
@@ -24,43 +24,11 @@ local table = require"table"
 module "luadoc.doclet.html"
 
 -------------------------------------------------------------------------------
--- Preprocess and include the content of a mixed HTML file into the 
--- currently 'open' HTML document. 
-
---[[function lp2func (filename, doc)
-	local fh = assert (io.open (filename))
-	local prog = fh:read("*a")
-	fh:close()
-	prog = lp.translate (prog, "file "..filename)
-	if prog then
-		local f, err = loadstring (prog, "@"..filename)
-		if f then
-			return f
-		else
-			error (err)
-		end
-	end
-end
-
-function envexec (prog, env)
-	local _env
-	if env then
-		_env = getfenv (prog)
-		setfenv (prog, env)
-	end
-	prog ()
-	if env then
-		setfenv (prog, _env)
-	end
-end
-
-function lp.include (filename, env)
-	local prog = lp2func (filename)
-	envexec (prog, env)
-end
-]]
--------------------------------------------------------------------------------
 -- Looks for a file `name' in given path. Removed from compat-5.1
+-- @param path String with the path.
+-- @param name String with the name to look for.
+-- @return String with the complete path of the file found
+--	or nil in case the file is not found.
 
 local function search (path, name)
   for c in string.gfind(path, "[^;]+") do
