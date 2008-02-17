@@ -1,12 +1,14 @@
-# $Id: Makefile,v 1.3 2007/04/14 04:20:42 tomas Exp $
+# $Id: Makefile,v 1.4 2008/02/17 06:42:51 jasonsantos Exp $
 
-LUA_DIR= /usr/local/share/lua/5.1
+CONFIG= ./config
+
+include $(CONFIG)
+
 LUADOC_DIR= $(LUA_DIR)/luadoc
 DOCLET_DIR= $(LUADOC_DIR)/doclet
 HTML_DIR= $(DOCLET_DIR)/html
 TAGLET_DIR= $(LUADOC_DIR)/taglet
 STANDARD_DIR= $(TAGLET_DIR)/standard
-LAUNCHER_DIR= /usr/local/bin
 LUADOC_REFMAN= doc/refman
 
 LUADOC_LUAS= src/luadoc/config.lua \
@@ -27,8 +29,8 @@ HTML_LUAS= src/luadoc/doclet/html/file.lp \
 TAGLET_LUAS= src/luadoc/taglet/standard.lua
 STANDARD_LUAS= src/luadoc/taglet/standard/tags.lua
 
-LAUNCHER= $(LAUNCHER_DIR)/luadoc
-LAUNCHER_SRC= src/luadoc.lua
+LAUNCHER= $(SYS_BINDIR)/luadoc
+LAUNCHER_SRC= src/luadoc.lua.in
 
 
 build clean:
@@ -44,7 +46,7 @@ install:
 	cp $(TAGLET_LUAS) $(TAGLET_DIR)
 	mkdir -p $(STANDARD_DIR)
 	cp $(STANDARD_LUAS) $(STANDARD_DIR)
-	mkdir -p $(LAUNCHER_DIR)
+	mkdir -p $(SYS_BINDIR)
 	cp $(LAUNCHER_SRC) $(LAUNCHER)
 	chmod a+x $(LAUNCHER)
 

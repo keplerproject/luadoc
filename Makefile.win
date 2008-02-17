@@ -1,6 +1,7 @@
-# $Id: Makefile.win,v 1.1 2007/07/30 20:35:38 carregal Exp $
+# $Id: Makefile.win,v 1.2 2008/02/17 06:42:51 jasonsantos Exp $
 
-LUA_DIR=c:\lua5.1\lua
+include config.win
+
 LUADOC_DIR= $(LUA_DIR)\luadoc
 DOCLET_DIR= $(LUADOC_DIR)\doclet
 HTML_DIR= $(DOCLET_DIR)\html

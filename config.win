@@ -1,0 +1,13 @@
+# $Id: config.win,v 1.1 2008/02/17 06:42:51 jasonsantos Exp $
+
+# System's libraries directory (where binary libraries are installed)
+LUA_LIBDIR= c:\lua5.1
+
+# System's lua directory (where Lua libraries are installed)
+LUA_DIR= c:\lua5.1\lua
+
+# System's executables directory (where binary or script executables are installed)
+SYS_BINDIR= c:\lua5.1
+
+# Complete path to Lua command line interpreter
+LUA_INTERPRETER= c:\lua5.1\lua5.1
