@@ -1,4 +1,4 @@
-# $Id: Makefile.win,v 1.2 2008/02/17 06:42:51 jasonsantos Exp $
+# $Id: Makefile.win,v 1.3 2008/02/18 23:00:42 jasonsantos Exp $
 
 include config.win
 
@@ -29,28 +29,28 @@ TAGLET_LUAS= src\luadoc\taglet\standard.lua
 STANDARD_LUAS= src\luadoc\taglet\standard\tags.lua
 
 LAUNCHER= src\luadoc.bat
-LAUNCHER_SRC= src\luadoc.lua
+LAUNCHER_SRC= src\luadoc.lua.in
 LAUNCHER_START= luadoc_start.lua
 
 build clean:
 
 install:    
-	IF NOT EXIST $(LUADOC_DIR) mkdir $(LUADOC_DIR)	
-	FOR %F IN ($(LUADOC_LUAS)) DO copy %F $(LUADOC_DIR)
-	IF NOT EXIST $(DOCLET_DIR) mkdir $(DOCLET_DIR)	
-	FOR %F IN ($(DOCLET_LUAS)) DO copy %F $(DOCLET_DIR)
-	IF NOT EXIST $(HTML_DIR) mkdir $(HTML_DIR)	
-	FOR %F IN ($(HTML_LUAS)) DO copy %F $(HTML_DIR)
-	IF NOT EXIST $(TAGLET_DIR) mkdir $(TAGLET_DIR)
-	FOR %F IN ($(TAGLET_LUAS)) DO copy %F $(TAGLET_DIR)	
-	IF NOT EXIST $(STANDARD_DIR) mkdir $(STANDARD_DIR)	
-	FOR %F IN ($(STANDARD_LUAS)) DO copy %F $(STANDARD_DIR)	
-	IF NOT EXIST $(LAUNCHER_DIR) mkdir $(LAUNCHER_DIR)
-	copy $(LAUNCHER) $(LAUNCHER_DIR) 
-	copy $(LAUNCHER_SRC) $(LAUNCHER_DIR)\$(LAUNCHER_START)
+	IF NOT EXIST "$(LUADOC_DIR)" mkdir "$(LUADOC_DIR)"
+	FOR %F IN ($(LUADOC_LUAS)) DO copy "%F" "$(LUADOC_DIR)"
+	IF NOT EXIST "$(DOCLET_DIR)" mkdir "$(DOCLET_DIR)"
+	FOR %F IN ($(DOCLET_LUAS)) DO copy "%F" "$(DOCLET_DIR)"
+	IF NOT EXIST "$(HTML_DIR)" mkdir "$(HTML_DIR)"
+	FOR %F IN ($(HTML_LUAS)) DO copy "%F" "$(HTML_DIR)"
+	IF NOT EXIST "$(TAGLET_DIR)" mkdir "$(TAGLET_DIR)"
+	FOR %F IN ($(TAGLET_LUAS)) DO copy "%F" "$(TAGLET_DIR)"
+	IF NOT EXIST "$(STANDARD_DIR)" mkdir "$(STANDARD_DIR)"
+	FOR %F IN ($(STANDARD_LUAS)) DO copy "%F" "$(STANDARD_DIR)"
+	IF NOT EXIST "$(LAUNCHER_DIR)" mkdir "$(LAUNCHER_DIR)"
+	copy "$(LAUNCHER)" "$(LAUNCHER_DIR)"
+	copy "$(LAUNCHER_SRC)" "$(LAUNCHER_DIR)\$(LAUNCHER_START)"
 	
 	
 
 refman:
-	IF NOT EXIST $(LUADOC_REFMAN) mkdir $(LUADOC_REFMAN)
-	$(LAUNCHER) -d $(LUADOC_REFMAN) src\luadoc
+	IF NOT EXIST "$(LUADOC_REFMAN)" mkdir "$(LUADOC_REFMAN)"
+	"$(LAUNCHER)" -d "$(LUADOC_REFMAN)" src\luadoc
