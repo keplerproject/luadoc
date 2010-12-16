@@ -52,7 +52,7 @@ local function field (tag, block, text)
 
 	local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
 	assert(name, "field name not defined")
-	
+
 	table.insert(block[tag], name)
 	block[tag][name] = desc
 end
@@ -65,7 +65,7 @@ local function name (tag, block, text)
 	if block[tag] and block[tag] ~= text then
 		luadoc.logger:error(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
 	end
-	
+
 	block[tag] = text
 end
 
@@ -120,12 +120,12 @@ end
 local function see (tag, block, text)
 	-- see is always an array
 	block[tag] = block[tag] or {}
-	
+
 	-- remove trailing "."
 	text = string.gsub(text, "(.*)%.$", "%1")
-	
-	local s = util.split("%s*,%s*", text)			
-	
+
+	local s = util.split("%s*,%s*", text)
+
 	table.foreachi(s, function (_, v)
 		table.insert(block[tag], v)
 	end)

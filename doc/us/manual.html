@@ -65,8 +65,8 @@
 <div id="content">
 
 <h2><a name="introduction">Introduction</a></h2>
-<p>LuaDoc is a documentation generation tool for lua source files. It does not 
-impose a documentation format, but suggests one (XHTML) and implements it. The produced 
+<p>LuaDoc is a documentation generation tool for lua source files. It does not
+impose a documentation format, but suggests one (XHTML) and implements it. The produced
 documentation can be of any type.
 </p>
 
@@ -80,7 +80,7 @@ the proposed format.
 <p>LuaDoc tool is composed by two parts, a library, and a launcher script.</p>
 
 <p>
-The library follows the 
+The library follows the
 <a href="http://www.keplerproject.org/compat/">package model</a>
 for Lua 5.1 and therefore should be "installed" in your
 <code>package.path</code>.
@@ -92,9 +92,9 @@ for Windows, should be installed in your system <code>PATH</code>, so that it ca
 </p>
 
 <p>
-LuaDoc also depends on two external packages: 
-<a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a> and 
-<a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and you'll 
+LuaDoc also depends on two external packages:
+<a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a> and
+<a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and you'll
 need to install them accordingly.
 </p>
 
@@ -107,7 +107,7 @@ lua5.1 luadoc.lua [options|files]
 </pre>
 
 <p>
-This is the main script: it will load LuaDoc library and process the specified 
+This is the main script: it will load LuaDoc library and process the specified
 files. Try <code>luadoc.lua --help</code>, it will show you all available options.
 </p>
 
@@ -226,11 +226,11 @@ but they can be used to override the infered value.
   <dt>@class &lt;word&gt;</dt>
   <dd>If LuaDoc cannot infer the type of documentation (function, table or
       module definition), the programmer can specify it explicitally.</dd>
-  
+
   <dt>@description</dt>
   <dd>The description of the function or table.
       This is usually infered automatically.</dd>
-  
+
   <dt>@name &lt;word&gt;</dt>
   <dd>The name of the function or table definition.
       This is usually infered from the code analysis, and the programmer does
@@ -248,10 +248,10 @@ The luadoc command line script has some options:
 <dl>
 	<dt>-d &lt;path&gt;</dt>
 	<dd>Defines the output directory path. Default is the current dir.</dd>
-  
+
 	<dt>-h, --help</dt>
 	<dd>Show help instructions</dd>
-  
+
 	<dt>--noindexpage</dt>
 	<dd>Do not generate the index page.</dd>
 
@@ -263,13 +263,13 @@ The luadoc command line script has some options:
 
 	<dt>--doclet &lt;doclet_module&gt;</dt>
 	<dd>Doclet module used to generate output</dd>
-  
+
 	<dt>--taglet &lt;taglet_module&gt;</dt>
 	<dd>Taglet module used to parse input code</dd>
-  
+
 	<dt>-q, --quiet</dt>
 	<dd>Suppress info output</dd>
-  
+
 	<dt>-v, --version</dt>
 	<dd>Print version information</dd>
 </dl>
@@ -283,6 +283,6 @@ The luadoc command line script has some options:
 	<p><small>$Id: manual.html,v 1.10 2007/10/12 13:33:45 tomas Exp $</small></p>
 </div> <!-- id="about" -->
 
-</div> <!-- id="container" -->	
+</div> <!-- id="container" -->
 </body>
 </html>
