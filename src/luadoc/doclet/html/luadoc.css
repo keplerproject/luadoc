@@ -73,15 +73,17 @@ body {
 
 code, tt { font-family: monospace; }
 
-body, td, th { font-size: .95em; }
+body, p, td, th { font-size: .95em; line-height: 1.2em;}
+
+p, ul { margin: 10px 0 0 10px;}
 
 strong { font-weight: bold;}
 
 h1 {
     font-size: 1.5em;
-    margin: 0 0 10px 0;
+    margin: 0 0 20px 0;
 }
-h2, h3, h4 { margin: 15px 0 5px 0; }
+h2, h3, h4 { margin: 15px 0 10px 0; }
 h2 { font-size: 1.25em; }
 h3 { font-size: 1.15em; }
 h4 { font-size: 1.06em; }
@@ -99,24 +101,6 @@ hr {
 blockquote { margin-left: 3em; }
 
 ul { list-style-type: disc; }
-
-table {
-    border: 1px solid black;
-    border-collapse: collapse;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-th {
-    border: 1px solid black;
-    padding: 0.5em;
-}
-
-td {
-    border: 1px solid black;
-    padding: 0.5em;
-}
-
 
 p.name {
     font-family: "Andale Mono", monospace;
@@ -164,7 +148,7 @@ table.index td { text-align: left; vertical-align: top; }
     overflow: visible;
 }
 
-#navigation h1 {
+#navigation h2 {
     background-color:#e7e7e7;
     font-size:1.1em;
     color:#000000;
