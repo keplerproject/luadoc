@@ -25,7 +25,7 @@
 
 <div id="content">
 
-<h1>Module <code><%=module_doc.name%></code></h1>
+<h1>Module "<%=module_doc.name%>"</h1>
 
 <p><%=module_doc.description%></p>
 <%if module_doc.author then%>
