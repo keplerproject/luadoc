@@ -16,7 +16,7 @@ module ("luadoc")
 
 _COPYRIGHT = "Copyright (c) 2003-2007 The Kepler Project"
 _DESCRIPTION = "Documentation Generator Tool for the Lua language"
-_VERSION = "LuaDoc 3.0.1"
+_VERSION = "LuaDoc 3.1.0"
 
 -------------------------------------------------------------------------------
 -- Main function
