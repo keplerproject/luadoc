@@ -17,7 +17,7 @@ end
 <ul>
 	<%for p = 1, #func.param do%>
 	<li>
-	  <%=func.param[p]%>: <%=func.param[func.param[p]] or ""%>
+	  <%= func.param[p]%>: <%=func.param[func.param[p]] or ""%>
 	</li>
 	<%end%>
 </ul>
@@ -38,11 +38,9 @@ end
 
 <%if func.example then%>
 <h3>Example:</h3>
-<p>
-<pre>
+<pre class="example">
 <%=func.example%>
 </pre>
-</p>
 <%end%>
 
 <%if type(func.ret) == "string" then%>
