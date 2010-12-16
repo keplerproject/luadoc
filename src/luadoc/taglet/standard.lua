@@ -10,6 +10,7 @@ local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
 local string = require "string"
 local table = require "table"
+local require = require
 
 module 'luadoc.taglet.standard'
 
@@ -453,6 +454,17 @@ local function recsort (tab)
 	end
 end
 
+function parse_readme (filepath, doc)
+	local text = assert(io.open(filepath, "r")):read("*a")
+	local extension = (filepath:match("%.([a-z]+)$"))
+	if extension == "md" or extension == "mkd" or extension == "markdown" then
+		local markdown = require "markdown"
+		doc.readme = markdown(text)
+	else
+		doc.readme = text
+	end
+end
+
 -------------------------------------------------------------------------------
 
 function start (files, doc)
@@ -465,6 +477,10 @@ function start (files, doc)
 	}
 	assert(doc.files, "undefined `files' field")
 	assert(doc.modules, "undefined `modules' field")
+
+	if options.readme then
+		parse_readme(options.readme, doc)
+	end
 
 	table.foreachi(files, function (_, path)
 		local attr = lfs.attributes(path)
