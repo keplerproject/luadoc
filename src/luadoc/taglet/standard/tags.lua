@@ -23,7 +23,7 @@ local function author (tag, block, text)
 end
 
 -------------------------------------------------------------------------------
--- Set the class of a comment block. Classes can be "module", "function", 
+-- Set the class of a comment block. Classes can be "module", "function",
 -- "table". The first two classes are automatic, extracted from the source code
 
 local function class (tag, block, text)

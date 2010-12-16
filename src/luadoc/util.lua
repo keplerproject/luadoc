@@ -52,7 +52,7 @@ function concat (str1, str2)
 	if str1 == nil or string.len(str1) == 0 then
 		return str2
 	else
-		return str1 .. " " .. str2
+		return str1 .. "\n" .. str2
 	end
 end
 
