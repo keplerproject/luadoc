@@ -146,6 +146,12 @@ end
 
 -------------------------------------------------------------------------------
 
+local function example (tag, block, text)
+	block[tag] = text
+end
+
+-------------------------------------------------------------------------------
+
 local handlers = {}
 handlers["author"] = author
 handlers["class"] = class
@@ -158,6 +164,7 @@ handlers["release"] = release
 handlers["return"] = ret
 handlers["see"] = see
 handlers["usage"] = usage
+handlers["example"] = example
 
 -------------------------------------------------------------------------------
 

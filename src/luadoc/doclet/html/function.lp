@@ -36,6 +36,15 @@ end
 </ul>
 <%end%>
 
+<%if func.example then%>
+<h3>Example:</h3>
+<p>
+<pre>
+<%=func.example%>
+</pre>
+</p>
+<%end%>
+
 <%if type(func.ret) == "string" then%>
 <h3>Return value:</h3>
 <%=func.ret%>
