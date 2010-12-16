@@ -13,7 +13,7 @@ end
 <%=func.description or ""%>
 
 <%if type(func.param) == "table" and #func.param > 0 then%>
-<h3>Parameters</h3>
+<h3>Parameters:</h3>
 <ul>
 	<%for p = 1, #func.param do%>
 	<li>
@@ -28,7 +28,7 @@ end
 <h3>Usage:</h3>
 <%=func.usage%>
 <%elseif type(func.usage) == "table" then%>
-<h3>Usage</h3>
+<h3>Usage:</h3>
 <ul>
 	<%for _, usage in ipairs(func.usage) do%>
 	<li><%= usage %>
