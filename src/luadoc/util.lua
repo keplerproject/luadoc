@@ -12,12 +12,12 @@ local type, table, string, io, assert, tostring, setmetatable, pcall = type, tab
 module "luadoc.util"
 
 -------------------------------------------------------------------------------
--- Removes spaces from the begining and end of a given string
+-- Removes spaces from the end of a given string
 -- @param s string to be trimmed
 -- @return trimmed string
 
 function trim (s)
-	return (string.gsub(s, "^%s*(.-)%s*$", "%1"))
+	return (string.gsub(s, "^(.-)%s*$", "%1"))
 end
 
 -------------------------------------------------------------------------------
@@ -29,7 +29,7 @@ end
 -- @see string.gsub
 
 function trim_comment (s)
-	s = string.gsub(s, "%-%-+(.*)$", "%1")
+	s = string.gsub(s, "%-%-+ ?(.*)$", "%1")
 	return trim(s)
 end
 

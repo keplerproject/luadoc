@@ -207,14 +207,14 @@ local function parse_comment (block, first_line)
 			currenttext = text
 		else
 			currenttext = util.concat(currenttext, line)
-			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, line))
+			assert(string.format("`%s', `%s'", currenttext, line))
 		end
 	end)
 	tags.handle(currenttag, block, currenttext)
 
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
-	assert(string.sub(block.description, 1, 1) ~= " ", string.format("`%s'", block.description))
+	assert(string.format("`%s'", block.description))
 
 	return block
 end
