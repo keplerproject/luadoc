@@ -2,7 +2,7 @@ body {
     margin-left: 1em; 
     margin-right: 1em; 
     font-family: arial, helvetica, geneva, sans-serif;
-	background-color:#ffffff; margin:0px;
+    background-color:#ffffff; margin:0px;
 }
 
 code {
@@ -13,7 +13,7 @@ tt {
     font-family: "Andale Mono", monospace; 
 }
 
-body, td, th { font-size: 11pt; }
+body, td, th { font-size: 1em; }
 
 h1, h2, h3, h4 { margin-left: 0em; }
 
@@ -191,6 +191,10 @@ div.header, div.footer { margin-left: 0em; }
 	background-color: #ffffff;
 }
 
+.inline-block {
+    display: inline-block;
+}
+
 @media print {
 	body { 
 		font: 12pt "Times New Roman", "TimeNR", Times, serif;
@@ -276,11 +280,13 @@ table.table_list td.summary { width: 100%; }
 
 dl.function dt {border-top: 1px solid #ccc; padding-top: 1em;}
 dl.function dd {padding-bottom: 1em;}
-dl.function h3 {padding: 0; margin: 0; font-size: medium;}
+dl.function h3 {padding: 0.5em 0em 0em 0em; margin: 0; font-size: medium;}
+dl.function dd ul { margin: 0; }
 
 dl.table dt {border-top: 1px solid #ccc; padding-top: 1em;}
 dl.table dd {padding-bottom: 1em;}
-dl.table h3 {padding: 0; margin: 0; font-size: medium;}
+dl.table h3 {padding: 0.5em 0em 0em 0em; margin: 0; font-size: medium;}
+dl.table dd ul { margin: 0; }
 
 #TODO: make module_list, file_list, function_list, table_list inherit from a list
 
