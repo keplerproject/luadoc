@@ -11,7 +11,8 @@
 	<%end%>
 </ul>
 <%end%>
-<%if type(tab.field) == "table" and type(functions) == "table" then
+
+<%if type(functions) == "table" then
     methods = {}
     for _, func_name in ipairs(functions) do
         if func_name:find( '^'..tab.name ) then
