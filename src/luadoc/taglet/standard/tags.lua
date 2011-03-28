@@ -62,10 +62,10 @@ end
 -- an error and do not change the previous value
 
 local function name (tag, block, text)
+        text = text:gsub("%s+$","") -- right trim name
 	if block[tag] and block[tag] ~= text then
 		luadoc.logger:error(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
 	end
-	
 	block[tag] = text
 end
 
