@@ -2,7 +2,7 @@
 <dd><%=tab.description%>
 
 <%if type(tab.field) == "table" and #tab.field > 0 then%>
-<em>Fields</em>
+<h3>Fields</h3>
 <ul>
 	<%for p = 1, #tab.field do%>
 	<li>
