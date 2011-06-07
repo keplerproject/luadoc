@@ -23,9 +23,10 @@ end
 </ul>
 <%end%>
 
-
+<%if func.usage then%>
+<div>
 <%if type(func.usage) == "string" then%>
-<h3>Usage:</h3>
+<h3 class="inline-block">Usage:</h3>
 <%=func.usage%>
 <%elseif type(func.usage) == "table" then%>
 <h3>Usage</h3>
@@ -35,9 +36,13 @@ end
 	<%end%>
 </ul>
 <%end%>
+</div>
+<%end%>
 
+<%if func.ret then%>
+<div>
 <%if type(func.ret) == "string" then%>
-<h3>Return value:</h3>
+<h3 class="inline-block">Return value:</h3>
 <%=func.ret%>
 <%elseif type(func.ret) == "table" then%>
 <h3>Return values:</h3>
@@ -47,9 +52,13 @@ end
 	<%end%>
 </ol>
 <%end%>
+</div>
+<%end%>
 
+<%if func.see then%>
+<div>
 <%if type(func.see) == "string" then %>
-<h3>See also:</h3>
+<h3 class="inline-block">See also:</h3>
 	<a href="<%=func.see%>"><%=func.see%></a>
 <%elseif type(func.see) == "table" and #func.see > 0 then %>
 <h3>See also:</h3>
@@ -61,4 +70,7 @@ end
 	<%end%>
 </ul>
 <%end%>
+</div>
+<%end%>
+
 </dd>

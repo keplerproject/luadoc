@@ -149,9 +149,11 @@ end
 -------------------------------------------------------------------------------
 -- Parses the information inside a block comment
 -- @param block block with comment field
+-- @param modulename module already found, if any
 -- @return block parameter
+-- @return modulename if found or given
 
-local function parse_comment (block, first_line)
+local function parse_comment (block, first_line, modulename)
 
 	-- get the first non-empty line of code
 	local code = table.foreachi(block.code, function(_, line)
@@ -181,6 +183,7 @@ local function parse_comment (block, first_line)
 			block.class = "module"
 			block.name = module_name
 			block.param = {}
+                        modulename = module_name
 		else
 			block.param = {}
 		end
@@ -215,7 +218,10 @@ local function parse_comment (block, first_line)
 	block.summary = parse_summary(block.description)
 	assert(string.sub(block.description, 1, 1) ~= " ", string.format("`%s'", block.description))
 	
-	return block
+        if not modulename and block.class == "module" then
+            modulename = block.name
+        end
+	return block, modulename
 end
 
 -------------------------------------------------------------------------------
@@ -241,7 +247,7 @@ local function parse_block (f, line, modulename, first)
 			line, block.code, modulename = parse_code(f, line, modulename)
 			
 			-- parse information in block comment
-			block = parse_comment(block, first)
+			block, modulename = parse_comment(block, first, modulename)
 
 			return line, block, modulename
 		else
@@ -252,7 +258,7 @@ local function parse_block (f, line, modulename, first)
 	-- reached end of file
 	
 	-- parse information in block comment
-	block = parse_comment(block, first)
+	block, modulename = parse_comment(block, first, modulename)
 	
 	return line, block, modulename
 end
