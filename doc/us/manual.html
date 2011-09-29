@@ -236,6 +236,18 @@ but they can be used to override the infered value.
 
 </dl>
 
+<h2><a name="tags">Text indentation and linebreaks</a></h2>
+<p>
+LuaDoc parses text in such a way that it concatenates text on individual lines 
+and removes trailing and leading whitespace in the process. To prevent LuaDoc 
+from doing this and to retain the original linebreaks and indentation end the 
+tag with a `<code>#</code>' character, for example '<code>@usage#</code>'. 
+This is especially usefull for multiline code examples in the usage tag, where 
+you want the example code to remain properly indented for readability. Run 
+LuaDoc on the included test file to see the results.  
+Warning; you must make sure that the doclet you are using supports this format.
+</p>
+
 
 <h2><a name="options">Command line options</a></h2>
 <p>
