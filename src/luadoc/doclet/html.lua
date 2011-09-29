@@ -1,11 +1,11 @@
 -------------------------------------------------------------------------------
 -- Doclet that generates HTML output. This doclet generates a set of html files
--- based on a group of templates. The main templates are: 
+-- based on a group of templates. The main templates are:
 -- <ul>
 -- <li>index.lp: index of modules and files;</li>
 -- <li>file.lp: documentation for a lua file;</li>
 -- <li>module.lp: documentation for a lua module;</li>
--- <li>function.lp: documentation for a lua function. This is a 
+-- <li>function.lp: documentation for a lua function. This is a
 -- sub-template used by the others.</li>
 -- </ul>
 --
@@ -48,12 +48,12 @@ end
 function include (template, env)
 	-- template_dir is relative to package.path
 	local templatepath = options.template_dir .. template
-	
+
 	-- search using package.path (modified to search .lp instead of .lua
 	local search_path = string.gsub(package.path, "%.lua", "")
 	local templatepath = search(search_path, templatepath)
 	assert(templatepath, string.format("template `%s' not found", template))
-	
+
 	env = env or {}
 	env.table = table
 	env.io = io
@@ -64,7 +64,7 @@ function include (template, env)
 	env.type = type
 	env.luadoc = luadoc
 	env.options = options
-	
+
 	return lp.include(templatepath, env)
 end
 
@@ -93,12 +93,12 @@ function module_link (modulename, doc, from)
 	assert(modulename)
 	assert(doc)
 	from = from or ""
-	
+
 	if doc.modules[modulename] == nil then
 --		logger:error(string.format("unresolved reference to module `%s'", modulename))
 		return
 	end
-	
+
 	local href = "modules/" .. modulename .. ".html"
 	string.gsub(from, "/", function () href = "../" .. href end)
 	return href
@@ -116,7 +116,7 @@ end
 function file_link (to, from)
 	assert(to)
 	from = from or ""
-	
+
 	local href = to
 	href = string.gsub(href, "lua$", "html")
 	href = string.gsub(href, "luadoc$", "html")
@@ -136,7 +136,7 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 	assert(doc)
 	from = from or ""
 	kind = kind or "functions"
-	
+
 	if file_doc then
 		for _, func_name in pairs(file_doc[kind]) do
 			if func_name == fname then
@@ -144,7 +144,7 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 			end
 		end
 	end
-	
+
 	local _, _, modulename, fname = string.find(fname, "^(.-)[%.%:]?([^%.%:]*)$")
 	assert(fname)
 
@@ -158,13 +158,13 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 --		logger:error(string.format("unresolved reference to function `%s': module `%s' not found", fname, modulename))
 		return
 	end
-	
+
 	for _, func_name in pairs(module_doc[kind]) do
 		if func_name == fname then
 			return module_link(modulename, doc, from) .. "#" .. fname
 		end
 	end
-	
+
 --	logger:error(string.format("unresolved reference to function `%s' of module `%s'", fname, modulename))
 end
 
@@ -174,17 +174,17 @@ end
 function symbol_link (symbol, doc, module_doc, file_doc, from)
 	assert(symbol)
 	assert(doc)
-	
-	local href = 
+
+	local href =
 --		file_link(symbol, from) or
-		module_link(symbol, doc, from) or 
+		module_link(symbol, doc, from) or
 		link_to(symbol, doc, module_doc, file_doc, from, "functions") or
 		link_to(symbol, doc, module_doc, file_doc, from, "tables")
-	
+
 	if not href then
 		logger:error(string.format("unresolved reference to symbol `%s'", symbol))
 	end
-	
+
 	return href or ""
 end
 
@@ -211,11 +211,33 @@ function out_module (modulename)
 	return h
 end
 
+-------------------------------------------------------------------------------
+-- Update a table to make all string values refelect html tags for linebreaks
+-- a leading spaces.
+function fixhtmltable (doc)
+    for k,v in pairs(doc) do
+        if type(v) == "string" then
+            -- update string value
+            local s = string.gsub(v, "\n", "<br/>")
+            s = string.gsub(s, "<br/> ", "<br/>&nbsp")
+            while string.find(s, "&nbsp ") do
+                s = string.gsub(s, "&nbsp ", "&nbsp&nbsp")
+            end
+            doc[k] = s
+        elseif type(v) == "table" then
+            -- recurse update table
+            fixhtmltable(v)
+        end
+    end
+end
+
 -----------------------------------------------------------------
 -- Generate the output.
 -- @param doc Table with the structured documentation.
 
 function start (doc)
+    -- Pre proces doc table, replacing linebreaks and leading space by html equiv.
+    fixhtmltable(doc)
 	-- Generate index file
 	if (#doc.files > 0 or #doc.modules > 0) and (not options.noindexpage) then
 		local filename = options.output_dir.."index.html"
@@ -226,7 +248,7 @@ function start (doc)
 		include("index.lp", { doc = doc })
 		f:close()
 	end
-	
+
 	-- Process modules
 	if not options.nomodules then
 		for _, modulename in ipairs(doc.modules) do
@@ -234,7 +256,7 @@ function start (doc)
 			-- assembly the filename
 			local filename = out_module(modulename)
 			logger:info(string.format("generating file `%s'", filename))
-			
+
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
@@ -250,7 +272,7 @@ function start (doc)
 			-- assembly the filename
 			local filename = out_file(file_doc.name)
 			logger:info(string.format("generating file `%s'", filename))
-			
+
 			local f = lfs.open(filename, "w")
 			assert(f, string.format("could not open `%s' for writing", filename))
 			io.output(f)
@@ -258,7 +280,7 @@ function start (doc)
 			f:close()
 		end
 	end
-	
+
 	-- copy extra files
 	local f = lfs.open(options.output_dir.."luadoc.css", "w")
 	io.output(f)
