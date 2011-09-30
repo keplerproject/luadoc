@@ -435,11 +435,6 @@ end
 -- @return table with documentation
 
 function directory (path, doc)
-    if util.iswindows then
-        -- fix bad windows paths (mix of / and \ in a path)
-        -- see http://luaforge.net/tracker/index.php?func=detail&aid=1844&group_id=18&atid=142
-        path = string.gsub(path, "\\","/")
-    end
 	for f in lfs.dir(path) do
 		local fullpath = path .. "/" .. f
 		local attr = lfs.attributes(fullpath)

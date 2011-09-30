@@ -3,7 +3,7 @@
 -- @release $Id: init.lua,v 1.4 2008/02/17 06:42:51 jasonsantos Exp $
 -------------------------------------------------------------------------------
 
-local require = require
+local require, pairs, string = require, pairs, string
 
 local util = require "luadoc.util"
 
@@ -34,9 +34,17 @@ function main (files, options)
 		-- load default config file
 		require("luadoc.config")
 	end
-	
+
 	local taglet = require(options.taglet)
 	local doclet = require(options.doclet)
+
+    -- fix bad windows paths (mix of / and \ in a path)
+    -- standardize on forward slash
+    if util.iswindows then
+        for k, v in pairs(files) do
+            files[k] = string.gsub(v, "\\", "/")
+        end
+    end
 
 	-- analyze input
 	taglet.options = options
