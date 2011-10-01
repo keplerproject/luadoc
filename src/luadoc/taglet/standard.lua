@@ -73,12 +73,12 @@ end
 -- Checks if the line contains a module definition.
 -- @param line string with line text
 -- @param currentmodule module already found, if any
--- @return the name of the defined module, or nil if there is no module 
+-- @return the name of the defined module, or nil if there is no module
 -- definition
 
 local function check_module (line, currentmodule)
 	line = util.trim(line)
-	
+
 	-- module"x.y"
 	-- module'x.y'
 	-- module[[x.y]]
@@ -97,9 +97,9 @@ local function check_module (line, currentmodule)
 end
 
 -------------------------------------------------------------------------------
--- Extracts summary information from a description. The first sentence of each 
--- doc comment should be a summary sentence, containing a concise but complete 
--- description of the item. It is important to write crisp and informative 
+-- Extracts summary information from a description. The first sentence of each
+-- doc comment should be a summary sentence, containing a concise but complete
+-- description of the item. It is important to write crisp and informative
 -- initial sentences that can stand on their own
 -- @param description text with item description
 -- @return summary string or nil if description is nil
@@ -107,16 +107,16 @@ end
 local function parse_summary (description)
 	-- summary is never nil...
 	description = description or ""
-	
+
 	-- append an " " at the end to make the pattern work in all cases
 	description = description.." "
 
-	-- read until the first period followed by a space or tab	
+	-- read until the first period followed by a space or tab
 	local summary = string.match(description, "(.-%.)[%s\t]")
-	
+
 	-- if pattern did not find the first sentence, summary is the whole description
 	summary = summary or description
-	
+
 	return summary
 end
 
@@ -167,7 +167,7 @@ local function parse_comment (block, first_line)
 			return line
 		end
 	end)
-	
+
 	-- parse first line of code
 	if code ~= nil then
 		local func_info = check_function(code)
@@ -191,30 +191,40 @@ local function parse_comment (block, first_line)
 
 	-- parse @ tags
 	local currenttag = "description"
-	local currenttext
-	
+	local currenttext		-- trimmed and concatenated lines
+	local ocurrenttext		-- concatenated lines with linebreaks (eg. original non-stripped text format)
+    local currenttagpostfix -- postfix '#' for current tag
+
 	table.foreachi(block.comment, function (_, line)
-		line = util.trim_comment(line)
-		
-		local r, _, tag, text = string.find(line, "@([_%w%.]+)%s+(.*)")
+		tline = util.trim_comment(line)
+		oline = util.no_trim_comment(line)
+
+		local r, _, tag, tagpostfix, text = string.find(tline, "@([_%w%.]+)(#?)%s+(.*)")
 		if r ~= nil then
 			-- found new tag, add previous one, and start a new one
 			-- TODO: what to do with invalid tags? issue an error? or log a warning?
 			tags.handle(currenttag, block, currenttext)
-			
+
 			currenttag = tag
 			currenttext = text
+			ocurrenttext = text
+            currenttagpostfix = tagpostfix
 		else
-			currenttext = util.concat(currenttext, line)
-			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, line))
+			currenttext = util.concat(currenttext, tline)
+			ocurrenttext = util.no_concat(ocurrenttext, oline)
+			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, tline))
 		end
 	end)
-	tags.handle(currenttag, block, currenttext)
+    if currenttagpostfix == "#" then
+        tags.handle(currenttag, block, ocurrenttext)    -- dispatch text with original linebreaks and indentations
+    else
+        tags.handle(currenttag, block, currenttext)     -- dispatch text with trimmed and concatenated
+    end
 
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
 	assert(string.sub(block.description, 1, 1) ~= " ", string.format("`%s'", block.description))
-	
+
 	return block
 end
 
@@ -239,7 +249,7 @@ local function parse_block (f, line, modulename, first)
 			-- reached end of comment, read the code below it
 			-- TODO: allow empty lines
 			line, block.code, modulename = parse_code(f, line, modulename)
-			
+
 			-- parse information in block comment
 			block = parse_comment(block, first)
 
@@ -250,10 +260,10 @@ local function parse_block (f, line, modulename, first)
 		end
 	end
 	-- reached end of file
-	
+
 	-- parse information in block comment
 	block = parse_comment(block, first)
-	
+
 	return line, block, modulename
 end
 
@@ -266,7 +276,7 @@ end
 function parse_file (filepath, doc)
 	local blocks = {}
 	local modulename = nil
-	
+
 	-- read each line
 	local f = io.open(filepath, "r")
 	local i = 1
@@ -281,9 +291,9 @@ function parse_file (filepath, doc)
 		else
 			-- look for a module definition
 			modulename = check_module(line, modulename)
-			
+
 			-- TODO: keep beginning of file somewhere
-			
+
 			line = f:read()
 		end
 		first = false
@@ -336,14 +346,14 @@ function parse_file (filepath, doc)
 				release = first and first.release,
 				summary = "",
 			}
-			
+
 			-- find module description
 			for m in class_iterator(blocks, "module")() do
 				doc.modules[modulename].description = util.concat(
-					doc.modules[modulename].description, 
+					doc.modules[modulename].description,
 					m.description)
 				doc.modules[modulename].summary = util.concat(
-					doc.modules[modulename].summary, 
+					doc.modules[modulename].summary,
 					m.summary)
 				if m.author then
 					doc.modules[modulename].author = m.author
@@ -361,14 +371,14 @@ function parse_file (filepath, doc)
 			doc.modules[modulename].description = doc.modules[modulename].description or (first and first.description) or ""
 			doc.modules[modulename].summary = doc.modules[modulename].summary or (first and first.summary) or ""
 		end
-		
+
 		-- make functions table
 		doc.modules[modulename].functions = {}
 		for f in class_iterator(blocks, "function")() do
 			table.insert(doc.modules[modulename].functions, f.name)
 			doc.modules[modulename].functions[f.name] = f
 		end
-		
+
 		-- make tables table
 		doc.modules[modulename].tables = {}
 		for t in class_iterator(blocks, "table")() do
@@ -376,26 +386,26 @@ function parse_file (filepath, doc)
 			doc.modules[modulename].tables[t.name] = t
 		end
 	end
-	
+
 	-- make functions table
 	doc.files[filepath].functions = {}
 	for f in class_iterator(blocks, "function")() do
 		table.insert(doc.files[filepath].functions, f.name)
 		doc.files[filepath].functions[f.name] = f
 	end
-	
+
 	-- make tables table
 	doc.files[filepath].tables = {}
 	for t in class_iterator(blocks, "table")() do
 		table.insert(doc.files[filepath].tables, t.name)
 		doc.files[filepath].tables[t.name] = t
 	end
-	
+
 	return doc
 end
 
 -------------------------------------------------------------------------------
--- Checks if the file is terminated by ".lua" or ".luadoc" and calls the 
+-- Checks if the file is terminated by ".lua" or ".luadoc" and calls the
 -- function that does the actual parsing
 -- @param filepath full path of the file to parse
 -- @param doc table with documentation
@@ -409,12 +419,12 @@ function file (filepath, doc)
 			return true
 		end
 	end)
-	
+
 	if valid then
 		logger:info(string.format("processing file `%s'", filepath))
 		doc = parse_file(filepath, doc)
 	end
-	
+
 	return doc
 end
 
@@ -429,7 +439,7 @@ function directory (path, doc)
 		local fullpath = path .. "/" .. f
 		local attr = lfs.attributes(fullpath)
 		assert(attr, string.format("error stating file `%s'", fullpath))
-		
+
 		if attr.mode == "file" then
 			doc = file(fullpath, doc)
 		elseif attr.mode == "directory" and f ~= "." and f ~= ".." then
@@ -457,7 +467,7 @@ end
 
 function start (files, doc)
 	assert(files, "file list not specified")
-	
+
 	-- Create an empty document, or use the given one
 	doc = doc or {
 		files = {},
@@ -465,18 +475,18 @@ function start (files, doc)
 	}
 	assert(doc.files, "undefined `files' field")
 	assert(doc.modules, "undefined `modules' field")
-	
+
 	table.foreachi(files, function (_, path)
 		local attr = lfs.attributes(path)
 		assert(attr, string.format("error stating path `%s'", path))
-		
+
 		if attr.mode == "file" then
 			doc = file(path, doc)
 		elseif attr.mode == "directory" then
 			doc = directory(path, doc)
 		end
 	end)
-	
+
 	-- order arrays alphabetically
 	recsort(doc.files)
 	recsort(doc.modules)

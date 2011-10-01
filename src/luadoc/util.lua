@@ -58,8 +58,8 @@ end
 
 -------------------------------------------------------------------------------
 -- Split text into a list consisting of the strings in text,
--- separated by strings matching delim (which may be a pattern). 
--- @param delim if delim is "" then action is the same as %s+ except that 
+-- separated by strings matching delim (which may be a pattern).
+-- @param delim if delim is "" then action is the same as %s+ except that
 -- field 1 may be preceeded by leading whitespace
 -- @usage split(",%s*", "Anna, Bob, Charlie,Dolores")
 -- @usage split(""," x y") gives {"x","y"}
@@ -73,12 +73,12 @@ function split(delim, text)
 		delim = delim or ""
 		local pos = 1
 		-- if delim matches empty string then it would give an endless loop
-		if string.find("", delim, 1) and delim ~= "" then 
+		if string.find("", delim, 1) and delim ~= "" then
 			error("delim matches empty string!")
 		end
 		local first, last
 		while 1 do
-			if delim ~= "" then 
+			if delim ~= "" then
 				first, last = string.find(text, delim, pos)
 			else
 				first, last = string.find(text, "%s+", pos)
@@ -169,33 +169,65 @@ function loadlogengine(options)
 		require "logging"
 		require "logging.console"
 	end)
-	
+
 	local logging = logenabled and logging
-	
+
 	if logenabled then
 		if options.filelog then
 			logger = logging.file("luadoc.log") -- use this to get a file log
 		else
 			logger = logging.console("[%level] %message\n")
 		end
-	
+
 		if options.verbose then
 			logger:setLevel(logging.INFO)
 		else
 			logger:setLevel(logging.WARN)
 		end
-		
+
 	else
 		noop = {__index=function(...)
 			return function(...)
 				-- noop
 			end
 		end}
-		
-		logger = {} 
+
+		logger = {}
 		setmetatable(logger, noop)
 	end
-	
+
 	return logger
 end
 
+-------------------------------------------------------------------------------
+-- Check if the current executing platform is windows
+-- @return true if execution platform is windows
+function iswindows()
+    return string.find(_G.package.config:sub(1,1), "\\")
+end
+
+-------------------------------------------------------------------------------
+-- Removes comment markers from the beginning of a string, leaves spaces alone.
+-- @param s string to be trimmed
+-- @return trimmed string
+-- @see trim_comment
+
+function no_trim_comment (s)
+	s = string.gsub(trim(s), "%-%-+ (.*)$", "%1")
+	return s
+end
+
+-------------------------------------------------------------------------------
+-- Appends two strings using original line-end, but if the first one is nil, use to second one.
+-- to be used when using the text without removal of line ends and indentation
+-- @param str1 first string, can be nil
+-- @param str2 second string
+-- @return str1 .. "\n" .. str2, or str2 if str1 is nil
+
+function no_concat (str1, str2)
+	if str1 == nil or string.len(str1) == 0 then
+		return str2
+	else
+		return str1 .. "\n" .. str2
+	end
+end
