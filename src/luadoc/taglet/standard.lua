@@ -191,13 +191,12 @@ local function parse_comment (block, first_line)
 
 	-- parse @ tags
 	local currenttag = "description"
-	local currenttext		-- trimmed and concatenated lines
-	local ocurrenttext		-- concatenated lines with linebreaks (eg. original non-stripped text format)
+	local currenttext		-- text in comment
     local currenttagpostfix -- postfix '#' for current tag
 
 	table.foreachi(block.comment, function (_, line)
-		tline = util.trim_comment(line)
-		oline = util.no_trim_comment(line)
+		local tline = util.trim_comment(line)
+		local oline = util.no_trim_comment(line)
 
 		local r, _, tag, tagpostfix, text = string.find(tline, "@([_%w%.]+)(#?)%s+(.*)")
 		if r ~= nil then
@@ -207,19 +206,19 @@ local function parse_comment (block, first_line)
 
 			currenttag = tag
 			currenttext = text
-			ocurrenttext = text
             currenttagpostfix = tagpostfix
 		else
-			currenttext = util.concat(currenttext, tline)
-			ocurrenttext = util.no_concat(ocurrenttext, oline)
+            if currenttagpostfix == "#" then
+                -- retain leading spaces and linebreaks
+                currenttext = util.no_concat(currenttext, oline)
+            else
+                -- remove leading spaces and linebreaks
+                currenttext = util.concat(currenttext, tline)
+            end
 			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, tline))
 		end
 	end)
-    if currenttagpostfix == "#" then
-        tags.handle(currenttag, block, ocurrenttext)    -- dispatch text with original linebreaks and indentations
-    else
-        tags.handle(currenttag, block, currenttext)     -- dispatch text with trimmed and concatenated
-    end
+    tags.handle(currenttag, block, currenttext)
 
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
