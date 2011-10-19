@@ -311,7 +311,17 @@ function parse_file (filepath, doc)
 	}
 --
 	local first = doc.files[filepath].doc[1]
-	if first and modulename then
+
+    -- if the first block was 'hardcoded' a module, using the '@class module' tag,
+    -- it should be recognized as such, so set the modulename.
+    if first and not modulename and first.class and first.class == "module" then
+        -- use provided name (through @name tag) or filename
+        modulename = first.name or filepath
+    end
+
+    -- If it is a module, or the first block has no class tag (meaning its the first
+    -- file level block) then set the generic file/module information for the header
+	if (first and modulename) or (first and not first.class) then
 		doc.files[filepath].author = first.author
 		doc.files[filepath].copyright = first.copyright
 		doc.files[filepath].description = first.description
