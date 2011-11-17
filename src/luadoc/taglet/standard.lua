@@ -406,6 +406,17 @@ function parse_file (filepath, doc)
 	-- make tables table
 	doc.files[filepath].tables = {}
 	for t in class_iterator(blocks, "table")() do
+        if not t.name then
+            -- name is missing, must be explicitly added using an @name tag
+            -- create a unique name.
+            t.name = "unnamed_table_"
+            local i = 0
+            repeat
+                i = i + 1
+            until doc.files[filepath].tables[t.name] == nil
+            t.name = t.name .. tostring(i)
+            luadoc.logger:warn("table `name' not defined (@name tag missing), adding as; '" .. t.name .. "'")
+        end
 		table.insert(doc.files[filepath].tables, t.name)
 		doc.files[filepath].tables[t.name] = t
 	end
