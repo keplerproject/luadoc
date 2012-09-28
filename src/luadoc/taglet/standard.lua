@@ -10,6 +10,7 @@ local util = require "luadoc.util"
 local tags = require "luadoc.taglet.standard.tags"
 local string = require "string"
 local table = require "table"
+local require = require
 
 module 'luadoc.taglet.standard'
 
@@ -191,13 +192,12 @@ local function parse_comment (block, first_line)
 
 	-- parse @ tags
 	local currenttag = "description"
-	local currenttext		-- trimmed and concatenated lines
-	local ocurrenttext		-- concatenated lines with linebreaks (eg. original non-stripped text format)
+	local currenttext		-- text in comment
     local currenttagpostfix -- postfix '#' for current tag
 
 	table.foreachi(block.comment, function (_, line)
-		tline = util.trim_comment(line)
-		oline = util.no_trim_comment(line)
+		local tline = util.trim_comment(line)
+		local oline = util.no_trim_comment(line)
 
 		local r, _, tag, tagpostfix, text = string.find(tline, "@([_%w%.]+)(#?)%s+(.*)")
 		if r ~= nil then
@@ -207,19 +207,19 @@ local function parse_comment (block, first_line)
 
 			currenttag = tag
 			currenttext = text
-			ocurrenttext = text
             currenttagpostfix = tagpostfix
 		else
-			currenttext = util.concat(currenttext, tline)
-			ocurrenttext = util.no_concat(ocurrenttext, oline)
+            if currenttagpostfix == "#" then
+                -- retain leading spaces and linebreaks
+                currenttext = util.no_concat(currenttext, oline)
+            else
+                -- remove leading spaces and linebreaks
+                currenttext = util.concat(currenttext, tline)
+            end
 			assert(string.sub(currenttext, 1, 1) ~= " ", string.format("`%s', `%s'", currenttext, tline))
 		end
 	end)
-    if currenttagpostfix == "#" then
-        tags.handle(currenttag, block, ocurrenttext)    -- dispatch text with original linebreaks and indentations
-    else
-        tags.handle(currenttag, block, currenttext)     -- dispatch text with trimmed and concatenated
-    end
+    tags.handle(currenttag, block, currenttext)
 
 	-- extracts summary information from the description
 	block.summary = parse_summary(block.description)
@@ -312,7 +312,17 @@ function parse_file (filepath, doc)
 	}
 --
 	local first = doc.files[filepath].doc[1]
-	if first and modulename then
+
+    -- if the first block was 'hardcoded' a module, using the '@class module' tag,
+    -- it should be recognized as such, so set the modulename.
+    if first and not modulename and first.class and first.class == "module" then
+        -- use provided name (through @name tag) or filename
+        modulename = first.name or filepath
+    end
+
+    -- If it is a module, or the first block has no class tag (meaning its the first
+    -- file level block) then set the generic file/module information for the header
+	if (first and modulename) or (first and not first.class) then
 		doc.files[filepath].author = first.author
 		doc.files[filepath].copyright = first.copyright
 		doc.files[filepath].description = first.description
@@ -397,6 +407,17 @@ function parse_file (filepath, doc)
 	-- make tables table
 	doc.files[filepath].tables = {}
 	for t in class_iterator(blocks, "table")() do
+        if not t.name then
+            -- name is missing, must be explicitly added using an @name tag
+            -- create a unique name.
+            t.name = "unnamed_table_"
+            local i = 0
+            repeat
+                i = i + 1
+            until doc.files[filepath].tables[t.name .. i] == nil
+            t.name = t.name .. tostring(i)
+            luadoc.logger:warn("table `name' not defined (@name tag missing), adding as; '" .. t.name .. "'")
+        end
 		table.insert(doc.files[filepath].tables, t.name)
 		doc.files[filepath].tables[t.name] = t
 	end
@@ -463,6 +484,17 @@ local function recsort (tab)
 	end
 end
 
+function parse_readme (filepath, doc)
+	local text = assert(io.open(filepath, "r")):read("*a")
+	local extension = (filepath:match("%.([a-z]+)$"))
+	if extension == "md" or extension == "mkd" or extension == "markdown" then
+		local markdown = require "markdown"
+		doc.readme = markdown(text)
+	else
+		doc.readme = text
+	end
+end
+
 -------------------------------------------------------------------------------
 
 function start (files, doc)
@@ -475,6 +507,10 @@ function start (files, doc)
 	}
 	assert(doc.files, "undefined `files' field")
 	assert(doc.modules, "undefined `modules' field")
+
+	if options.readme then
+		parse_readme(options.readme, doc)
+	end
 
 	table.foreachi(files, function (_, path)
 		local attr = lfs.attributes(path)

@@ -8,7 +8,7 @@ else
 end
 %>
 
-<h1>LuaDoc</h1>
+<h2>LuaDoc</h2>
 <ul>
 	<%if not module_doc and not file_doc then%>
 	<li><strong>Index</strong></li>
@@ -20,7 +20,7 @@ end
 
 <!-- Module list -->
 <%if not options.nomodules and #doc.modules > 0 then%>
-<h1>Modules</h1>
+<h2>Modules</h2>
 <ul>
 <%for _, modulename in ipairs(doc.modules) do
 	if module_doc and module_doc.name == modulename then%>
@@ -37,7 +37,7 @@ end%>
 
 <!-- File list -->
 <%if not options.nofiles and #doc.files > 0 then%>
-<h1>Files</h1>
+<h2>Files</h2>
 <ul>
 <%for _, filepath in ipairs(doc.files) do
 	if file_doc and file_doc.name == filepath then%>

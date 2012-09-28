@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------------
 
 local lfs = require "lfs"
-local type, table, string, io, assert, tostring, setmetatable, pcall = type, table, string, io, assert, tostring, setmetatable, pcall
+local type, table, string, io, assert, tostring, setmetatable, pcall, require = type, table, string, io, assert, tostring, setmetatable, pcall, require
 
 -------------------------------------------------------------------------------
 -- Module with several utilities that could not fit in a specific module
@@ -165,20 +165,18 @@ end
 -- @return logger object that will implement log methods
 
 function loadlogengine(options)
-	local logenabled = pcall(function()
-		require "logging"
-		require "logging.console"
+	options = options or {}
+	local logging
+	local success, logger = pcall(function()
+		logging = require("logging")
+		if options.filelog then
+			return require("logging.file")("luadoc.log") -- use this to get a file log
+		else
+			return require("logging.console")("[%level] %message\n")
+		end
 	end)
 
-	local logging = logenabled and logging
-
-	if logenabled then
-		if options.filelog then
-			logger = logging.file("luadoc.log") -- use this to get a file log
-		else
-			logger = logging.console("[%level] %message\n")
-		end
-
+	if success then
 		if options.verbose then
 			logger:setLevel(logging.INFO)
 		else

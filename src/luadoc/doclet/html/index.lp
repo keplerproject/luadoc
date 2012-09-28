@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <title><% if not options.nomodules and doc.modules[1] then %>
     <%= ("%s: "):format(doc.modules[1]) %>
@@ -28,6 +28,11 @@
 
 <div id="content">
 
+<% if doc.readme then %>
+<div id="readme">
+<%= doc.readme %>
+</div>
+<% end %>
 
 <%if not options.nomodules and #doc.modules > 0 then%>
 <h2>Modules</h2>

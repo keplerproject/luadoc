@@ -24,12 +24,14 @@ local function print_help ()
 Generate documentation from files. Available options are:
   -d path                      output directory path
   -t path                      template directory path
+  -r file                      README file to include in documentation index
   -h, --help                   print this help and exit
       --noindexpage            do not generate global index page
       --nofiles                do not generate documentation for files
       --nomodules              do not generate documentation for modules
       --doclet doclet_module   doclet module to generate output
       --taglet taglet_module   taglet module to parse input code
+      --filelog                log output to file 'luadoc.log'
   -q, --quiet                  suppress all normal output
   -v, --version                print version information]])
 end
@@ -58,6 +60,11 @@ local OPTIONS = {
 			dir = dir..'/'
 		end
 		options.template_dir = dir
+		return 1
+	end,
+	r = function (arg, i, options)
+		local readme = arg[i+1]
+		options.readme = readme
 		return 1
 	end,
 	h = print_help,
