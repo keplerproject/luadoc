@@ -31,6 +31,7 @@ Generate documentation from files. Available options are:
       --nomodules              do not generate documentation for modules
       --doclet doclet_module   doclet module to generate output
       --taglet taglet_module   taglet module to parse input code
+      --filelog                log output to file 'luadoc.log'
   -q, --quiet                  suppress all normal output
   -v, --version                print version information]])
 end
