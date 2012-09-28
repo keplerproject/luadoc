@@ -52,4 +52,4 @@ install:
 
 refman:
 	mkdir -p $(LUADOC_REFMAN)
-	$(LAUNCHER) -d $(LUADOC_REFMAN) src/luadoc
+	$(LAUNCHER) -r README.md -d $(LUADOC_REFMAN) src/luadoc

@@ -1,5 +1,5 @@
 -------------------------------------------------------------------------------
--- LuaDoc configuration file. This file contains the default options for 
+-- LuaDoc configuration file. This file contains the default options for
 -- luadoc operation. These options can be overriden by the command line tool
 -- @see luadoc.print_help
 -- @release $Id: config.lua,v 1.6 2007/04/18 14:28:39 tomas Exp $
@@ -17,8 +17,9 @@ module "luadoc.config"
 -- @field doclet documentation generator
 -- @field template_dir directory with documentation templates, used by the html
 -- doclet
--- @field verbose command line tool configuration to output processing 
+-- @field verbose command line tool configuration to output processing
 -- information
+-- @field readme A readme file to include in the module index
 
 local default_options = {
 	output_dir = "",
@@ -29,6 +30,7 @@ local default_options = {
 	nomodules = false,
 	nofiles = false,
 	verbose = true,
+	readme = false
 }
 
 return default_options

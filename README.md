@@ -1,9 +1,10 @@
-LuaDoc, version 3.0
-Tomas Guisasola (tomas@tecgraf.puc-rio.br)
-http://luadoc.luaforge.net
-13/aug/2007
+# LuaDoc 3.1
 
-What is it?
+[Tomas Guisasola](mailto:tomas@tecgraf.puc-rio.br)
+
+[http://luadoc.luaforge.net](http://luadoc.luaforge.net)
+
+## What is it?
 
 LuaDoc is a documentation generator tool for Lua source code.
 It parses the declarations and documentation comments in a set of Lua
@@ -15,14 +16,14 @@ implementing new doclets. The format of the documentation comments is
 also flexible and can be customized by implementing new taglets.
 Please refer to customizing section for further information.
 
-LuaDoc is free software and uses the same license as Lua. 
+LuaDoc is free software and uses the same license as Lua.
 
-Distribution:
+## Distribution
 
-This distribution includes a set of  Lua  files  and  this  README.  It
+This distribution includes a set of  Lua  files  and  this  README. It
 requires Lua 5.1.
 
-Installation:
+## Installation
 
 LuaDoc tool is composed by two parts, a library, and a launcher script.
 
@@ -36,15 +37,13 @@ LuaDoc also depends on two external packages: LuaFileSystem and LuaLogging,
 and you'll need to install them accordingly.
 
 On Unix boxes, the file luadoc.lua could be used as a script;
-it's the same as:
-
-lua5.1 luadoc.lua [options|files]
+it's the same as: `lua5.1 luadoc.lua [options|files]`
 
 This is the main script: it will load LuaDoc library and process the
-specified files. Try luadoc.lua --help, it will show you all available
-options. 
+specified files. Try `luadoc.lua --help`, it will show you all available
+options.
 
-How does it work?
+## How does it work?
 
 LuaDoc works in two phases: analysis and synthesis.  On the first  one,
 all input files are analyzed and an intermediate structure is made with
@@ -57,5 +56,4 @@ files and another for HTML output files.
 Some technical documentation can  be  built  running  LuaDoc  over  its
 files.
 
-Please send any comments and bug reports to tomas@tecgraf.puc-rio.br
-
+Please send any comments and bug reports to [Tomas Guisasola](mailto:tomas@tecgraf.puc-rio.br).

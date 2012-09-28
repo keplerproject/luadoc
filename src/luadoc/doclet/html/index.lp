@@ -28,6 +28,11 @@
 
 <div id="content">
 
+<% if doc.readme then %>
+<div id="readme">
+<%= doc.readme %>
+</div>
+<% end %>
 
 <%if not options.nomodules and #doc.modules > 0 then%>
 <h2>Modules</h2>
