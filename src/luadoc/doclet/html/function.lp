@@ -17,7 +17,7 @@ end
 <ul>
 	<%for p = 1, #func.param do%>
 	<li>
-	  <%=func.param[p]%>: <%=func.param[func.param[p]] or ""%>
+	  <code><em><%=func.param[p]%></em></code>: <%=func.param[func.param[p]] or ""%>
 	</li>
 	<%end%>
 </ul>
@@ -26,14 +26,16 @@ end
 
 <%if type(func.usage) == "string" then%>
 <h3>Usage:</h3>
+<pre class="example">
 <%=func.usage%>
+</pre>
 <%elseif type(func.usage) == "table" then%>
 <h3>Usage</h3>
-<ul>
+<ul><pre class="example">
 	<%for _, usage in ipairs(func.usage) do%>
-	<li><%= usage %>
+	<li><%= usage %></li>
 	<%end%>
-</ul>
+</pre></ul>
 <%end%>
 
 <%if type(func.ret) == "string" then%>
@@ -43,7 +45,7 @@ end
 <h3>Return values:</h3>
 <ol>
 	<%for _, ret in ipairs(func.ret) do%>
-	<li><%= ret %>
+	<li><%= ret %></li>
 	<%end%>
 </ol>
 <%end%>
@@ -57,7 +59,7 @@ end
 	<%for i = 1, #func.see do%>
 	<li><a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from)%>">
 		<%=func.see[i]%>
-	</a>
+	</a></li>
 	<%end%>
 </ul>
 <%end%>

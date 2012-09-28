@@ -6,7 +6,7 @@
 <ul>
 	<%for p = 1, #tab.field do%>
 	<li>
-	  <%=tab.field[p]%>: <%=tab.field[tab.field[p]] or ""%>
+	  <code><em><%=tab.field[p]%></em></code>: <%=tab.field[tab.field[p]] or ""%>
 	</li>
 	<%end%>
 </ul>

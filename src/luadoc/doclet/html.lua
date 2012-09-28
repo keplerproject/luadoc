@@ -219,9 +219,9 @@ function fixhtmltable (doc)
         if type(v) == "string" then
             -- update string value
             local s = string.gsub(v, "\n", "<br/>")
-            s = string.gsub(s, "<br/> ", "<br/>&nbsp")
-            while string.find(s, "&nbsp ") do
-                s = string.gsub(s, "&nbsp ", "&nbsp&nbsp")
+            s = string.gsub(s, "<br/> ", "<br/>&nbsp;")
+            while string.find(s, "&nbsp; ") do
+                s = string.gsub(s, "&nbsp; ", "&nbsp;&nbsp;")
             end
             doc[k] = s
         elseif type(v) == "table" then
