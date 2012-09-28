@@ -25,8 +25,7 @@ HTML_LUAS= src/luadoc/doclet/html/file.lp \
 	src/luadoc/doclet/html/luadoc.css \
 	src/luadoc/doclet/html/menu.lp \
 	src/luadoc/doclet/html/module.lp \
-	src/luadoc/doclet/html/table.lp \
-	src/luadoc/doclet/html/module_or_file.lp
+	src/luadoc/doclet/html/table.lp
 TAGLET_LUAS= src/luadoc/taglet/standard.lua
 STANDARD_LUAS= src/luadoc/taglet/standard/tags.lua
 
