@@ -47,6 +47,18 @@
 <p><small><b>Release:</b> <%=file_doc.release%></small></p>
 <%end%>
 
+<%if #file_doc.tables > 0 then%>
+<h2>Tables</h2>
+<table class="table_list">
+<%for _, tab_name in ipairs(file_doc.tables) do%>
+	<tr>
+	<td class="name" nowrap><a href="#<%=tab_name%>"><%=tab_name%></a></td>
+	<td class="summary"><%=file_doc.tables[tab_name].summary%></td>
+	</tr>
+<%end%>
+</table>
+<%end%>
+
 <%if #file_doc.functions > 0 then%>
 <h2>Functions</h2>
 <table class="function_list">
@@ -60,34 +72,8 @@
 </table>
 <%end%>
 
-
-<%if #file_doc.tables > 0 then%>
-<h2>Tables</h2>
-<table class="table_list">
-<%for _, tab_name in ipairs(file_doc.tables) do%>
-    <tr>
-    <td class="name" nowrap><a href="#<%=tab_name%>"><%=tab_name%></a></td>
-    <td class="summary"><%=file_doc.tables[tab_name].summary%></td>
-    </tr>
-<%end%>
-</table>
-<%end%>
-
-
 <br/>
 <br/>
-
-
-
-<%if #file_doc.functions > 0 then%>
-<h2><a name="functions"></a>Functions</h2>
-<dl class="function">
-<%for _, func_name in ipairs(file_doc.functions) do%>
-<%=luadoc.doclet.html.include("function.lp", { doc=doc, file_doc=file_doc, func=file_doc.functions[func_name] })%>
-<%end%>
-</dl>
-<%end%>
-
 
 <%if #file_doc.tables > 0 then%>
 <h2><a name="tables"></a>Tables</h2>
@@ -98,7 +84,14 @@
 </dl>
 <%end%>
 
-
+<%if #file_doc.functions > 0 then%>
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+<%for _, func_name in ipairs(file_doc.functions) do%>
+<%=luadoc.doclet.html.include("function.lp", { doc=doc, file_doc=file_doc, func=file_doc.functions[func_name] })%>
+<%end%>
+</dl>
+<%end%>
 
 </div> <!-- id="content" -->
 

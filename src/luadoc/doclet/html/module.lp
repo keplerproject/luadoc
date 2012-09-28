@@ -45,6 +45,18 @@
 <p><small><b>Release:</b> <%=module_doc.release%></small></p>
 <%end%>
 
+<%if #module_doc.tables > 0 then%>
+<h2>Tables</h2>
+<table class="table_list">
+<%for _, tab_name in ipairs(module_doc.tables) do%>
+	<tr>
+	<td class="name" nowrap><a href="#<%=tab_name%>"><%=tab_name%></a></td>
+	<td class="summary"><%=module_doc.tables[tab_name].summary%></td>
+	</tr>
+<%end%>
+</table>
+<%end%>
+
 <%if #module_doc.functions > 0 then%>
 <h2>Functions</h2>
 <table class="function_list">
@@ -58,33 +70,8 @@
 </table>
 <%end%>
 
-
-<%if #module_doc.tables > 0 then%>
-<h2>Tables</h2>
-<table class="table_list">
-<%for _, tab_name in ipairs(module_doc.tables) do%>
-    <tr>
-    <td class="name" nowrap><a href="#<%=tab_name%>"><%=tab_name%></a></td>
-    <td class="summary"><%=module_doc.tables[tab_name].summary%></td>
-    </tr>
-<%end%>
-</table>
-<%end%>
-
-
 <br/>
 <br/>
-
-
-<%if #module_doc.functions > 0 then%>
-<h2><a name="functions"></a>Functions</h2>
-<dl class="function">
-<%for _, func_name in ipairs(module_doc.functions) do%>
-<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=module_doc.functions[func_name] })%>
-<%end%>
-</dl>
-<%end%>
-
 
 <%if #module_doc.tables > 0 then%>
 <h2><a name="tables"></a>Tables</h2>
@@ -95,6 +82,14 @@
 </dl>
 <%end%>
 
+<%if #module_doc.functions > 0 then%>
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+<%for _, func_name in ipairs(module_doc.functions) do%>
+<%=luadoc.doclet.html.include("function.lp", { doc=doc, module_doc=module_doc, func=module_doc.functions[func_name] })%>
+<%end%>
+</dl>
+<%end%>
 
 </div> <!-- id="content" -->
 
