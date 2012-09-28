@@ -6,13 +6,8 @@
 <ul>
 	<%for p = 1, #tab.field do%>
 	<li>
-<<<<<<< HEAD
 	  <code><em><%=tab.field[p]%></em></code>: <%=tab.field[tab.field[p]] or ""%>
 	</li>
-=======
-	  <%=tab.field[p]%>: <%=tab.field[tab.field[p]] or ""%>
-        </li>
->>>>>>> merge_nichtich
 	<%end%>
 </ul>
 <%end%>
