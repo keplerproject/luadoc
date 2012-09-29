@@ -124,11 +124,22 @@ local function see (tag, block, text)
 	-- remove trailing "."
 	text = string.gsub(text, "(.*)%.$", "%1")
 
+  -- split comma separated list
 	local s = util.split("%s*,%s*", text)
+  table.foreachi(s, function (_, symbol)
+    local space = symbol:find(" ")
+    local ref
+    if space then
+      -- split symbol and reference and insert as table
+      ref = symbol:sub(space + 1, -1)
+      symbol = symbol:sub(1, space -1)
+      table.insert(block[tag], { ["reference"] = ref, ["symbol"] = symbol })
+    else
+      -- just symbol, insert as string
+      table.insert(block[tag], symbol)
+    end
+  end)
 
-	table.foreachi(s, function (_, v)
-		table.insert(block[tag], v)
-	end)
 end
 
 -------------------------------------------------------------------------------

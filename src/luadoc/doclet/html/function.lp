@@ -67,8 +67,8 @@ end
 <h3>See also:</h3>
 <ul>
 	<%for i = 1, #func.see do%>
-	<li><a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from)%>">
-		<%=func.see[i]%>
+	<li><a href="<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from).href%>">
+		<%=luadoc.doclet.html.symbol_link(func.see[i], doc, module_doc, file_doc, from).display%>
 	</a></li>
 	<%end%>
 </ul>

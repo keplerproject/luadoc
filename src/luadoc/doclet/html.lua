@@ -13,6 +13,7 @@
 -------------------------------------------------------------------------------
 
 local assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type = assert, getfenv, ipairs, loadstring, pairs, setfenv, tostring, tonumber, type
+local print = print
 local io = require"io"
 local lfs = require "lfs"
 local lp = require "luadoc.lp"
@@ -129,7 +130,7 @@ end
 -- Returns a link to a function or to a table
 -- @param fname name of the function or table to link to.
 -- @param doc documentation table
--- @param kind String specying the kinf of element to link ("functions" or "tables").
+-- @param kind String specying the kind of element to link ("functions" or "tables").
 
 function link_to (fname, doc, module_doc, file_doc, from, kind)
 	assert(fname)
@@ -145,8 +146,8 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 		end
 	end
 
-	local _, _, modulename, fname = string.find(fname, "^(.-)[%.%:]?([^%.%:]*)$")
-	assert(fname)
+	local _, _, modulename, sfname = string.find(fname, "^(.-)[%.%:]?([^%.%:]*)$")
+	assert(sfname)
 
 	-- if fname does not specify a module, use the module_doc
 	if string.len(modulename) == 0 and module_doc then
@@ -155,12 +156,14 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 
 	local module_doc = doc.modules[modulename]
 	if not module_doc then
---		logger:error(string.format("unresolved reference to function `%s': module `%s' not found", fname, modulename))
+--		logger:error(string.format("unresolved reference to function `%s': module `%s' not found", sfname, modulename))
 		return
 	end
 
 	for _, func_name in pairs(module_doc[kind]) do
-		if func_name == fname then
+		if func_name == sfname then
+			return module_link(modulename, doc, from) .. "#" .. sfname
+    elseif func_name == fname then -- if a @name tag is used check full name
 			return module_link(modulename, doc, from) .. "#" .. fname
 		end
 	end
@@ -170,22 +173,32 @@ end
 
 -------------------------------------------------------------------------------
 -- Make a link to a file, module or function
-
+-- @return table with keys 'symbol' and 'display'
 function symbol_link (symbol, doc, module_doc, file_doc, from)
 	assert(symbol)
 	assert(doc)
 
-	local href =
---		file_link(symbol, from) or
-		module_link(symbol, doc, from) or
-		link_to(symbol, doc, module_doc, file_doc, from, "functions") or
-		link_to(symbol, doc, module_doc, file_doc, from, "tables")
-
-	if not href then
-		logger:error(string.format("unresolved reference to symbol `%s'", symbol))
-	end
-
-	return href or ""
+  local href
+  local sym
+  
+  if type(symbol) == "table" then
+    -- explicit reference provided
+    href = symbol.reference
+    sym = symbol.symbol
+  else
+    -- single string, go look up in our doc
+    href =
+  --		file_link(symbol, from) or
+      module_link(symbol, doc, from) or
+      link_to(symbol, doc, module_doc, file_doc, from, "functions") or
+      link_to(symbol, doc, module_doc, file_doc, from, "tables")
+    if not href then
+      logger:error(string.format("unresolved reference to symbol `%s'", symbol))
+    end
+    sym = symbol
+  end
+  
+	return {["href"] = (href or ""), ["display"] = sym or ""}
 end
 
 -------------------------------------------------------------------------------
