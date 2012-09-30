@@ -26,7 +26,7 @@
 
 <div id="content">
 
-<h1>File <code><%=file_doc.name%></code></h1>
+<h1>File "<code><%=file_doc.name%></code>"</h1>
 
 <%if file_doc.description then%>
 <p><%=file_doc.description%></p>
@@ -41,7 +41,7 @@
 </p>
 <%end%>
 <%if file_doc.copyright then%>
-<p>Copyright &copy;<%=file_doc.copyright%></p>
+<p>Copyright &copy; <%=file_doc.copyright%></p>
 <%end%>
 <%if file_doc.release then%>
 <p><small><b>Release:</b> <%=file_doc.release%></small></p>

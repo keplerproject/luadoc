@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"> 
+<head>
+    <title>example.lua: Module Index</title>
+    <link rel="stylesheet" href="../luadoc.css" type="text/css" />
+    <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
+</head>
+
+<body>
+<div id="container">
+
+<div id="product">
+    <div id="product_logo"></div>
+    <div id="product_name"><big><b></b></big></div>
+    <div id="product_description"></div>
+</div> <!-- id="product" -->
+
+<div id="main">
+
+<div id="navigation">
+
+
+<h2>LuaDoc</h2>
+<ul>
+	
+	<li><a href="../index.html">Index</a></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h2>Modules</h2>
+<ul>
+
+	<li><strong>example.lua</strong></li>
+	
+</ul>
+
+
+
+<!-- File list -->
+
+<h2>Files</h2>
+<ul>
+
+	<li>
+		<a href="../files/example.html">example.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
+
+</div><!-- id="navigation" -->
+
+<div id="content">
+
+<h1>Module "<code>example.lua</code>"</h1>
+
+<p>Ipsum lorum and then some. This starts after the first dot and hence does not get to go in the short, but the long description. As is the remainder of the text, everything until the next tag or a code line is included. Interesting in this block is the explicit reference in the 'see' tag to the LuaDoc website</p>
+
+<p><b>Authors:</b>
+<table class="authors_list">
+
+    <tr><td class="name">Keplerproject</td></tr>
+
+    <tr><td class="name">Tieske</td></tr>
+
+</table>
+</p>
+
+
+<p>Copyright &copy; This example file is free of any copyrights, but 'copyright' and the symbol will be inserted on the left</p>
+
+
+<p><small><b>Release:</b> LuaDoc testfile version 1.0</small></p>
+
+
+
+<h2>Tables</h2>
+<table class="table_list">
+
+	<tr>
+	<td class="name" nowrap><a href="#properties">properties</a></td>
+	<td class="summary">A list with object properties.</td>
+	</tr>
+
+</table>
+
+
+
+<h2>Functions</h2>
+<table class="function_list">
+
+    <tr>
+    <td class="name" nowrap><a href="#main_func">main_func</a>&nbsp;(filepath, aname)</td>
+    <td class="summary">The main module functionality being executed.</td>
+    </tr>
+
+    <tr>
+    <td class="name" nowrap><a href="#main_func2">main_func2</a>&nbsp;(filepath, aname)</td>
+    <td class="summary">The main module functionality being executed.</td>
+    </tr>
+
+</table>
+
+
+<br/>
+<br/>
+
+
+<h2><a name="tables"></a>Tables</h2>
+<dl class="table">
+
+<dt><a name="properties"></a><strong>properties</strong></dt>
+<dd>A list with object properties. And here is the longer description again.
+
+
+<h3>Fields</h3>
+<ul>
+	
+	<li>
+	  <code><em>verbose</em></code>: Boolean inicating extra verbose output
+	</li>
+	
+	<li>
+	  <code><em>type</em></code>: This field contains a string with the current type, either <code>"auto", "semi",</code> or <code>"manual"</code>
+	</li>
+	
+</ul>
+
+
+
+
+
+<div>
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="modules/example.lua.html#main_func">
+		main_func
+	</a></li>
+	
+</ul>
+
+</div>
+
+
+
+</dd>
+
+
+</dl>
+
+
+
+<h2><a name="functions"></a>Functions</h2>
+<dl class="function">
+
+
+
+<dt><a name="main_func"></a><strong>main_func</strong>&nbsp;(filepath, aname)</dt>
+<dd>
+The main module functionality being executed. And another long description without any inspiration other than lots of coffee, and it was bad coffee, and so is the long description. Of special interest here is the 'example' tag which is being used with a trailing '#'. This will preserve whitespace and line-breaks, especially usefull to preserve the layout of example code. The '#' will also work on other tags. Other than that, the 'see' tag is automatically inferred because it references another, also documented, element.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>filepath</em></code>: The filepath to search for input files
+	</li>
+	
+	<li>
+	  <code><em>aname</em></code>: Filename of the output file
+	</li>
+	
+</ul>
+
+
+
+<div>
+
+<h3 class="inline-block">Usage:</h3>
+preferably call this function once, directly after requiring it
+
+</div>
+
+
+
+<div>
+
+
+<h3 class="inline-block">Return value:</h3>
+a table with all files, or <code>nil + error</code>
+
+</div>
+
+
+
+ 
+<div>
+
+<h3 class="inline-block">Example:</h3>
+<pre class="example">for _, filename in ipairs(filepath) do<br/>&nbsp;&nbsp;&nbsp;&nbsp;print("filename:", filename)<br/>end</pre>
+
+</div>
+
+
+
+<div>
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="../modules/example.lua.html#properties">
+		properties
+	</a></li>
+	
+</ul>
+
+</div>
+
+
+</dd>
+
+
+
+
+<dt><a name="main_func2"></a><strong>main_func2</strong>&nbsp;(filepath, aname)</dt>
+<dd>
+The main module functionality being executed. This is the same as above, only showing what happens if there are multiple similar tags.
+
+
+<h3>Parameters:</h3>
+<ul>
+	
+	<li>
+	  <code><em>filepath</em></code>: The filepath to search for input files
+	</li>
+	
+	<li>
+	  <code><em>aname</em></code>: Filename of the output file
+	</li>
+	
+</ul>
+
+
+
+<div>
+
+<h3>Usage:</h3>
+<ul>
+	
+	<li>preferably call this function once, directly after requiring it</li>
+	
+	<li>preferably call this function once, directly after requiring it, even if this is twice the same 'usage' tag</li>
+	
+</ul>
+
+</div>
+
+
+
+<div>
+
+
+<h3>Return values:</h3>
+<ol>
+	
+	<li>a table with all files or <code>nil</code> in case of error</li>
+	
+	<li><code>error</code>in case of error</li>
+	
+</ol>
+
+</div>
+
+
+
+ 
+<div>
+
+<h3>Example:</h3>
+<ul>
+	
+	<pre class="example">-- this example is multi-line, the other goes to single line in absence of the '#'<br/>for _, filename in ipairs(filepath) do<br/>&nbsp;&nbsp;&nbsp;&nbsp;print("filename:", filename)<br/>end</pre>
+	
+	<pre class="example">for _, filename in ipairs(filepath) do print("filename:", filename) end</pre>
+	
+</ul>
+
+</div>
+
+
+
+<div>
+
+<h3>See also:</h3>
+<ul>
+	
+	<li><a href="../modules/example.lua.html#properties">
+		properties
+	</a></li>
+	
+	<li><a href="http://keplerproject.github.com/luadoc/">
+		LuaDoc
+	</a></li>
+	
+</ul>
+
+</div>
+
+
+</dd>
+
+
+</dl>
+
+
+</div> <!-- id="content" -->
+
+</div> <!-- id="main" -->
+
+<div id="about">
+    <p><a href="http://validator.w3.org/check?uri=referer"><img src="http://www.w3.org/Icons/valid-xhtml10" alt="Valid XHTML 1.0!" height="31" width="88" /></a></p>
+</div> <!-- id="about" -->
+
+</div> <!-- id="container" -->
+</body>
+</html>
