@@ -10,9 +10,9 @@ require "luadoc"
 -- Print version number.
 
 local function print_version ()
-	print (string.format("%s\n%s\n%s", 
-		luadoc._VERSION, 
-		luadoc._DESCRIPTION, 
+	print (string.format("%s\n%s\n%s",
+		luadoc._VERSION,
+		luadoc._DESCRIPTION,
 		luadoc._COPYRIGHT))
 end
 
@@ -47,18 +47,25 @@ end
 
 local OPTIONS = {
 	d = function (arg, i, options)
-		local dir = arg[i+1]
+		local dir = arg[i+1] or ""
+		dir = dir:gsub("\\", "/") -- normalize windows paths
+		if dir:sub(1,2) == "./" then
+			dir = dir:sub(3,-1)
+		end
 		if string.sub (dir, -2) ~= "/" then
 			dir = dir..'/'
 		end
+		dir = dir:gsub("/%./", "/")
+
 		options.output_dir = dir
 		return 1
 	end,
 	t = function (arg, i, options)
-		local dir = arg[i+1]
+		local dir = arg[i+1] or ""
 		if string.sub (dir, -2) ~= "/" then
 			dir = dir..'/'
 		end
+
 		options.template_dir = dir
 		return 1
 	end,
@@ -92,6 +99,11 @@ local function process_options (arg)
 	while i <= #arg do
 		local argi = arg[i]
 		if string.sub (argi, 1, 1) ~= '-' then
+			argi = argi:gsub("\\", "/") -- normalize windows paths
+			if argi:sub(1,2) == "./" then
+				argi = argi:sub(3,-1)
+			end
+			argi = argi:gsub("/%./", "/")
 			table.insert (files, argi)
 		else
 			local opt = string.sub (argi, 2)
@@ -109,7 +121,7 @@ local function process_options (arg)
 		i = i+1
 	end
 	return files, options
-end 
+end
 
 -------------------------------------------------------------------------------
 -- Main function. Process command-line parameters and call luadoc processor.
