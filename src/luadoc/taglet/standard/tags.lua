@@ -63,7 +63,7 @@ end
 
 local function name (tag, block, text)
 	if block[tag] and block[tag] ~= text then
-		luadoc.logger:error(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
+		luadoc.logger:warn(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
 	end
 
 	block[tag] = text
@@ -158,7 +158,13 @@ end
 -------------------------------------------------------------------------------
 
 local function example (tag, block, text)
-	block[tag] = text
+	if type(block[tag]) == "string" then
+		block[tag] = { block[tag], text }
+	elseif type(block[tag]) == "table" then
+		table.insert(block[tag], text)
+	else
+		block[tag] = text
+	end
 end
 
 -------------------------------------------------------------------------------

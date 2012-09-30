@@ -93,8 +93,9 @@ for Windows, should be installed in your system <code>PATH</code>, so that it ca
 
 <p>
 LuaDoc also depends on two external packages:
-<a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a> and
-<a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and you'll
+<a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a>,
+<a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and
+<a href="http://luaforge.net/projects/markdown/">markdown</a> and you'll
 need to install them accordingly.
 </p>
 
@@ -189,7 +190,10 @@ followed by the name of the tag:
       LuaDoc adds a &copy; sign between the label (Copyright) and the
       given text (e.g. 2004-2007 Kepler Project).</dd>
 
-  <dt>@field</dt>
+  <dt>@example &lt;text&gt;</dt> 
+  <dd>Example code showing how to use the item being described.</dd> 
+
+  <dt>@field &lt;fieldname&gt; &lt;text&gt;</dt>
   <dd>Describe a table field definition.</dd>
 
   <dt>@param &lt;word&gt; &lt;text&gt;</dt>
@@ -204,8 +208,9 @@ followed by the name of the tag:
       Since Lua can return multiple values, this tag should appear more
       than once.</dd>
 
-  <dt>@see &lt;text&gt;</dt>
-  <dd>Refers to other descriptions of functions or tables.</dd>
+  <dt>@see &lt;text&gt; [&lt;explicit reference&gt;]</dt>
+  <dd>Refers to other descriptions of functions or tables. 'text' should be an identifier for a table or function in a module in the documentation set. 
+      Optionally an explicit reference can be set (eg. url), but you must make sure that the doclet used understands the format. This tag can appear more than once.</dd>
 
   <dt>@usage &lt;text&gt;</dt>
   <dd>Describe the usage of the function or variable.</dd>
@@ -221,8 +226,8 @@ but they can be used to override the infered value.
 
 <dl>
   <dt>@class &lt;word&gt;</dt>
-  <dd>If LuaDoc cannot infer the type of documentation (function, table or
-      module definition), the programmer can specify it explicitly.</dd>
+  <dd>If LuaDoc cannot infer the type of documentation (<code>"function", "table" or
+      "module"</code>), the programmer can specify it explicitly.</dd>
 
   <dt>@description</dt>
   <dd>The description of the function or table.
@@ -237,7 +242,7 @@ but they can be used to override the infered value.
 
 </dl>
 
-<h2><a name="tags">Text indentation and linebreaks</a></h2>
+<h2><a name="indent">Text indentation and linebreaks</a></h2>
 <p>
 LuaDoc parses text in such a way that it concatenates text on individual lines 
 and removes trailing and leading whitespace in the process. To prevent LuaDoc 
@@ -270,20 +275,27 @@ The luadoc command line script has some options:
 	<dt>--nomodules</dt>
 	<dd>Do not generate documentation focused on modules.</dd>
 
+	<dt>--filelog</dt>
+	<dd>Log output to file 'luadoc.log'.</dd>
+
 	<dt>--doclet &lt;doclet_module&gt;</dt>
 	<dd>Doclet module used to generate output</dd>
 
 	<dt>--taglet &lt;taglet_module&gt;</dt>
 	<dd>Taglet module used to parse input code</dd>
 
+	<dt>-t &lt;path&gt;</dt>
+	<dd>Template directory path</dd>
+
 	<dt>-q, --quiet</dt>
 	<dd>Suppress info output</dd>
 
 	<dt>-r &lt;file&gt;</dt>
-	<dd>README file to include in documentation index</dd>
+	<dd>README file to include in documentation index (can be markdown format)</dd>
 
 	<dt>-v, --version</dt>
 	<dd>Print version information</dd>
+
 </dl>
 
 </div> <!-- id="content" -->

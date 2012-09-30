@@ -27,16 +27,14 @@ end
 <div>
 <%if type(func.usage) == "string" then%>
 <h3 class="inline-block">Usage:</h3>
-<pre class="example">
 <%=func.usage%>
-</pre>
 <%elseif type(func.usage) == "table" then%>
 <h3>Usage:</h3>
-<ul><pre class="example">
+<ul>
 	<%for _, usage in ipairs(func.usage) do%>
 	<li><%= usage %></li>
 	<%end%>
-</pre></ul>
+</ul>
 <%end%>
 </div>
 <%end%>
@@ -54,6 +52,23 @@ end
 	<li><%= ret %></li>
 	<%end%>
 </ol>
+<%end%>
+</div>
+<%end%>
+
+
+<%if func.example then%> 
+<div>
+<%if type(func.example) == "string" then%>
+<h3 class="inline-block">Example:</h3>
+<pre class="example"><%=func.example%></pre>
+<%elseif type(func.example) == "table" then%>
+<h3>Example:</h3>
+<ul>
+	<%for _, example in ipairs(func.example) do%>
+	<pre class="example"><%= example %></pre>
+	<%end%>
+</ul>
 <%end%>
 </div>
 <%end%>
