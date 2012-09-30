@@ -137,36 +137,94 @@ function link_to (fname, doc, module_doc, file_doc, from, kind)
 	assert(doc)
 	from = from or ""
 	kind = kind or "functions"
+  local optional
+  
+--local msg = ""  
+--if fname:find("afterset") then msg = msg .. "\n" .. string.rep("=", 50) end
+--if fname:find("afterset") and module_doc then msg = msg .. "\n" .. string.format("START module_doc for `%s'", fname) end
+--if fname:find("afterset") and file_doc then msg = msg .. "\n" .. string.format("START file_doc for `%s'", fname) end
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("    doc : %s", tostring(doc)) end
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("    from: %s", tostring(from)) end
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("    kind: %s", tostring(kind)) end
 
 	if file_doc then
+--if fname:find("afterset") then msg = msg .. "\n" .. "checking file_doc" end
 		for _, func_name in pairs(file_doc[kind]) do
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("   \t%s\t%s", tostring(fname), tostring(func_name)) end
 			if func_name == fname then
+--if fname:find("afterset") then msg = msg .. "\n" .. "  FOUND IT!"; print (msg) end
 				return file_link(file_doc.name, from) .. "#" .. fname
 			end
+      if type(func_name) == "string" and func_name:find("[%.%:]" .. fname .. "$") then
+        -- this could be a match; symbol found, but the found one has a prefix
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("  FOUND OPTIONAL!  `%s' for `%s'",func_name, fname) end
+        optional = file_link(file_doc.name, from) .. "#" .. func_name
+      end
 		end
+--if fname:find("afterset") then msg = msg .. "\n" .. "  NOT FOUND!" end
 	end
 
 	local _, _, modulename, sfname = string.find(fname, "^(.-)[%.%:]?([^%.%:]*)$")
 	assert(sfname)
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("Module lookup for `%s', module `%s' and symbol `%s'",fname, modulename, sfname) end
 
 	-- if fname does not specify a module, use the module_doc
 	if string.len(modulename) == 0 and module_doc then
 		modulename = module_doc.name
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("Update: module lookup for `%s', module `%s' and symbol `%s'",fname, modulename, sfname) end
 	end
+--if fname:find("afterset") then msg = msg .. "\n" .. "   Modulelist:" end
+--if fname:find("afterset") then for k,v in pairs(doc.modules) do msg = msg .. "\n" .. string.format("      \t%s\t%s", tostring(k),tostring(v)) end end
 
 	local module_doc = doc.modules[modulename]
-	if not module_doc then
---		logger:error(string.format("unresolved reference to function `%s': module `%s' not found", sfname, modulename))
-		return
+  if not module_doc then
+    -- module not found, check for partial module name
+    for k,v in pairs(doc.modules) do
+      if type(k) == "string" and k:find("%." .. modulename .. "$") then
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("FOUND OPTIONAL MODULE: module `%s' for name `%s'",modulename, fname) end
+        module_doc = v
+        modulename = k
+      end
+    end
+  end
+	if not module_doc then  
+    if optional then
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("RETURNING OPTIONAL: module `%s'",modulename); if kind == "functions" then print(msg) end end
+      return optional
+    else
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("NOT FOUND: module `%s'",modulename); if kind == "functions" then print(msg) end end
+--	    logger:error(string.format("unresolved reference to function `%s': module `%s' not found", sfname, modulename))
+      return
+    end
 	end
 
+--if fname:find("afterset") then msg = msg .. "\n" .. "checking module_doc" end
 	for _, func_name in pairs(module_doc[kind]) do
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("  \t%s\t%s", tostring(fname), tostring(func_name)) end
 		if func_name == sfname then
+--if fname:find("afterset") then msg = msg .. "\n" .. "  FOUND IT!"; if kind == "functions" then print(msg) end end
 			return module_link(modulename, doc, from) .. "#" .. sfname
     elseif func_name == fname then -- if a @name tag is used check full name
+--if fname:find("afterset") then msg = msg .. "\n" .. "  FOUND IT!"; if kind == "functions" then print(msg) end end
 			return module_link(modulename, doc, from) .. "#" .. fname
 		end
+    if type(func_name) == "string" and fname:find("[%.%:]" .. func_name .. "$") then
+      -- this could be a match; symbol found, but the found one has a prefix
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("  FOUND OPTIONAL!  `%s' for `%s'",func_name, fname) end
+      optional = module_link(modulename, doc, from) .. "#" .. func_name
+    end
+    if type(func_name) == "string" and func_name:find("[%.%:]" .. fname .. "$") then
+      -- this could be a match; symbol found, but the found one has a prefix
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("  FOUND OPTIONAL!  `%s' for `%s'",func_name, fname) end
+      optional = module_link(modulename, doc, from) .. "#" .. func_name
+    end
 	end
+  
+  if optional then
+--if fname:find("afterset") then msg = msg .. "\n" .. string.format("RETURNING: module `%s'",modulename); if kind == "functions" then print(msg) end end
+    return optional
+  end
+--if fname:find("afterset") then msg = msg .. "\n" .. "  FAILED!"; if kind == "functions" then print(msg) end end
 
 --	logger:error(string.format("unresolved reference to function `%s' of module `%s'", fname, modulename))
 end
@@ -187,6 +245,7 @@ function symbol_link (symbol, doc, module_doc, file_doc, from)
     sym = symbol.symbol
   else
     -- single string, go look up in our doc
+--print("symbol:", symbol)
     href =
   --		file_link(symbol, from) or
       module_link(symbol, doc, from) or
