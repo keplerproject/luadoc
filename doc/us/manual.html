@@ -54,8 +54,8 @@
 		<li><a href="examples.html">Examples</a></li>
         <li><a href="http://luaforge.net/projects/luadoc/">Project</a>
             <ul>
-                <li><a href="http://luaforge.net/tracker/?group_id=18">Bug Tracker</a></li>
-                <li><a href="http://luaforge.net/scm/?group_id=18">CVS</a></li>
+                <li><a href="https://github.com/keplerproject/luadoc/issues">Bug Tracker</a></li>
+                <li><a href="https://github.com/keplerproject/luadoc">Git</a></li>
             </ul>
         </li>
 		<li><a href="license.html">License</a></li>
@@ -65,8 +65,8 @@
 <div id="content">
 
 <h2><a name="introduction">Introduction</a></h2>
-<p>LuaDoc is a documentation generation tool for lua source files. It does not 
-impose a documentation format, but suggests one (XHTML) and implements it. The produced 
+<p>LuaDoc is a documentation generation tool for lua source files. It does not
+impose a documentation format, but suggests one (XHTML) and implements it. The produced
 documentation can be of any type.
 </p>
 
@@ -80,7 +80,7 @@ the proposed format.
 <p>LuaDoc tool is composed by two parts, a library, and a launcher script.</p>
 
 <p>
-The library follows the 
+The library follows the
 <a href="http://www.keplerproject.org/compat/">package model</a>
 for Lua 5.1 and therefore should be "installed" in your
 <code>package.path</code>.
@@ -92,9 +92,10 @@ for Windows, should be installed in your system <code>PATH</code>, so that it ca
 </p>
 
 <p>
-LuaDoc also depends on two external packages: 
-<a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a> and 
-<a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and you'll 
+LuaDoc also depends on two external packages:
+<a href="http://www.keplerproject.org/luafilesystem">LuaFileSystem</a>,
+<a href="http://www.keplerproject.org/lualogging">LuaLogging</a>, and
+<a href="http://luaforge.net/projects/markdown/">markdown</a> and you'll
 need to install them accordingly.
 </p>
 
@@ -107,7 +108,7 @@ lua5.1 luadoc.lua [options|files]
 </pre>
 
 <p>
-This is the main script: it will load LuaDoc library and process the specified 
+This is the main script: it will load LuaDoc library and process the specified
 files. Try <code>luadoc.lua --help</code>, it will show you all available options.
 </p>
 
@@ -189,26 +190,31 @@ followed by the name of the tag:
       LuaDoc adds a &copy; sign between the label (Copyright) and the
       given text (e.g. 2004-2007 Kepler Project).</dd>
 
-  <dt>@field</dt>
+  <dt>@example &lt;text&gt;</dt> 
+  <dd>Example code showing how to use the item being described.</dd> 
+
+  <dt>@field &lt;fieldname&gt; &lt;text&gt;</dt>
   <dd>Describe a table field definition.</dd>
 
   <dt>@param &lt;word&gt; &lt;text&gt;</dt>
   <dd>Describe function parameters.
       It requires the name of the parameter and its description.</dd>
-  
+
   <dt>@release &lt;text&gt;</dt>
   <dd>Free format string to describe the module or file release.</dd>
-  
+
   <dt>@return &lt;text&gt;</dt>
   <dd>Describe a returning value of the function.
       Since Lua can return multiple values, this tag should appear more
       than once.</dd>
-  
-  <dt>@see &lt;text&gt;</dt>
-  <dd>Refers to other descriptions of functions or tables.</dd>
-  
+
+  <dt>@see &lt;text&gt; [&lt;explicit reference&gt;]</dt>
+  <dd>Refers to other descriptions of functions or tables. 'text' should be an identifier for a table or function in a module in the documentation set. 
+      Optionally an explicit reference can be set (eg. url), but you must make sure that the doclet used understands the format. This tag can appear more than once.</dd>
+
   <dt>@usage &lt;text&gt;</dt>
   <dd>Describe the usage of the function or variable.</dd>
+
 </dl>
 
 <h3><a name="infered-tags">Infered Tags</a></h3>
@@ -220,13 +226,13 @@ but they can be used to override the infered value.
 
 <dl>
   <dt>@class &lt;word&gt;</dt>
-  <dd>If LuaDoc cannot infer the type of documentation (function, table or
-      module definition), the programmer can specify it explicitly.</dd>
-  
+  <dd>If LuaDoc cannot infer the type of documentation (<code>"function", "table" or
+      "module"</code>), the programmer can specify it explicitly.</dd>
+
   <dt>@description</dt>
   <dd>The description of the function or table.
       This is usually infered automatically.</dd>
-  
+
   <dt>@name &lt;word&gt;</dt>
   <dd>The name of the function or table definition.
       This is usually infered from the code analysis, and the programmer does
@@ -236,13 +242,13 @@ but they can be used to override the infered value.
 
 </dl>
 
-<h2><a name="tags">Text indentation and linebreaks</a></h2>
+<h2><a name="indent">Text indentation and linebreaks</a></h2>
 <p>
 LuaDoc parses text in such a way that it concatenates text on individual lines 
 and removes trailing and leading whitespace in the process. To prevent LuaDoc 
 from doing this and to retain the original linebreaks and indentation end the 
-tag with a `<code>#</code>' character, for example '<code>@usage#</code>'. 
-This is especially usefull for multiline code examples in the usage tag, where 
+tag with a `<code>#</code>' character, for example '<code>@example#</code>'. 
+This is especially usefull for multiline code examples in the example tag, where 
 you want the example code to remain properly indented for readability. Run 
 LuaDoc on the included test file to see the results.  
 Warning; you must make sure that the doclet you are using supports this format.
@@ -256,10 +262,10 @@ The luadoc command line script has some options:
 <dl>
 	<dt>-d &lt;path&gt;</dt>
 	<dd>Defines the output directory path. Default is the current dir.</dd>
-  
+
 	<dt>-h, --help</dt>
 	<dd>Show help instructions</dd>
-  
+
 	<dt>--noindexpage</dt>
 	<dd>Do not generate the index page.</dd>
 
@@ -269,17 +275,27 @@ The luadoc command line script has some options:
 	<dt>--nomodules</dt>
 	<dd>Do not generate documentation focused on modules.</dd>
 
+	<dt>--filelog</dt>
+	<dd>Log output to file 'luadoc.log'.</dd>
+
 	<dt>--doclet &lt;doclet_module&gt;</dt>
 	<dd>Doclet module used to generate output</dd>
-  
+
 	<dt>--taglet &lt;taglet_module&gt;</dt>
 	<dd>Taglet module used to parse input code</dd>
-  
+
+	<dt>-t &lt;path&gt;</dt>
+	<dd>Template directory path</dd>
+
 	<dt>-q, --quiet</dt>
 	<dd>Suppress info output</dd>
-  
+
+	<dt>-r &lt;file&gt;</dt>
+	<dd>README file to include in documentation index (can be markdown format)</dd>
+
 	<dt>-v, --version</dt>
 	<dd>Print version information</dd>
+
 </dl>
 
 </div> <!-- id="content" -->
@@ -291,6 +307,6 @@ The luadoc command line script has some options:
 	<p><small>$Id: manual.html,v 1.10 2007/10/12 13:33:45 tomas Exp $</small></p>
 </div> <!-- id="about" -->
 
-</div> <!-- id="container" -->	
+</div> <!-- id="container" -->
 </body>
 </html>

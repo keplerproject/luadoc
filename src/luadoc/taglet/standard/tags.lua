@@ -52,7 +52,7 @@ local function field (tag, block, text)
 
 	local _, _, name, desc = string.find(text, "^([_%w%.]+)%s+(.*)")
 	assert(name, "field name not defined")
-	
+
 	table.insert(block[tag], name)
 	block[tag][name] = desc
 end
@@ -63,9 +63,9 @@ end
 
 local function name (tag, block, text)
 	if block[tag] and block[tag] ~= text then
-		luadoc.logger:error(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
+		luadoc.logger:warn(string.format("block name conflict: `%s' -> `%s'", block[tag], text))
 	end
-	
+
 	block[tag] = text
 end
 
@@ -120,21 +120,44 @@ end
 local function see (tag, block, text)
 	-- see is always an array
 	block[tag] = block[tag] or {}
-	
+
 	-- remove trailing "."
 	text = string.gsub(text, "(.*)%.$", "%1")
-	
-	local s = util.split("%s*,%s*", text)			
-	
-	table.foreachi(s, function (_, v)
-		table.insert(block[tag], v)
-	end)
+
+  -- split comma separated list
+	local s = util.split("%s*,%s*", text)
+  table.foreachi(s, function (_, symbol)
+    local space = symbol:find(" ")
+    local ref
+    if space then
+      -- split symbol and reference and insert as table
+      ref = symbol:sub(space + 1, -1)
+      symbol = symbol:sub(1, space -1)
+      table.insert(block[tag], { ["reference"] = ref, ["symbol"] = symbol })
+    else
+      -- just symbol, insert as string
+      table.insert(block[tag], symbol)
+    end
+  end)
+
 end
 
 -------------------------------------------------------------------------------
 -- @see ret
 
 local function usage (tag, block, text)
+	if type(block[tag]) == "string" then
+		block[tag] = { block[tag], text }
+	elseif type(block[tag]) == "table" then
+		table.insert(block[tag], text)
+	else
+		block[tag] = text
+	end
+end
+
+-------------------------------------------------------------------------------
+
+local function example (tag, block, text)
 	if type(block[tag]) == "string" then
 		block[tag] = { block[tag], text }
 	elseif type(block[tag]) == "table" then
@@ -158,6 +181,7 @@ handlers["release"] = release
 handlers["return"] = ret
 handlers["see"] = see
 handlers["usage"] = usage
+handlers["example"] = example
 
 -------------------------------------------------------------------------------
 

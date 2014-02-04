@@ -3,10 +3,10 @@
    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <title><% if not options.nomodules and doc.modules[1] then %>
-    <%= ("%s: "):format(doc.modules[1]) %>
-    <% end %> Luadocs Index</title>
-    <link rel="stylesheet" href="<%=luadoc.doclet.html.link("luadoc.css")%>" type="text/css" />
+    <title>
+    example.lua: 
+     Luadocs Index</title>
+    <link rel="stylesheet" href="luadoc.css" type="text/css" />
     <!--meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/-->
 </head>
 
@@ -22,45 +22,78 @@
 <div id="main">
 
 <div id="navigation">
-<%=luadoc.doclet.html.include("menu.lp", { doc=doc })%>
+
+
+<h2>LuaDoc</h2>
+<ul>
+	
+	<li><strong>Index</strong></li>
+	
+</ul>
+
+
+<!-- Module list -->
+
+<h2>Modules</h2>
+<ul>
+
+	<li>
+		<a href="modules/example.lua.html">example.lua</a>
+	</li>
+
+</ul>
+
+
+
+<!-- File list -->
+
+<h2>Files</h2>
+<ul>
+
+	<li>
+		<a href="files/example.html">example.lua</a>
+	</li>
+
+</ul>
+
+
+
+
+
 
 </div> <!-- id="navigation" -->
 
 <div id="content">
 
-<% if doc.readme then %>
-<div id="readme">
-<%= doc.readme %>
-</div>
-<% end %>
 
-<%if not options.nomodules and #doc.modules > 0 then%>
+
+
 <h2>Modules</h2>
 <table class="module_list">
 <!--<tr><td colspan="2">Modules</td></tr>-->
-<%for _, modulename in ipairs(doc.modules) do%>
+
     <tr>
-        <td class="name"><a href="<%=luadoc.doclet.html.module_link(modulename, doc)%>"><%=modulename%></a></td>
-        <td class="summary"><%=doc.modules[modulename].summary%></td>
+        <td class="name"><a href="modules/example.lua.html">example.lua</a></td>
+        <td class="summary">Ipsum lorum and then some.</td>
     </tr>
-<%end%>
+
 </table>
-<%end%>
 
 
 
-<%if not options.nofiles and #doc.files > 0 then%>
+
+
 <h2>Files</h2>
 <table class="file_list">
 <!--<tr><td colspan="2">Files</td></tr>-->
-<%for _, filepath in ipairs(doc.files) do%>
+
     <tr>
-        <td class="name"><a href="<%=luadoc.doclet.html.file_link(filepath)%>"><%=filepath%></a></td>
+        <td class="name"><a href="files/example.html">example.lua</a></td>
         <td class="summary"></td>
     </tr>
-<%end%>
+
 </table>
-<%end%>
+
 
 </div> <!-- id="content" -->
 
