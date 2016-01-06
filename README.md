@@ -1,9 +1,9 @@
-LuaDoc, version 3.0
-Tomas Guisasola (tomas@tecgraf.puc-rio.br)
-http://luadoc.luaforge.net
+LuaDoc, version 3.0  
+Tomas Guisasola (tomas@tecgraf.puc-rio.br)  
+http://luadoc.luaforge.net  
 13/aug/2007
 
-What is it?
+# What is it?
 
 LuaDoc is a documentation generator tool for Lua source code.
 It parses the declarations and documentation comments in a set of Lua
@@ -17,12 +17,12 @@ Please refer to customizing section for further information.
 
 LuaDoc is free software and uses the same license as Lua. 
 
-Distribution:
+# Distribution:
 
 This distribution includes a set of  Lua  files  and  this  README.  It
 requires Lua 5.1.
 
-Installation:
+# Installation:
 
 LuaDoc tool is composed by two parts, a library, and a launcher script.
 
@@ -38,13 +38,13 @@ and you'll need to install them accordingly.
 On Unix boxes, the file luadoc.lua could be used as a script;
 it's the same as:
 
-lua5.1 luadoc.lua [options|files]
+    lua5.1 luadoc.lua [options|files]
 
 This is the main script: it will load LuaDoc library and process the
 specified files. Try luadoc.lua --help, it will show you all available
 options. 
 
-How does it work?
+# How does it work?
 
 LuaDoc works in two phases: analysis and synthesis.  On the first  one,
 all input files are analyzed and an intermediate structure is made with
