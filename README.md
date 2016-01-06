@@ -1,3 +1,5 @@
+**LuaDoc is obsolete, use [LDoc](https://github.com/stevedonovan/LDoc) instead.**
+
 LuaDoc, version 3.0  
 Tomas Guisasola (tomas@tecgraf.puc-rio.br)  
 http://luadoc.luaforge.net  
