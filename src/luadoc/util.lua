@@ -4,7 +4,7 @@
 -------------------------------------------------------------------------------
 
 local lfs = require "lfs"
-local type, table, string, io, assert, tostring, setmetatable, pcall = type, table, string, io, assert, tostring, setmetatable, pcall
+local require, type, table, string, io, assert, tostring, setmetatable, pcall = require, type, table, string, io, assert, tostring, setmetatable, pcall
 
 -------------------------------------------------------------------------------
 -- Module with several utilities that could not fit in a specific module
@@ -165,12 +165,11 @@ end
 -- @return logger object that will implement log methods
 
 function loadlogengine(options)
+	local logging = false
 	local logenabled = pcall(function()
-		require "logging"
+		logging = require "logging"
 		require "logging.console"
 	end)
-
-	local logging = logenabled and logging
 
 	if logenabled then
 		if options.filelog then
@@ -213,7 +212,7 @@ end
 -- @see trim_comment
 
 function no_trim_comment (s)
-	s = string.gsub(trim(s), "%-%-+ (.*)$", "%1")
+	s = string.gsub(trim(s), "%-%-+ ?(.*)$", "%1")
 	return s
 end
 
